@@ -1,21 +1,18 @@
 import { Image } from 'expo-image';
-import { StyleSheet } from 'react-native';
-
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
+import { StyleSheet, Text, View } from 'react-native';
 
 export default function HomeScreen() {
   return (
-    <ThemedView style={styles.container}>
+    <View style={styles.container}>
       <Image
         source={require('@/assets/images/logo.jpg')}
         style={styles.logo}
         contentFit="contain"
       />
-      <ThemedText type="title" style={styles.message}>
+      <Text style={styles.message}>
         {'VOCÊ CONSEGUIU!\nTá tudo certo agora'}
-      </ThemedText>
-    </ThemedView>
+      </Text>
+    </View>
   );
 }
 
