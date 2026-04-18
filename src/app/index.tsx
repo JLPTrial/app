@@ -1,4 +1,5 @@
 import { Image } from 'expo-image';
+import { Link } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
 
 export default function HomeScreen() {
@@ -12,6 +13,9 @@ export default function HomeScreen() {
       <Text style={styles.message}>
         {'VOCÊ CONSEGUIU!\nTá tudo certo agora'}
       </Text>
+      <Link href="/questions">
+      Ir para uma questão
+      </Link>
     </View>
   );
 }
