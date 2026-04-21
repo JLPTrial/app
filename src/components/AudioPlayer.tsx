@@ -1,5 +1,6 @@
-import { StyleSheet, Pressable, Button, Text, View } from 'react-native';
+import { StyleSheet, Pressable, Text, View } from 'react-native';
 import { AudioSource, useAudioPlayer, useAudioPlayerStatus } from 'expo-audio';
+import { useEffect } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
 
@@ -7,8 +8,14 @@ export default function AudioPlayer({ source }: { source: AudioSource }) {
   const player = useAudioPlayer(source);
   const status = useAudioPlayerStatus(player);
 
+  useEffect(() => {
+    if (status?.didJustFinish) {
+      player.seekTo(0);
+      player.pause();
+    }
+  }, [status?.didJustFinish]);
+
   return (
-    <View>
       <View style={{ flexDirection: 'row', alignItems: 'center'}}>
         <Pressable
         onPress={() => {
@@ -37,10 +44,10 @@ export default function AudioPlayer({ source }: { source: AudioSource }) {
         maximumValue={status.duration}
         minimumTrackTintColor="#000000"
         maximumTrackTintColor="#000000"
+        thumbTintColor="#000000"
         thumbSize={32}
       />
       <Text>{Math.floor(status.currentTime)}s/{Math.floor(status.duration)}s</Text>
-    </View>
     </View>
   );
 }
