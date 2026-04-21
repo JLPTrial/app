@@ -11,10 +11,12 @@
     "lint": "expo lint"
   },
   "dependencies": {
+    "@react-native-community/slider": "5.1.2",
     "@react-navigation/bottom-tabs": "^7.15.5",
     "@react-navigation/elements": "^2.9.10",
     "@react-navigation/native": "^7.1.33",
     "expo": "55.0.10-canary-20260327-0789fbc",
+    "expo-audio": "55.0.10-canary-20260327-0789fbc",
     "expo-constants": "55.0.10-canary-20260327-0789fbc",
     "expo-device": "55.0.11-canary-20260327-0789fbc",
     "expo-font": "55.0.5-canary-20260327-0789fbc",
