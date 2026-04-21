@@ -1,3 +1,5 @@
+import { assetsMap } from '../constants/assetsMap.ts';
+import AudioPlayer from '../components/AudioPlayer.tsx'
 import { Image } from 'expo-image';
 import { StyleSheet, Text, View } from 'react-native';
 
@@ -12,6 +14,7 @@ export default function HomeScreen() {
       <Text style={styles.message}>
         {'VOCÊ CONSEGUIU!\nTá tudo certo agora'}
       </Text>
+      <AudioPlayer source={assetsMap["N5listening/JT4Y/L6-Q5.mp3"]}/>
     </View>
   );
 }
