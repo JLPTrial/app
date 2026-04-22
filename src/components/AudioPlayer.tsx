@@ -26,7 +26,7 @@ export default function AudioPlayer({ source }: { source: AudioSource }) {
   }, [status?.didJustFinish]);
 
   return (
-  <View style={{ flexDirection: 'row', alignItems: 'center'}}>
+  <View style={styles.container}>
     <Pressable
       onPress={() => {
         if (status.playing) {
@@ -44,7 +44,7 @@ export default function AudioPlayer({ source }: { source: AudioSource }) {
     </Pressable>
 
     <Slider
-      style={{width: 200, height: 40}}
+      style={styles.slider}
       value={status.currentTime}
       onSlidingStart={(value : number) => {
           setIsSliding(true);
@@ -66,9 +66,25 @@ export default function AudioPlayer({ source }: { source: AudioSource }) {
       minimumTrackTintColor="#000000"
       maximumTrackTintColor="#000000"
       thumbTintColor="#000000"
-      thumbSize={32}
     />
     <Text>{formatTime(isSliding ? sliderTime : status.currentTime)}/{formatTime(status.duration)}</Text>
   </View>
   );
 }
+
+const styles = StyleSheet.create({
+    container : {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 10,
+        borderWidth: 0,
+        backgroundColor: '#ddd',
+        borderRadius: 30,
+        maxWidth: '90%',
+    },
+    slider : {
+      flex: 1,
+      height: 30,
+    }
+});
