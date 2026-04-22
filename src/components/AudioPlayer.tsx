@@ -1,6 +1,6 @@
 import { StyleSheet, Pressable, Text, View } from 'react-native';
 import { AudioSource, useAudioPlayer, useAudioPlayerStatus } from 'expo-audio';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
 
@@ -14,6 +14,9 @@ function formatTime(seconds: number) : string {
 export default function AudioPlayer({ source }: { source: AudioSource }) {
   const player = useAudioPlayer(source);
   const status = useAudioPlayerStatus(player);
+
+  const [isSliding, setIsSliding] = useState(false);
+  const [sliderTime, setSliderTime] = useState(0);
 
   useEffect(() => {
     if (status?.didJustFinish) {
@@ -43,8 +46,19 @@ export default function AudioPlayer({ source }: { source: AudioSource }) {
     <Slider
       style={{width: 200, height: 40}}
       value={status.currentTime}
+      onSlidingStart={(value : number) => {
+          setIsSliding(true);
+          player.pause();
+        }
+      }
+      onValueChange={(value : number) => {
+          setSliderTime(value);
+        }
+      }
       onSlidingComplete={(value : number) => {
-              player.seekTo(value);
+            setIsSliding(false);
+            player.seekTo(value);
+            player.play();
           }
       }
       minimumValue={0}
@@ -54,7 +68,7 @@ export default function AudioPlayer({ source }: { source: AudioSource }) {
       thumbTintColor="#000000"
       thumbSize={32}
     />
-    <Text>{formatTime(status.currentTime)}/{formatTime(status.duration)}</Text>
+    <Text>{formatTime(isSliding ? sliderTime : status.currentTime)}/{formatTime(status.duration)}</Text>
   </View>
   );
 }
