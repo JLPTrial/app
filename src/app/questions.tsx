@@ -8,30 +8,36 @@ import { Button } from '@react-navigation/elements';
 export default function QuestionScreen() {
     const [question, setQuestion] = useState<Question | null>(null);
     const [type, setType] = useState<number>(0);
-    const questionsDB = useQuestions("n5");
+    const questionsDB = useQuestions("N5");
     useEffect(() => { load(); }, []);
-    const types = ['grammar', 'vocabulary', 'kanji', 'reading', 'listening']
-    if (!question) return null; 
+    const types = [
+        'grammar',
+        'vocabulary',
+        'kanji',
+        'reading', 
+        'listening'
+    ]
     async function load() {
         const result = await questionsDB.selectByTypeRandom(types[type]);
         setQuestion(result);
     }
-
+    
+    if (!question) return null; 
     return (
         <View style={styles.container}>
              <Text>Tipo: {types[type]} </Text>
-            {question.media?.imageFilePath && (
+            { (question.image != null) ?
             <Image
-                source={assetsMap[`${question.media.imageFilePath}`]}
+                source={assetsMap[`${question.image}`]}
                 style={styles.questionImage}
                 contentFit="contain"
-                />)}
-            <Text>{question.questionText}</Text>
+                /> : null }
+            <Text>{question.text}</Text>
             {question.alternatives.alternatives.map((alternative : string, i) => {
                 return <Text key={i}>{alternative}</Text>;
             })}
             <Button onPress={() => {load()}}> Nova Questão</Button>
-            <Button onPress={() => {setType((type + 1) % 5); load()}}> Mudar tipo</Button>
+            <Button onPress={() => {setType((type + 1) % types.length); load()}}> Mudar tipo</Button>
         </View>
     );
 }

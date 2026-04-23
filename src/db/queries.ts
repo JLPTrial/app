@@ -1,163 +1,119 @@
 import { useSQLiteContext } from 'expo-sqlite';
 
-export type JLPTLevel = 'n5' | 'n4';
+export type JLPTLevel = 'N5' | 'N4';
 
-// Interfaces to manage queries
-export interface Question {
+// Interface to manage question query
+interface QuestionQuery {
   id: number;
   questionText: string;
   statementText: string;
   questionType: string;
-  media: Media | null;
-  alternatives: Alternative;
+  imagePath: string | null;
+  audioPath: string | null;
+  contextualText: string | null;
+  alternativeId: number;
+  alternative1: string;
+  alternative2: string;
+  alternative3: string;
+  alternative4: string;
+  tags: string;
+  correctAlternative: number;
 }
 
-interface Media {
+// Interfaces for Backend and UI
+export interface Question {
   id: number;
-  contextualText: string;
-  imageFilePath: string;
-  audioFilePath: string;
+  text: string;
+  statement: string;
+  type: string;
+  image: string | null;
+  audio: string | null;
+  contextualText: string | null;
+  tags: string[];
+  alternatives: Alternative;
 }
 
 export interface Alternative {
   id: number;
   alternatives: string[];
-  correctAlternative:number;
+  correctAlternative: number;
 }
 
 export function useQuestions(level: JLPTLevel) {
   const db = useSQLiteContext();
 
-  const selectMediaById = async (id: number | null) => {
-    if(id == null) return null;
-    let queryMedia = await db.getFirstAsync(`
-        SELECT *
-        FROM media
-        WHERE id = ?
-      `, id);
-    let contextualText = "";
-    if(queryMedia.contextual_text_id != null){
-      contextualText = selectContextualTextById(queryMedia.contextual_text_id);
+  const selectQuestion = async (table:string, column: string, value: any, order: string = "RANDOM()") : Promise<Question | null> => {
+    const query = `
+    SELECT
+    ${level}.questions.id as id,  
+    ${level}.questions.question_text as questionText,
+    ${level}.questions.question_type as questionType,
+    ${level}.media.image_file_path as imagePath,
+    ${level}.media.audio_file_path as audioPath,
+    ${level}.statement.statement_text as statementText,
+    ${level}.contextual_texts.contextual_text as contextualText,
+    ${level}.alternatives.id as alternativeId,
+    ${level}.alternatives.alternative_1 as alternative1,
+    ${level}.alternatives.alternative_2 as alternative2,
+    ${level}.alternatives.alternative_3 as alternative3,
+    ${level}.alternatives.alternative_4 as alternative4,
+    ${level}.alternatives.correct_alternative as correctAlternative,
+    GROUP_CONCAT(${level}.tags.name) as tags
+    FROM ${level}.questions
+      INNER JOIN ${level}.alternatives
+        ON ${level}.questions.alternative_id = ${level}.alternatives.id 
+      LEFT JOIN ${level}.media
+        ON ${level}.questions.media_id = ${level}.media.id
+      INNER JOIN ${level}.statement
+        ON ${level}.questions.statement_id = ${level}.statement.id 
+      LEFT JOIN ${level}.contextual_texts
+        ON ${level}.media.contextual_text_id = ${level}.contextual_texts.id
+      LEFT JOIN ${level}.question_tags
+        ON  ${level}.questions.id = ${level}.question_tags.question_id
+      LEFT JOIN ${level}.tags
+        ON ${level}.question_tags.tag_id = ${level}.tags.id
+      WHERE ${level}.${table}.${column} = ?
+      GROUP BY ${level}.questions.id 
+      ORDER BY ${order};`;
+
+    const result = await db.getFirstAsync<QuestionQuery>(query, value)
+    if(!result)
+      return null;
+
+    const alternatives: Alternative = {
+      id: result.alternativeId,
+      alternatives: [result.alternative1, result.alternative2, result.alternative3, result.alternative4],
+      correctAlternative: result.correctAlternative
     }
-    const prefix = level.toUpperCase( )
-    let imagePath = queryMedia.image_file_path;
-    if(imagePath != null)
-      imagePath = `${prefix}${imagePath}`
-    let audioPath = queryMedia.audio_file_path;
-    if(audioPath != null)
-      audioPath = `${prefix}${audioPath}`
-      
-    const media : Media = {
-      id: queryMedia.id,
-      contextualText: contextualText,
-      imageFilePath: imagePath,
-      audioFilePath: audioPath
-    };
-
-    return media
-  }
-
-  const selectStatementById = async (id: number) => {
-    const statement = await db.getFirstAsync<string>(`
-        SELECT statement_text
-        FROM statement
-        WHERE id = ?
-      `, id);
-    return statement;
-  }
-
-  const selectContextualTextById = async (id: number | null) => {
-    const contextualText = await db.getFirstAsync<string>(`
-        SELECT contextual_text
-        FROM contextual_texts
-        WHERE id = ?
-      `, id);
-    return contextualText;
-  }
-
-  const selectAlternativesById = async (id: number | null) => {
-    const queryAlternative = await db.getFirstAsync<Alternative>(`
-        SELECT *
-        FROM alternatives
-        WHERE id = ?
-      `, id);
-    const alternatives : Alternative = {
-      id: queryAlternative.id,
-      alternatives: [queryAlternative.alternative_1, queryAlternative.alternative_2, queryAlternative.alternative_3, queryAlternative.alternative_4],
-      correctAlternative: queryAlternative.correct_alternative
-    }
-    return alternatives;
-  }
-
-  // Combine Media and statement data into a question instance
-  const prepareQuestion = async(queryQuestion:any) => {
-    const media = await selectMediaById(queryQuestion.media_id);
-    const alternatives = await selectAlternativesById(queryQuestion.alternative_id);
-    const statement = await selectStatementById(queryQuestion.statement_id);
+    const image = (result.imagePath != null) ? `${level}${result.imagePath}` : null;
+    const audio = (result.audioPath != null) ? `${level}${result.audioPath}` : null;
     const question: Question = {
-      id: queryQuestion.id,
-      statementText: statement,
-      questionText: queryQuestion.question_text,
-      questionType: queryQuestion.question_type,
-      media: media,
-      alternatives: alternatives
+      id: result.id,
+      text: result.questionText,
+      statement: result.statementText,
+      type: result.questionType,
+      alternatives: alternatives,
+      image: image,
+      audio: audio,
+      contextualText: result.contextualText,
+      tags: result?.tags ? result.tags.split(",") : []
     }
     return question;
   }
 
   const selectById = async (id: number) => {
-    const queryQuestion = await db.getFirstAsync(`
-      SELECT * 
-      FROM questions 
-      WHERE id = ?
-    `, id);
-    const question = prepareQuestion(queryQuestion);
-    return question;
+    return await selectQuestion("questions","id", id);
   }
 
-  const selectByAlternativeId = async (alternativeId: number) => {
-    const queryQuestion = await db.getFirstAsync(`
-      SELECT * 
-      FROM questions 
-      WHERE alternative_id = ?
-    `, alternativeId);
-    const question = prepareQuestion(queryQuestion);
-    return question;
-  }
-
-  const selectByStatementId = async (statementId: number) => {
-    const queryQuestion = await db.getFirstAsync(`
-      SELECT * 
-      FROM questions 
-      WHERE statement_id = ?
-    `,statementId);
-    const question = prepareQuestion(queryQuestion);
-    return question;
-  }
-
-  const selectByTagId = async (tagId: number) => {
-    const queryQuestion = await db.getFirstAsync<Question>(`
-      SELECT * 
-      FROM questions 
-      INNER JOIN question_tags 
-        ON questions.id == question_tags.question_id 
-        AND question_tags.id = ?
-      `, tagId);
-    const question = prepareQuestion(queryQuestion);
-    return question;
+  const selectByTagName = async (tagName: string) => {
+    return await selectQuestion("tags","name", tagName);
   }
 
   const selectByTypeRandom = async (type: string) => {
-    const queryQuestion = await db.getFirstAsync<Question>(`
-      SELECT * 
-      FROM questions
-      WHERE question_type = ?
-      ORDER BY RANDOM()
-      `, type);
-    const question = prepareQuestion(queryQuestion);
-    return question;
+    return await selectQuestion("questions","question_type", type);
   }
 
-  return {selectById, selectByAlternativeId, selectByStatementId, selectByTagId,
-    selectByTypeRandom};
+  return {
+    selectById, selectByTagName, selectByTypeRandom
+  };
 }
