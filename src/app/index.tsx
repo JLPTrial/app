@@ -13,8 +13,11 @@ export default function HomeScreen() {
       <Text style={styles.message}>
         {'VOCÊ CONSEGUIU!\nTá tudo certo agora'}
       </Text>
-      <Link href="/questions">
+      <Link href="/demo/questions">
       Ir para uma questão
+      </Link>
+       <Link href="/demo/manyQuestions">
+      Ir para várias questões
       </Link>
     </View>
   );
