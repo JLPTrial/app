@@ -1,3 +1,4 @@
+import { textStyles } from '@/styles/texts';
 import { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
@@ -17,7 +18,7 @@ export default function FloatingButton(){
     return (
         <View style={styles.overlay}>
             <Pressable style={styles.button} onPress={() => setOpen(!open)}>
-                <Text>{ option }</Text>
+                <Text style={textStyles.subtitle}>{ option }</Text>
             </Pressable>
 
             {open && (
@@ -30,7 +31,7 @@ export default function FloatingButton(){
                             setOption(item);
                             setOpen(false);
                         }}>
-                        <Text>{item}</Text>
+                        <Text style={textStyles.subtitle}>{item}</Text>
                     </Pressable>
                     ))}
                 </View>
