@@ -1,37 +1,43 @@
 import Card from '@/components/pressable/Card';
+import FloatingButton from '@/components/pressable/FloatingButton';
 import Screen from '@/components/Screen';
 import { textStyles } from '@/styles/texts';
 import { Image } from 'expo-image';
+import { RelativePathString, router } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
 
+function toPage(page : RelativePathString){
+  router.push(page);
+}
 
 export default function HomeScreen() {
+
   return (
     <Screen>
-      
+      <FloatingButton/>
+
       <Image
       source={require('@/assets/images/logo.jpg')}
       style={styles.logo}
       contentFit="contain"
       />
-      
 
       <View style={{alignSelf: 'stretch',  gap: 20}}>
         <Text style={textStyles.title}>Teste Seus Conhecimentos</Text>
-        <Card title='Simulados' style={{width: '100%'}}/>
+        <Card title='Simulado' style={{width: '100%'}} onPress={() => toPage("/practice-test")}/>
       </View>
 
       <View style={{alignSelf: 'stretch', gap: 20}}>
         <Text style={textStyles.title}>Estude Por Competência</Text>
         
         <View style={{flexDirection: 'row', height: 150, alignSelf: 'stretch', gap: 20}}>
-          <Card title='Kanji' style={{flex: 1, backgroundColor: '#d22'}}/>
-          <Card title='Leitura' style={{flex: 1, backgroundColor: '#a2a'}}/>
+          <Card title='Kanji' style={{flex: 1, backgroundColor: '#d22'}} onPress={() => toPage("/topic-study")}/>
+          <Card title='Leitura' style={{flex: 1, backgroundColor: '#a2a'}} onPress={() => toPage("/topic-study")}/>
         </View>
 
         <View style={{flexDirection: 'row', height: 150, alignSelf: 'stretch', gap: 20}}>
-          <Card title='Áudio' style={{flex: 1, backgroundColor: '#2b7'}}/>
-          <Card title='Áudio' style={{flex: 1, backgroundColor: '#cc3'}}/>
+          <Card title='Áudio' style={{flex: 1, backgroundColor: '#2b7'}} onPress={() => toPage("/topic-study")}/>
+          <Card title='Áudio' style={{flex: 1, backgroundColor: '#cc3'}} onPress={() => toPage("/topic-study")}/>
         </View>
       </View>
     </Screen>
