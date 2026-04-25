@@ -14,30 +14,30 @@ export default function QuestionScreen() {
         'grammar',
         'vocabulary',
         'kanji',
-        'reading', 
+        'reading',
         'listening'
     ]
     async function load() {
-        const result = await questionsDB.selectByTypeRandom(types[type]);
+        const result = await questionsDB.selectByType(types[type]);
         setQuestion(result);
     }
-    
-    if (!question) return null; 
+
+    if (!question) return null;
     return (
         <View style={styles.container}>
-             <Text>Tipo: {types[type]} </Text>
-            { (question.image != null) ?
-            <Image
-                source={assetsMap[`${question.image}`]}
-                style={styles.questionImage}
-                contentFit="contain"
-                /> : null }
+            <Text>Tipo: {types[type]} </Text>
+            {(question.image != null) ?
+                <Image
+                    source={assetsMap[`${question.image}`]}
+                    style={styles.questionImage}
+                    contentFit="contain"
+                /> : null}
             <Text>{question.text}</Text>
-            {question.alternatives.alternatives.map((alternative : string, i) => {
+            {question.alternatives.map((alternative: string, i) => {
                 return <Text key={i}>{alternative}</Text>;
             })}
-            <Button onPress={() => {load()}}> Nova Questão</Button>
-            <Button onPress={() => {setType((type + 1) % types.length); load()}}> Mudar tipo</Button>
+            <Button onPress={() => { load() }}> Nova Questão</Button>
+            <Button onPress={() => { setType((type + 1) % types.length); load() }}> Mudar tipo</Button>
         </View>
     );
 }

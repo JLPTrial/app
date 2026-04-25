@@ -30,13 +30,14 @@ export interface Question {
 	audio: string | null;
 	contextualText: string | null;
 	tags: string[];
-	alternatives: Alternative;
-}
-
-export interface Alternative {
-	id: number;
 	alternatives: string[];
 	correctAlternative: number;
+}
+
+enum Order {
+	RANDOM = "RANDOM()",
+	ASC = "id ASC",
+	DESC = "id DESC",
 }
 
 export function useQuestions(level: JLPTLevel) {
@@ -96,12 +97,7 @@ export function useQuestions(level: JLPTLevel) {
 		}
 	}
 
-	const formatQuestion = (result : QuestionQuery) =>{
-		const alternatives: Alternative = {
-			id: result.alternativeId,
-			alternatives: [result.alternative1, result.alternative2, result.alternative3, result.alternative4],
-			correctAlternative: result.correctAlternative
-		}
+	const formatQuestion = (result: QuestionQuery) => {
 
 		const image = (result.imagePath != null) ? `${level}${result.imagePath}` : null;
 		const audio = (result.audioPath != null) ? `${level}${result.audioPath}` : null;
@@ -111,7 +107,8 @@ export function useQuestions(level: JLPTLevel) {
 			text: result.questionText,
 			statement: result.statementText,
 			type: result.questionType,
-			alternatives: alternatives,
+			alternatives: [result.alternative1, result.alternative2, result.alternative3, result.alternative4],
+			correctAlternative: result.correctAlternative,
 			image: image,
 			audio: audio,
 			contextualText: result.contextualText,
@@ -121,9 +118,15 @@ export function useQuestions(level: JLPTLevel) {
 		return question;
 	}
 
-	const selectManyQuestion = async (whereClause: WhereClause, limit: number = 20, offset: number = 0, order: string = "RANDOM()"): Promise<Question[] | null> => {
-		const query = ((whereClause === null) ? `${queryBase}` : `${queryBase} WHERE ${whereClause.getClauses()}`) 
-		+ ` GROUP BY ${level}.questions.id ORDER BY ${order} LIMIT ${limit} OFFSET ${offset};`
+
+	const selectQuestion = async (whereClause: WhereClause, order: Order = Order.RANDOM): Promise<Question | null> => {
+		const question: Question[] | null = await selectQuestionMany(whereClause, order, 1, 0);
+		return (question != null) ? question[0] : null;
+	}
+
+	const selectQuestionMany = async (whereClause: WhereClause, order: Order = Order.RANDOM, limit: number = 20, offset: number = 0): Promise<Question[] | null> => {
+		const query = ((whereClause === null) ? `${queryBase}` : `${queryBase} WHERE ${whereClause.getClauses()}`)
+			+ ` GROUP BY ${level}.questions.id ORDER BY ${order} LIMIT ${limit} OFFSET ${offset};`
 
 		const results = await db.getAllAsync<QuestionQuery>(query, whereClause.getValues());
 
@@ -134,39 +137,31 @@ export function useQuestions(level: JLPTLevel) {
 		return questions;
 	}
 
-	const selectQuestion = async (whereClause: WhereClause, order: string = "RANDOM()"): Promise<Question | null> => {
-		const query = ((whereClause === null) ? `${queryBase}` : `${queryBase} WHERE ${whereClause.getClauses()}`) + ` GROUP BY ${level}.questions.id ORDER BY ${order};`
-		const result = await db.getFirstAsync<QuestionQuery>(query, whereClause.getValues());
-		if (!result)
-			return null;
-		return formatQuestion(result);
-	}
-
-	const selectById = async (id: number) => {
+	const selectById = async (id: number): Promise<Question | null> => {
 		const whereClause = new WhereClause();
 		whereClause.addClause("questions", "id", id);
 		return await selectQuestion(whereClause);
 	}
 
-	const selectByTagName = async (tagName: string) => {
+	const selectByTagName = async (tagName: string, limit: number = 5, offset: number = 0) => {
 		const whereClause = new WhereClause();
 		whereClause.addClause("tags", "name", tagName);
-		return await selectQuestion(whereClause);
+		return await selectQuestionMany(whereClause, Order.RANDOM, limit, offset);
 	}
 
-	const selectByTypeRandom = async (type: string) => {
+	const selectByType = async (type: string) => {
 		const whereClause = new WhereClause();
 		whereClause.addClause("questions", "question_type", type);
 		return await selectQuestion(whereClause);
 	}
 
-	const selectManyByType = async (type: string, limit:number = 5, offset:number = 0) => {
+	const selectByTypeMany = async (type: string, limit: number = 5, offset: number = 0) => {
 		const whereClause = new WhereClause();
 		whereClause.addClause("questions", "question_type", type);
-		return await selectManyQuestion(whereClause,limit,offset," id ASC");
+		return await selectQuestionMany(whereClause, Order.ASC, limit, offset);
 	}
 
 	return {
-		selectById, selectByTagName, selectByTypeRandom, selectManyByType
+		selectById, selectByTagName, selectByType, selectByTypeMany
 	};
 }

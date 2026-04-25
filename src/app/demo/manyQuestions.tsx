@@ -20,7 +20,7 @@ export default function QuestionScreen() {
         'listening'
     ]
     async function load() {
-        const results = await questionsDB.selectManyByType(types[type],limit,offset);
+        const results = await questionsDB.selectByTypeMany(types[type], limit, offset);
         setQuestions(results);
     }
 
@@ -47,19 +47,19 @@ export default function QuestionScreen() {
             <FlatList
                 data={questions}
                 keyExtractor={(question) => String(question.id)}
-                renderItem={({ item : question }) => (
+                renderItem={({ item: question }) => (
                     <View style={styles.flatlistItem}>
-                    {question.image != null && (
-                    <Image
-                        source={assetsMap[`${question.image}`]}
-                        style={styles.questionImage}
-                        contentFit="contain"
-                    />
-                    )}
-                    <Text>{question.text}</Text>
-                    {question.alternatives.alternatives.map((alternative: string, i : number) => (
-                        <Text key={i}>{alternative}</Text>
-                    ))}
+                        {question.image != null && (
+                            <Image
+                                source={assetsMap[`${question.image}`]}
+                                style={styles.questionImage}
+                                contentFit="contain"
+                            />
+                        )}
+                        <Text>{question.text}</Text>
+                        {question.alternatives.map((alternative: string, i: number) => (
+                            <Text key={i}>{alternative}</Text>
+                        ))}
                     </View>
                 )}
             />
