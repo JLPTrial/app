@@ -31,13 +31,13 @@ export default function HomeScreen() {
         <Text style={textStyles.title}>Estude Por Competência</Text>
         
         <View style={{flexDirection: 'row', height: 150, alignSelf: 'stretch', gap: 20}}>
-          <Card title='Kanji' style={{flex: 1, backgroundColor: '#d22'}} onPress={() => toPage("/topic-study")}/>
-          <Card title='Leitura' style={{flex: 1, backgroundColor: '#a2a'}} onPress={() => toPage("/topic-study")}/>
+          <Card title='Vocabulário' style={{flex: 1, backgroundColor: '#d22'}} onPress={() => toPage("/topic-study")}/>
+          <Card title='Gramática' style={{flex: 1, backgroundColor: '#a2a'}} onPress={() => toPage("/topic-study")}/>
         </View>
 
         <View style={{flexDirection: 'row', height: 150, alignSelf: 'stretch', gap: 20}}>
-          <Card title='Áudio' style={{flex: 1, backgroundColor: '#2b7'}} onPress={() => toPage("/topic-study")}/>
-          <Card title='Áudio' style={{flex: 1, backgroundColor: '#cc3'}} onPress={() => toPage("/topic-study")}/>
+          <Card title='Leitura' style={{flex: 1, backgroundColor: '#2b7'}} onPress={() => toPage("/topic-study")}/>
+          <Card title='Audição' style={{flex: 1, backgroundColor: '#cc3'}} onPress={() => toPage("/topic-study")}/>
         </View>
       </View>
     </Screen>
