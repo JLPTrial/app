@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
     top: 0,
     right: 30,
     zIndex: 999,
+    alignItems: 'flex-end',
   },
   button: {
     height: 50,
