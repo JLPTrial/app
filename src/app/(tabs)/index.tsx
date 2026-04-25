@@ -1,33 +1,40 @@
+import Card from '@/components/pressable/Card';
+import Screen from '@/components/Screen';
+import { textStyles } from '@/styles/texts';
 import { Image } from 'expo-image';
-import { Link } from 'expo-router';
-import { Button, StyleSheet, Text, View } from 'react-native';
-import AudioPlayer from '../../components/AudioPlayer.tsx';
-import { assetsMap } from '../../constants/assetsMap.ts';
-import { useStorage } from '@/hooks/useStorage';
+import { StyleSheet, Text, View } from 'react-native';
 
 export default function HomeScreen() {
-  const {data, setValue} = useStorage();
-
   return (
-    <View style={styles.container}>
+    <Screen>
+      
       <Image
-        source={require('@/assets/images/logo.jpg')}
-        style={styles.logo}
-        contentFit="contain"
+      source={require('@/assets/images/logo.jpg')}
+      style={styles.logo}
+      contentFit="contain"
       />
-      <Text style={styles.message}>
-        {'VOCÊ CONSEGUIU!\n O nível é '} { data.jlptLevel }
-      </Text>
-      <AudioPlayer source={assetsMap["N5listening/JT4Y/L6-Q5.mp3"]}/>
-      <Link href="/demo/questions">
-      Ir para uma questão
-      </Link>
-       <Link href="/demo/manyQuestions">
-      Ir para várias questões
-      </Link>
-      <Button title='N5' onPress={() => setValue('jlptLevel', 'N5')}/>
-      <Button title='N4' onPress={() => setValue('jlptLevel', 'N4')}/>
-    </View>
+      
+
+      <View style={{alignSelf: 'stretch',  gap: 20}}>
+        <Text style={textStyles.title}>Teste Seus Conhecimentos</Text>
+        <Card title='Simulados' style={{width: '100%'}}/>
+      </View>
+
+      <View style={{alignSelf: 'stretch', gap: 20}}>
+        <Text style={textStyles.title}>Estude Por Competência</Text>
+        
+        <View style={{flexDirection: 'row', height: 150, alignSelf: 'stretch', gap: 20}}>
+          <Card title='Kanji' style={{flex: 1, backgroundColor: '#d22'}}/>
+          <Card title='Leitura' style={{flex: 1, backgroundColor: '#a2a'}}/>
+        </View>
+
+        <View style={{flexDirection: 'row', height: 150, alignSelf: 'stretch', gap: 20}}>
+          <Card title='Áudio' style={{flex: 1, backgroundColor: '#2b7'}}/>
+          <Card title='Áudio' style={{flex: 1, backgroundColor: '#cc3'}}/>
+        </View>
+      </View>
+    </Screen>
+    
   );
 }
 
