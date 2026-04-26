@@ -9,7 +9,6 @@ export default function QuestionScreen() {
     const [questions, setQuestions] = useState<Question[] | null>(null);
     const [type, setType] = useState<number>(0);
     const [limit, setLimit] = useState<number>(5);
-    const [offset, setOffset] = useState<number>(0);
     const questionsDB = useQuestions("N5");
     useEffect(() => { load(); }, [type]);
     const types = [
@@ -20,7 +19,7 @@ export default function QuestionScreen() {
         'listening'
     ]
     async function load() {
-        const results = await questionsDB.selectByTypeMany(types[type], limit, offset);
+        const results = await questionsDB.selectByTypeMany(types[type], limit);
         setQuestions(results);
     }
 
@@ -30,17 +29,13 @@ export default function QuestionScreen() {
             <Text>Tipo: {types[type]} </Text>
 
             <Button onPress={() => { load() }}> Buscar mais questões</Button>
+
             <TextInput
                 onChangeText={(limit) => setLimit(Number(limit))}
                 value={String(limit)}
                 placeholder="limit"
                 keyboardType="numeric"
-            />
-            <TextInput
-                onChangeText={(offset) => setOffset(Number(offset))}
-                value={String(offset)}
-                placeholder="offset"
-                keyboardType="numeric"
+                style={styles.input}
             />
             <Button onPress={() => { setType((type + 1) % types.length); load() }}> Mudar tipo</Button>
 
@@ -82,5 +77,13 @@ const styles = StyleSheet.create({
     flatlistItem: {
         backgroundColor: '#c0c0c0',
         margin: 10,
-    }
+    },
+    input: {
+        height: 40,
+        width: 100,
+        margin: 12,
+        textAlign: 'center',
+        borderWidth: 1,
+        padding: 10,
+    },
 });
