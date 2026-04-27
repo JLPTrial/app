@@ -9,7 +9,7 @@ export default function QuestionScreen() {
     const [question, setQuestion] = useState<Question | null>(null);
     const [type, setType] = useState<number>(0);
     const questionsDB = useQuestions("N5");
-    useEffect(() => { load(); }, []);
+    useEffect(() => { load(); }, [type]);
     const types = [
         'grammar',
         'vocabulary',
@@ -37,7 +37,7 @@ export default function QuestionScreen() {
                 return <Text key={i}>{alternative}</Text>;
             })}
             <Button onPress={() => { load() }}> Nova Questão</Button>
-            <Button onPress={() => { setType((type + 1) % types.length); load() }}> Mudar tipo</Button>
+            <Button onPress={() => { setType((type + 1) % types.length); }}> Mudar tipo</Button>
         </View>
     );
 }
