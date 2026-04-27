@@ -4,93 +4,93 @@ export type JLPTLevel = 'N5' | 'N4';
 
 // Interface to manage question query
 interface QuestionQuery {
-	id: number;
-	questionText: string;
-	statementText: string;
-	questionType: string;
-	imagePath: string | null;
-	audioPath: string | null;
-	contextualText: string | null;
-	alternativeId: number;
-	alternative1: string;
-	alternative2: string;
-	alternative3: string;
-	alternative4: string;
-	tags: string;
-	correctAlternative: number;
+  id: number;
+  questionText: string;
+  statementText: string;
+  questionType: string;
+  imagePath: string | null;
+  audioPath: string | null;
+  contextualText: string | null;
+  alternativeId: number;
+  alternative1: string;
+  alternative2: string;
+  alternative3: string;
+  alternative4: string;
+  tags: string;
+  correctAlternative: number;
 }
 
 // Interfaces for Backend and UI
 export interface Question {
-	id: number;
-	text: string;
-	statement: string;
-	type: string;
-	image: string | null;
-	audio: string | null;
-	contextualText: string | null;
-	tags: string[];
-	alternatives: string[];
-	correctAlternative: number;
+  id: number;
+  text: string;
+  statement: string;
+  type: string;
+  image: string | null;
+  audio: string | null;
+  contextualText: string | null;
+  tags: string[];
+  alternatives: string[];
+  correctAlternative: number;
 }
 
 // Common order params for SQL queries
 enum Order {
-	RANDOM = "RANDOM()",
-	ASC = "id ASC",
-	DESC = "id DESC",
+  RANDOM = "RANDOM()",
+  ASC = "id ASC",
+  DESC = "id DESC",
 }
 
 // Object to construct where clauses
 class WhereClause {
-	clauses: string[];
-	values: Record<string, string | number>;
-	level: JLPTLevel;
+  clauses: string[];
+  values: Record<string, string | number>;
+  level: JLPTLevel;
 
-	constructor(level : JLPTLevel) {
-		this.clauses = [];
-		this.values = {};
-		this.level = level;
-	}
+  constructor(level : JLPTLevel) {
+    this.clauses = [];
+    this.values = {};
+    this.level = level;
+  }
 
-	addClause(table: string, column: string, value: string | number, condition: string = "=") {
-		this.clauses.push(`${this.level}.${table}.${column} ${condition} $${table}${column}`);
-		this.values[`$${table}${column}`] = value;
-	}
+  addClause(table: string, column: string, value: string | number, condition: string = "=") {
+    this.clauses.push(`${this.level}.${table}.${column} ${condition} $${table}${column}`);
+    this.values[`$${table}${column}`] = value;
+  }
 
-	getClauses() : string {
-		return this.clauses.join(" AND ");
-	}
+  getClauses() : string {
+    return this.clauses.join(" AND ");
+  }
 
-	getValues() : Record<string, string | number> {
-		return this.values;
-	}
+  getValues() : Record<string, string | number> {
+    return this.values;
+  }
 }
 
 const formatQuestion = (result: QuestionQuery, level: JLPTLevel) => {
-	const image = (result.imagePath != null) ? `${level}${result.imagePath}` : null;
-	const audio = (result.audioPath != null) ? `${level}${result.audioPath}` : null;
+  const image = (result.imagePath != null) ? `${level}${result.imagePath}` : null;
+  const audio = (result.audioPath != null) ? `${level}${result.audioPath}` : null;
 
-	const question: Question = {
-		id: result.id,
-		text: result.questionText,
-		statement: result.statementText,
-		type: result.questionType,
-		alternatives: [result.alternative1, result.alternative2, result.alternative3, result.alternative4],
-		correctAlternative: result.correctAlternative,
-		image: image,
-		audio: audio,
-		contextualText: result.contextualText,
-		tags: result?.tags ? result.tags.split(",") : [],
-	}
+  const question: Question = {
+    id: result.id,
+    text: result.questionText,
+    statement: result.statementText,
+    type: result.questionType,
+    alternatives: [result.alternative1, result.alternative2, result.alternative3, result.alternative4],
+    correctAlternative: result.correctAlternative,
+    image: image,
+    audio: audio,
+    contextualText: result.contextualText,
+    tags: result?.tags ? result.tags.split(",") : [],
+  }
 
-	return question;
+  return question;
 }
 
 export function useQuestions(level: JLPTLevel) {
-	const db = useSQLiteContext();
+  const db = useSQLiteContext();
 
-	const queryBase = `
+  const queryBase = `
     SELECT
     ${level}.questions.id as id,  
     ${level}.questions.question_text as questionText,
@@ -120,46 +120,46 @@ export function useQuestions(level: JLPTLevel) {
       LEFT JOIN ${level}.tags
         ON ${level}.question_tags.tag_id = ${level}.tags.id`;
 
-	const selectQuestion = async (whereClause: WhereClause, order: Order = Order.RANDOM): Promise<Question | null> => {
-		const question: Question[] = await selectQuestionMany(whereClause, order, 1);
-		return (question.length > 0) ? question[0] : null;
-	}
+  const selectQuestion = async (whereClause: WhereClause, order: Order = Order.RANDOM): Promise<Question | null> => {
+    const question: Question[] = await selectQuestionMany(whereClause, order, 1);
+    return (question.length > 0) ? question[0] : null;
+  }
 
-	const selectQuestionMany = async (whereClause: WhereClause, order: Order = Order.RANDOM, limit: number = 20): Promise<Question[]> => {
-		const query = ((whereClause === null) ? `${queryBase}` : `${queryBase} WHERE ${whereClause.getClauses()}`)
-			+ ` GROUP BY ${level}.questions.id ORDER BY ${order} LIMIT ${limit}`
+  const selectQuestionMany = async (whereClause: WhereClause, order: Order = Order.RANDOM, limit: number = 20): Promise<Question[]> => {
+    const query = ((whereClause === null) ? `${queryBase}` : `${queryBase} WHERE ${whereClause.getClauses()}`)
+      + ` GROUP BY ${level}.questions.id ORDER BY ${order} LIMIT ${limit}`
 
-		const results : QuestionQuery[] = await db.getAllAsync<QuestionQuery>(query, whereClause.getValues());
+    const results : QuestionQuery[] = await db.getAllAsync<QuestionQuery>(query, whereClause.getValues());
 
-		const questions: Question[] = results.map((result) => formatQuestion(result, level));
-		return questions;
-	}
+    const questions: Question[] = results.map((result) => formatQuestion(result, level));
+    return questions;
+  }
 
-	const selectById = async (id: number): Promise<Question | null> => {
-		const whereClause: WhereClause = new WhereClause(level);
-		whereClause.addClause("questions", "id", id);
-		return await selectQuestion(whereClause);
-	}
+  const selectById = async (id: number): Promise<Question | null> => {
+    const whereClause: WhereClause = new WhereClause(level);
+    whereClause.addClause("questions", "id", id);
+    return await selectQuestion(whereClause);
+  }
 
-	const selectByTagName = async (tagName: string, limit: number = 5): Promise<Question[]> => {
-		const whereClause: WhereClause = new WhereClause(level);
-		whereClause.addClause("tags", "name", tagName);
-		return await selectQuestionMany(whereClause, Order.RANDOM, limit);
-	}
+  const selectByTagName = async (tagName: string, limit: number = 5): Promise<Question[]> => {
+    const whereClause: WhereClause = new WhereClause(level);
+    whereClause.addClause("tags", "name", tagName);
+    return await selectQuestionMany(whereClause, Order.RANDOM, limit);
+  }
 
-	const selectByType = async (type: string): Promise<Question | null> => {
-		const whereClause: WhereClause = new WhereClause(level);
-		whereClause.addClause("questions", "question_type", type);
-		return await selectQuestion(whereClause);
-	}
+  const selectByType = async (type: string): Promise<Question | null> => {
+    const whereClause: WhereClause = new WhereClause(level);
+    whereClause.addClause("questions", "question_type", type);
+    return await selectQuestion(whereClause);
+  }
 
-	const selectByTypeMany = async (type: string, limit: number = 5): Promise<Question[]> => {
-		const whereClause: WhereClause = new WhereClause(level);
-		whereClause.addClause("questions", "question_type", type);
-		return await selectQuestionMany(whereClause, Order.ASC, limit);
-	}
+  const selectByTypeMany = async (type: string, limit: number = 5): Promise<Question[]> => {
+    const whereClause: WhereClause = new WhereClause(level);
+    whereClause.addClause("questions", "question_type", type);
+    return await selectQuestionMany(whereClause, Order.ASC, limit);
+  }
 
-	return {
-		selectById, selectByTagName, selectByType, selectByTypeMany
-	};
+  return {
+    selectById, selectByTagName, selectByType, selectByTypeMany
+  };
 }
