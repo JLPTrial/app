@@ -22,7 +22,7 @@ export default function RootLayout() {
         databaseName="main.db"
         onInit={async (db: SQLiteDatabase) => {
           await db.execAsync("PRAGMA foreign_keys = ON;");
-          await db.execAsync(`ATTACH DATABASE '${n5Path}' AS n5;`);
+          await db.execAsync(`ATTACH DATABASE '${n5Path}' AS N5;`);
         }}
       >
         <Stack />
