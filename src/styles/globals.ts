@@ -7,7 +7,7 @@ export const vh = height / 100;
 
 export const colors = {
   primary: '#CC0033',        // Fundo dos cabeçalhos das questões e das tags
-  primaryLight: '#F68178',   // Texto da alternativa correta
+  primaryLight: '#F68178',   // Texto da alternativa correta, tab ativa
   background: '#FAFAFA',     // Fundo padrão
   surface: '#F1F4F6',        // Círculo das alternativas inativas
   selected: '#FFE6E6',       // Círculo externo da alternativa ativa
@@ -15,7 +15,7 @@ export const colors = {
   highlight: '#FFEEFF',      // Fundo dos blocos de texto de leitura
   highlightDark: '#FFCCCC',  // Fundo do bloco alvo dentro do texto de leitura
   textDark: '#212121',       // Textos principais (quase preto para boa legibilidade)
-  textMuted: '#757575',      // Textos secundários
+  textMuted: '#757575',      // Textos secundários, tab inativa
   textLight: '#FAFAFA',      // Textos dos headers das questões e das tags
   border: '#D7D7D7',         // Bordas das alternativas
   audioPlayer: '#F1F3F4',    // Fundo do player de áudio
