@@ -1,8 +1,8 @@
 import { moveDatabase } from "@/db/moveDatabase";
-import { Stack } from "expo-router";
 import { Paths } from 'expo-file-system';
+import { Stack } from "expo-router";
+import { SQLiteDatabase, SQLiteProvider } from "expo-sqlite";
 import { Suspense, useEffect, useState } from "react";
-import { SQLiteProvider, SQLiteDatabase } from "expo-sqlite"
 import Loading from "./loading";
 
 export default function RootLayout() {
@@ -18,14 +18,14 @@ export default function RootLayout() {
 
   return (
     <Suspense fallback={<Loading />}>
-      <SQLiteProvider 
+      <SQLiteProvider
         databaseName="main.db"
         onInit={async (db: SQLiteDatabase) => {
           await db.execAsync("PRAGMA foreign_keys = ON;");
           await db.execAsync(`ATTACH DATABASE '${n5Path}' AS N5;`);
         }}
       >
-        <Stack />
+        <Stack screenOptions={{ headerShown: false }}/>
       </SQLiteProvider>
     </Suspense>
   );

@@ -52,8 +52,6 @@ export default function TabLayout() {
 
 const styles = StyleSheet.create({
     tab: {
-        paddingBottom: 5,
         paddingTop: 5,
-        height: 65,
     }
 });
