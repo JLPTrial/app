@@ -1,8 +1,8 @@
-import { assetsMap } from '../constants/assetsMap.ts';
-import AudioPlayer from '../components/AudioPlayer.tsx'
 import { Image } from 'expo-image';
 import { Link } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
+import AudioPlayer from '../../components/AudioPlayer.tsx';
+import { assetsMap } from '../../constants/assetsMap.ts';
 
 export default function HomeScreen() {
   return (
