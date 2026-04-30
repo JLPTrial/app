@@ -2,18 +2,15 @@ import { textStyles } from '@/styles/texts';
 import { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
+type FloatingButtonProps = {
+  options: any[];
+};
 
-export default function FloatingButton(){
+export default function FloatingButton({ options } : FloatingButtonProps){
   const [open, setOpen] = useState(false);
   const [option, setOption] = useState('N5');
 
-  const options = [
-    'N5',
-    'N4',
-    'N3',
-    'N2',
-    'N1',
-    ];
+  
 
     return (
         <View style={styles.overlay}>
