@@ -1,20 +1,26 @@
 import Card from '@/components/pressable/Card';
 import FloatingButton from '@/components/pressable/FloatingButton';
 import Screen from '@/components/Screen';
+import { vh, vw } from '@/styles/globals';
 import { textStyles } from '@/styles/texts';
 import { Image } from 'expo-image';
-import { RelativePathString, router } from 'expo-router';
+import { router } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
 
-function toPage(page : RelativePathString){
-  router.push(page);
-}
+const GAP = 16;
 
 export default function HomeScreen() {
 
+  
+
+  const options = [
+    "N5",
+    "N4"
+  ];
+
   return (
     <Screen>
-      <FloatingButton/>
+      <FloatingButton options={options}/>
 
       <Image
       source={require('@/assets/images/logo.jpg')}
@@ -22,22 +28,25 @@ export default function HomeScreen() {
       contentFit="contain"
       />
 
-      <View style={{alignSelf: 'stretch',  gap: 20}}>
-        <Text style={textStyles.title}>Teste Seus Conhecimentos</Text>
-        <Card title='Simulado' style={{width: '100%'}} onPress={() => toPage("/practice-test")}/>
+      <View style={styles.table}>
+        <Text style={[{marginBottom: 8}, textStyles.title]}>Teste Seus Conhecimentos</Text>
+        <View style={styles.row}>
+          <Card title='Simulado' style={{width: '100%'}} onPress={() => router.push("/practice-test")}/>
+        </View>
       </View>
-
-      <View style={{alignSelf: 'stretch', gap: 20}}>
-        <Text style={textStyles.title}>Estude Por Competência</Text>
         
-        <View style={{flexDirection: 'row', height: 150, alignSelf: 'stretch', gap: 20}}>
-          <Card title='Vocabulário' style={{flex: 1, backgroundColor: '#d22'}} onPress={() => toPage("/topic-study")}/>
-          <Card title='Gramática' style={{flex: 1, backgroundColor: '#a2a'}} onPress={() => toPage("/topic-study")}/>
+
+      <View style={styles.table}>
+        <Text style={[{marginBottom: 8}, textStyles.title]}>Estude Por Competência</Text>
+        
+        <View style={styles.row}>
+          <Card title='Vocabulário' style={[{backgroundColor: '#d22'}, styles.card]} onPress={() => router.push("/topic-study")}/>
+          <Card title='Gramática' style={[{backgroundColor: '#a2a'}, styles.card]} onPress={() => router.push("/topic-study")}/>
         </View>
 
-        <View style={{flexDirection: 'row', height: 150, alignSelf: 'stretch', gap: 20}}>
-          <Card title='Leitura' style={{flex: 1, backgroundColor: '#2b7'}} onPress={() => toPage("/topic-study")}/>
-          <Card title='Audição' style={{flex: 1, backgroundColor: '#cc3'}} onPress={() => toPage("/topic-study")}/>
+        <View style={styles.row}>
+          <Card title='Leitura' style={[{backgroundColor: '#2b7'}, styles.card]} onPress={() => router.push("/topic-study")}/>
+          <Card title='Audição' style={[{backgroundColor: '#cc3'}, styles.card]} onPress={() => router.push("/topic-study")}/>
         </View>
       </View>
     </Screen>
@@ -46,18 +55,21 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 24,
-    gap: 20,
-  },
   logo: {
-    width: 180,
-    height: 180,
+    width: 50*vw,
+    height: 30*vh,
   },
-  message: {
-    textAlign: 'center',
+  row: { 
+    flexDirection: 'row', 
+    height: 20*vh, 
+    alignSelf: 'stretch',
+    gap: GAP,
   },
+  table: {
+    alignSelf: 'stretch',  
+    gap: GAP,
+  }, 
+  card: {
+    flex: 1
+  }
 });
