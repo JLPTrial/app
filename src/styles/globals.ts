@@ -18,7 +18,7 @@ export const colors = {
   textMuted: '#757575',      // Textos secundários, tab inativa
   textLight: '#FAFAFA',      // Textos dos headers das questões e das tags
   border: '#D7D7D7',         // Bordas das alternativas
-  audioPlayer: '#F1F3F4',    // Fundo do player de áudio
+  audioPlayer: '#ddd',       // Fundo do player de áudio
   success: '#0AB263',        // Texto da quantidade de questões corretas
   successBlock: '#F5F5DC',   // Fundo dos blocos da tela de resultado
   graphInner: '#CBD4ED',     // Interior do gráfico de estatísticas
