@@ -1,7 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
 import { AudioSource, useAudioPlayer, useAudioPlayerStatus } from 'expo-audio';
-import { useEffect, useState } from 'react';
+import { useFocusEffect } from 'expo-router';
+import { useCallback, useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { colors } from '../styles/globals';
 
@@ -25,6 +26,17 @@ export default function AudioPlayer({ source }: { source: AudioSource }) {
       player.pause();
     }
   }, [status?.didJustFinish]);
+
+  useFocusEffect(
+    useCallback(() => {
+      // Código que roda quando a rota entra em foco.
+
+      // Código que roda quando a rota sai de foco.
+      return () => {
+        player.pause();
+      };
+    }, [player]),
+  );
 
   return (
     <View style={styles.container}>
