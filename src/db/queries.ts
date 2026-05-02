@@ -175,7 +175,17 @@ export function useQuestions(level: JLPTLevel) {
 		return await selectQuestionMany(whereClause, Order.ASC, limit);
 	}
 
+	const insertAnswer = async (question: Question, level: JLPTLevel, aswer: number): Promise<boolean> => {
+		const query = `INSERT INTO answered_questions (jlpt_level, is_correct, question_id) VALUES (?,?,?)`;
+		try {
+			const result = await db.runAsync(query,`'${level}'`, aswer === question.correctAlternative, question.id);
+			return true;
+		} catch (e) {
+			return false;
+		}
+	}
+
 	return {
-		selectById, selectByTagName, selectByType, selectByTypeMany
+		selectById, selectByTagName, selectByType, selectByTypeMany, insertAnswer
 	};
 }
