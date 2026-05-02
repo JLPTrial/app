@@ -25,7 +25,9 @@ export default function RootLayout() {
           await db.execAsync(`ATTACH DATABASE '${n5Path}' AS N5;`);
         }}
       >
-        <Stack screenOptions={{ headerShown: false }}/>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        </Stack>
       </SQLiteProvider>
     </Suspense>
   );
