@@ -8,9 +8,6 @@ export default function TabLayout() {
         <Tabs
             screenOptions={{
                 headerShown: false,
-
-                // Garante que a barra não tenha overlap com a barra de navegação nativa do Android
-                tabBarSafeInsetBottom: true,
                 tabBarStyle: styles.tab,
 
                 tabBarActiveTintColor: colors.primaryLight,
