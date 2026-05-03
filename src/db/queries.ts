@@ -51,6 +51,7 @@ class WhereClause {
 	clauses: string[];
 	values: Record<string, string | number>;
 	level: JLPTLevel;
+	numClauses: number = 0;
 
 	constructor(level: JLPTLevel) {
 		this.clauses = [];
@@ -60,10 +61,11 @@ class WhereClause {
 
 	addClause(table: string, column: string, value: string | number, condition: string = "=", isQuestionTable: boolean = true) : void {
 		if(isQuestionTable)
-			this.clauses.push(`${this.level}.${table}.${column} ${condition} $${table}${column}`);
+			this.clauses.push(`${this.level}.${table}.${column} ${condition} $${table}${column}${this.numClauses}`);
 		else
-			this.clauses.push(`${table}.${column} ${condition} $${table}${column}`);
-		this.values[`$${table}${column}`] = value;
+			this.clauses.push(`${table}.${column} ${condition} $${table}${column}${this.numClauses}`);
+		this.values[`$${table}${column}${this.numClauses}`] = value;
+		this.numClauses += 1;
 	}
 	
 	getClauses(): string {
@@ -184,22 +186,8 @@ export function useQuestions(level: JLPTLevel) {
 			
 		}
 	}
-	const selectAnsweredByDateMany = async (date: string, limit: number = 5): Promise<Question[]> => {
-		const whereClause: WhereClause = new WhereClause(level);
-		whereClause.addClause("answered_questions", "answered_date", date, "<=", false);
-		return await selectQuestionMany(whereClause, Order.DATE, limit);
-	}
-
-	const filterAnsweredByRight = (questions: Question[]): Question[] => {
-		return questions.filter((question) => question.isCorrect);
-	}
-
-	const filterAnsweredByWrong = (questions: Question[]): Question[] => {
-		return questions.filter((question) => !question.isCorrect);
-	}
 
 	return {
-		selectById, selectByTagName, selectByType, selectByTypeMany, insertAnswer, selectAnsweredByDateMany,
-		filterAnsweredByRight, filterAnsweredByWrong
+		selectById, selectByTagName, selectByType, selectByTypeMany, insertAnswer
 	};
 }
