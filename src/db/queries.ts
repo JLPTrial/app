@@ -146,7 +146,6 @@ export function useQuestions(level: JLPTLevel) {
 			+ ` GROUP BY ${level}.questions.id ORDER BY ${order} LIMIT ${limit}`
 		
 		const results: QuestionQuery[] = await db.getAllAsync<QuestionQuery>(query, whereClause.getValues());
-
 		const questions: Question[] = results.map((result) => formatQuestion(result, level));
 		return questions;
 	}
@@ -178,14 +177,29 @@ export function useQuestions(level: JLPTLevel) {
 	const insertAnswer = async (question: Question, level: JLPTLevel, aswer: number): Promise<boolean> => {
 		const query = `INSERT INTO answered_questions (jlpt_level, is_correct, question_id) VALUES (?,?,?)`;
 		try {
-			const result = await db.runAsync(query,`'${level}'`, aswer === question.correctAlternative, question.id);
+			const result = await db.runAsync(query,`${level}`, aswer === question.correctAlternative, question.id);
 			return true;
 		} catch (e) {
 			return false;
+			
 		}
+	}
+	const selectAnsweredByDateMany = async (date: string, limit: number = 5): Promise<Question[]> => {
+		const whereClause: WhereClause = new WhereClause(level);
+		whereClause.addClause("answered_questions", "answered_date", date, "<=", false);
+		return await selectQuestionMany(whereClause, Order.DATE, limit);
+	}
+
+	const filterAnsweredByRight = (questions: Question[]): Question[] => {
+		return questions.filter((question) => question.isCorrect);
+	}
+
+	const filterAnsweredByWrong = (questions: Question[]): Question[] => {
+		return questions.filter((question) => !question.isCorrect);
 	}
 
 	return {
-		selectById, selectByTagName, selectByType, selectByTypeMany, insertAnswer
+		selectById, selectByTagName, selectByType, selectByTypeMany, insertAnswer, selectAnsweredByDateMany,
+		filterAnsweredByRight, filterAnsweredByWrong
 	};
 }

@@ -19,7 +19,12 @@ export default function QuestionScreen() {
         'listening'
     ]
     async function load() {
-        const results = await questionsDB.selectByTypeMany(types[type], limit);
+        const results: Question[] = await questionsDB.selectByTypeMany(types[type], limit);
+        setQuestions(results);
+    }
+
+    async function getAnswered() {
+        const results: Question[] = await questionsDB.selectAnsweredByDateMany("datetime('now', '-7 days')");
         setQuestions(results);
     }
 
@@ -29,6 +34,8 @@ export default function QuestionScreen() {
             <Text>Tipo: {types[type]} </Text>
 
             <Button onPress={() => { load() }}> Buscar mais questões</Button>
+
+             <Button onPress={() => { getAnswered() }}> Buscar questões respondidas</Button>
 
             <TextInput
                 onChangeText={(limit) => setLimit(Number(limit))}
