@@ -24,7 +24,9 @@ export default function QuestionScreen() {
     }
 
     async function getAnswered() {
-        const results: Question[] = await questionsDB.selectAnsweredByDateMany("datetime('now', '-7 days')");
+        const dayToday: Date = new Date();
+        const weekAgo: Date = new Date(dayToday.getTime() - 7 * (24 * 60 * 60 * 1000));
+        const results: Question[] = await questionsDB.selectAnsweredByDateMany(weekAgo);
         setQuestions(results);
     }
 

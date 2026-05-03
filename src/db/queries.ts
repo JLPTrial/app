@@ -183,11 +183,25 @@ export function useQuestions(level: JLPTLevel) {
 			return true;
 		} catch (e) {
 			return false;
-			
 		}
+	}
+	const selectAnsweredByDateMany = async (dateStart: Date, dateEnd:Date = new Date(), limit: number = 5): Promise<Question[]> => {
+		const whereClause: WhereClause = new WhereClause(level);
+		whereClause.addClause("answered_questions", "answered_date", dateStart.toISOString(), ">=", false);
+		whereClause.addClause("answered_questions", "answered_date", dateEnd.toISOString(), "<=", false);
+		return await selectQuestionMany(whereClause, Order.DATE, limit);
+	}
+
+	const filterAnsweredByRight = (questions: Question[]): Question[] => {
+		return questions.filter((question) => question.isCorrect);
+	}
+
+	const filterAnsweredByWrong = (questions: Question[]): Question[] => {
+		return questions.filter((question) => !question.isCorrect);
 	}
 
 	return {
-		selectById, selectByTagName, selectByType, selectByTypeMany, insertAnswer
+		selectById, selectByTagName, selectByType, selectByTypeMany, insertAnswer, selectAnsweredByDateMany,
+		filterAnsweredByRight, filterAnsweredByWrong
 	};
 }
