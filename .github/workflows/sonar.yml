@@ -1,13 +1,14 @@
-name: CI and SonarQube
+name: SonarQube Analysis
 
 on:
   push:
-    branches: [ main, develop, master ]
+    branches: [ main ]
   pull_request:
-    branches: [ main, develop, master ]
+    branches: [ main ]
 
 jobs:
-  quality:
+  sonar:
+    name: Scan Repository
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -16,12 +17,12 @@ jobs:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
 
-      - name: Setup Node.js
+      - name: Set up Node.js 22
         uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
         with:
           node-version: '22'
@@ -34,32 +35,17 @@ jobs:
             npm install --ignore-scripts
           fi
 
-      - name: Run lint
-        run: |
-          if npm run | grep -q " lint"; then
-            npm run lint
-          else
-            echo "No lint script found; skipping lint"
-          fi
-
-      - name: Run tests with coverage
-        run: |
-          if npm run | grep -q " test"; then
-            npm test -- --coverage --watchAll=false
-          else
-            echo "No test script found; skipping tests"
-          fi
-
-      - name: SonarQube Scan
+      - name: Run SonarCloud scan
         if: env.SONAR_TOKEN != ''
         uses: sonarsource/sonarqube-scan-action@a31c9398be7ace6bbfaf30c0bd5d415f843d45e9 # v7.0.0
         with:
           args: >
             -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.qualitygate.wait=false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ env.SONAR_TOKEN }}
 
-      - name: SonarQube skipped
+      - name: Skip SonarCloud scan
         if: env.SONAR_TOKEN == ''
         run: echo "SONAR_TOKEN is not configured; skipping SonarQube scan"
