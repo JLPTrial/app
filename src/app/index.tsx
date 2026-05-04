@@ -1,9 +1,10 @@
-import { assetsMap } from '../constants/assetsMap.ts';
-import AudioPlayer from '../components/AudioPlayer.tsx'
+import { useStorage } from '@/hooks/useStorage';
 import { Image } from 'expo-image';
-import { StyleSheet, Text, View } from 'react-native';
+import { Button, StyleSheet, Text, View } from 'react-native';
 
 export default function HomeScreen() {
+  const {data, setValue} = useStorage();
+
   return (
     <View style={styles.container}>
       <Image
@@ -12,9 +13,11 @@ export default function HomeScreen() {
         contentFit="contain"
       />
       <Text style={styles.message}>
-        {'VOCÊ CONSEGUIU!\nTá tudo certo agora'}
+        {'VOCÊ CONSEGUIU!\n O nível é '} { data.jlptLevel }
       </Text>
-      <AudioPlayer source={assetsMap["N5listening/JT4Y/L6-Q5.mp3"]}/>
+      <Button title='N5' onPress={() => setValue('jlptLevel', 'N5')}/>
+      <Button title='N4' onPress={() => setValue('jlptLevel', 'N4')}/>
+
     </View>
   );
 }
