@@ -1,8 +1,9 @@
+import { StorageProvider } from "@/contexts/StorageContext";
 import { moveDatabase } from "@/db/moveDatabase";
-import { Stack } from "expo-router";
 import { Paths } from 'expo-file-system';
+import { Stack } from "expo-router";
+import { SQLiteDatabase, SQLiteProvider } from "expo-sqlite";
 import { Suspense, useEffect, useState } from "react";
-import { SQLiteProvider, SQLiteDatabase } from "expo-sqlite"
 import Loading from "./loading";
 
 export default function RootLayout() {
@@ -25,7 +26,9 @@ export default function RootLayout() {
           await db.execAsync(`ATTACH DATABASE '${n5Path}' AS n5;`);
         }}
       >
-        <Stack />
+        <StorageProvider>
+          <Stack />
+        </StorageProvider>
       </SQLiteProvider>
     </Suspense>
   );
