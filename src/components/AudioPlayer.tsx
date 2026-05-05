@@ -29,9 +29,6 @@ export default function AudioPlayer({ source }: { source: AudioSource }) {
 
   useFocusEffect(
     useCallback(() => {
-      // Código que roda quando a rota entra em foco.
-
-      // Código que roda quando a rota sai de foco.
       return () => {
         player.pause();
       };
