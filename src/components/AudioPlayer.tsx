@@ -25,7 +25,7 @@ export default function AudioPlayer({ source }: { source: AudioSource }) {
       player.seekTo(0);
       player.pause();
     }
-  }, [status?.didJustFinish]);
+  }, [status?.didJustFinish, player]);
 
   useFocusEffect(
     useCallback(() => {
