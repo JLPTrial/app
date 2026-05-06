@@ -138,16 +138,18 @@ export function useQuestions(level: JLPTLevel) {
 		AND answered_questions.jlpt_level = '${level}'`;
 
 
-	const selectQuestion = async (whereClause: WhereClause, order: Order = Order.RANDOM): Promise<Question | null> => {
+	const selectQuestion = async (whereClause?: WhereClause, order: Order = Order.RANDOM): Promise<Question | null> => {
 		const question: Question[] = await selectQuestionMany(whereClause, order, 1);
 		return (question.length > 0) ? question[0] : null;
 	}
 
-	const selectQuestionMany = async (whereClause: WhereClause, order: Order = Order.RANDOM, limit: number = -1): Promise<Question[]> => {
-		const query = ((whereClause === null) ? `${queryBase}` : `${queryBase} WHERE ${whereClause.getClauses()}`)
+	const selectQuestionMany = async (whereClause?: WhereClause, order: Order = Order.RANDOM, limit: number = -1): Promise<Question[]> => {
+		const query = ((whereClause === undefined) ? `${queryBase}` : `${queryBase} WHERE ${whereClause.getClauses()}`)
 			+ ` GROUP BY ${level}.questions.id ORDER BY ${order} LIMIT ${limit}`
 
-		const results: QuestionQuery[] = await db.getAllAsync<QuestionQuery>(query, whereClause.getValues());
+		const values = ((whereClause === undefined) ? {} : whereClause.getValues());
+
+		const results: QuestionQuery[] = await db.getAllAsync<QuestionQuery>(query, values);
 		const questions: Question[] = results.map((result) => formatQuestion(result, level));
 		return questions;
 	}
@@ -192,6 +194,11 @@ export function useQuestions(level: JLPTLevel) {
 		return await selectQuestionMany(whereClause, Order.DATE, limit);
 	}
 
+	const selectAnsweredMany = async (limit: number = -1): Promise<Question[]> => {
+		return await selectQuestionMany(undefined, Order.DATE, limit);
+	}
+
+
 	const filterAnsweredByRight = (questions: Question[]): Question[] => {
 		return questions.filter((question) => question.isCorrect);
 	}
@@ -202,6 +209,6 @@ export function useQuestions(level: JLPTLevel) {
 
 	return {
 		selectById, selectByTagName, selectByType, selectByTypeMany, insertAnswer, selectAnsweredByDateMany,
-		filterAnsweredByRight, filterAnsweredByWrong
+		selectAnsweredMany, filterAnsweredByRight, filterAnsweredByWrong
 	};
 }
