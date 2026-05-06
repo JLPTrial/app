@@ -4,12 +4,13 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 
 type FloatingButtonProps = {
   options: any[];
+  defaultValue: any;
   onPress: Function;
 };
 
-export default function FloatingButton({ options, onPress} : FloatingButtonProps){
+export default function FloatingButton({ options, defaultValue, onPress} : FloatingButtonProps){
   const [open, setOpen] = useState(false);
-  const [option, setOption] = useState(options[0]);
+  const [option, setOption] = useState(defaultValue);
 
     return (
         <View style={styles.overlay}>
