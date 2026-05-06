@@ -143,7 +143,7 @@ export function useQuestions(level: JLPTLevel) {
 		return (question.length > 0) ? question[0] : null;
 	}
 
-	const selectQuestionMany = async (whereClause: WhereClause, order: Order = Order.RANDOM, limit: number = 20): Promise<Question[]> => {
+	const selectQuestionMany = async (whereClause: WhereClause, order: Order = Order.RANDOM, limit: number = -1): Promise<Question[]> => {
 		const query = ((whereClause === null) ? `${queryBase}` : `${queryBase} WHERE ${whereClause.getClauses()}`)
 			+ ` GROUP BY ${level}.questions.id ORDER BY ${order} LIMIT ${limit}`
 
@@ -158,7 +158,7 @@ export function useQuestions(level: JLPTLevel) {
 		return await selectQuestion(whereClause);
 	}
 
-	const selectByTagName = async (tagName: string, limit: number = 5): Promise<Question[]> => {
+	const selectByTagName = async (tagName: string, limit: number = -1): Promise<Question[]> => {
 		const whereClause: WhereClause = new WhereClause(level);
 		whereClause.addClause("tags", "name", tagName);
 		return await selectQuestionMany(whereClause, Order.RANDOM, limit);
@@ -170,7 +170,7 @@ export function useQuestions(level: JLPTLevel) {
 		return await selectQuestion(whereClause);
 	}
 
-	const selectByTypeMany = async (type: string, limit: number = 5): Promise<Question[]> => {
+	const selectByTypeMany = async (type: string, limit: number = -1): Promise<Question[]> => {
 		const whereClause: WhereClause = new WhereClause(level);
 		whereClause.addClause("questions", "question_type", type);
 		return await selectQuestionMany(whereClause, Order.ASC, limit);
@@ -185,7 +185,7 @@ export function useQuestions(level: JLPTLevel) {
 			return false;
 		}
 	}
-	const selectAnsweredByDateMany = async (dateStart: Date, dateEnd: Date = new Date(), limit: number = 5): Promise<Question[]> => {
+	const selectAnsweredByDateMany = async (dateStart: Date, dateEnd: Date = new Date(), limit: number = -1): Promise<Question[]> => {
 		const whereClause: WhereClause = new WhereClause(level);
 		whereClause.addClause("answered_questions", "answered_date", dateStart.toISOString(), ">=", false);
 		whereClause.addClause("answered_questions", "answered_date", dateEnd.toISOString(), "<=", false);
