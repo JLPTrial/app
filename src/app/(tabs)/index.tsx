@@ -1,6 +1,7 @@
 import Card from '@/components/pressable/Card';
 import FloatingButton from '@/components/pressable/FloatingButton';
 import Screen from '@/components/Screen';
+import { useStorage } from '@/hooks/useStorage';
 import { vh, vw } from '@/styles/globals';
 import { textStyles } from '@/styles/texts';
 import { Image } from 'expo-image';
@@ -15,10 +16,13 @@ const levels = [
 ];
 
 export default function HomeScreen() {
+  const {data, setValue} = useStorage();
   
   return (
     <Screen>
-      <FloatingButton options={levels}/>
+      <FloatingButton options={levels} onPress={(item : 'N5' | 'N4') => {
+        setValue('jlptLevel', item);
+      }}/>
 
       <Image
       source={require('@/assets/images/logo.jpg')}
@@ -32,7 +36,6 @@ export default function HomeScreen() {
           <Card title='Simulado' style={{width: '100%'}} onPress={() => router.push("/practice-test")}/>
         </View>
       </View>
-        
 
       <View style={styles.table}>
         <Text style={[{marginBottom: 8}, textStyles.title]}>Estude Por Competência</Text>
