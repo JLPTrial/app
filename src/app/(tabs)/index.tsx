@@ -20,7 +20,7 @@ export default function HomeScreen() {
   
   return (
     <Screen>
-      <FloatingButton options={levels} onPress={(item : 'N5' | 'N4') => {
+      <FloatingButton options={levels} defaultValue={data.jlptLevel} onPress={(item : 'N5' | 'N4') => {
         setValue('jlptLevel', item);
       }}/>
 
