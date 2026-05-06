@@ -1,3 +1,4 @@
+import { StorageProvider } from "@/contexts/StorageContext";
 import { moveDatabase } from "@/db/moveDatabase";
 import { Paths } from 'expo-file-system';
 import { Stack } from "expo-router";
@@ -25,9 +26,11 @@ export default function RootLayout() {
           await db.execAsync(`ATTACH DATABASE '${n5Path}' AS N5;`);
         }}
       >
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        </Stack>
+        <StorageProvider>
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          </Stack>
+        </StorageProvider>
       </SQLiteProvider>
     </Suspense>
   );
