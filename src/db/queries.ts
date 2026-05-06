@@ -59,15 +59,15 @@ class WhereClause {
 		this.level = level;
 	}
 
-	addClause(table: string, column: string, value: string | number, condition: string = "=", isQuestionTable: boolean = true) : void {
-		if(isQuestionTable)
+	addClause(table: string, column: string, value: string | number, condition: string = "=", isQuestionTable: boolean = true): void {
+		if (isQuestionTable)
 			this.clauses.push(`${this.level}.${table}.${column} ${condition} $${table}${column}${this.numClauses}`);
 		else
 			this.clauses.push(`${table}.${column} ${condition} $${table}${column}${this.numClauses}`);
 		this.values[`$${table}${column}${this.numClauses}`] = value;
 		this.numClauses += 1;
 	}
-	
+
 	getClauses(): string {
 		return this.clauses.join(" AND ");
 	}
@@ -136,7 +136,7 @@ export function useQuestions(level: JLPTLevel) {
 	  LEFT JOIN answered_questions
 		ON ${level}.questions.id = answered_questions.question_id
 		AND answered_questions.jlpt_level = '${level}'`;
-	
+
 
 	const selectQuestion = async (whereClause: WhereClause, order: Order = Order.RANDOM): Promise<Question | null> => {
 		const question: Question[] = await selectQuestionMany(whereClause, order, 1);
@@ -146,7 +146,7 @@ export function useQuestions(level: JLPTLevel) {
 	const selectQuestionMany = async (whereClause: WhereClause, order: Order = Order.RANDOM, limit: number = 20): Promise<Question[]> => {
 		const query = ((whereClause === null) ? `${queryBase}` : `${queryBase} WHERE ${whereClause.getClauses()}`)
 			+ ` GROUP BY ${level}.questions.id ORDER BY ${order} LIMIT ${limit}`
-		
+
 		const results: QuestionQuery[] = await db.getAllAsync<QuestionQuery>(query, whereClause.getValues());
 		const questions: Question[] = results.map((result) => formatQuestion(result, level));
 		return questions;
@@ -176,16 +176,16 @@ export function useQuestions(level: JLPTLevel) {
 		return await selectQuestionMany(whereClause, Order.ASC, limit);
 	}
 
-	const insertAnswer = async (question: Question, level: JLPTLevel, aswer: number): Promise<boolean> => {
+	const insertAnswer = async (question: Question, level: JLPTLevel, answer: number): Promise<boolean> => {
 		const query = `INSERT INTO answered_questions (jlpt_level, is_correct, question_id) VALUES (?,?,?)`;
 		try {
-			const result = await db.runAsync(query,`${level}`, aswer === question.correctAlternative, question.id);
+			const result = await db.runAsync(query, `${level}`, answer === question.correctAlternative, question.id);
 			return true;
 		} catch (e) {
 			return false;
 		}
 	}
-	const selectAnsweredByDateMany = async (dateStart: Date, dateEnd:Date = new Date(), limit: number = 5): Promise<Question[]> => {
+	const selectAnsweredByDateMany = async (dateStart: Date, dateEnd: Date = new Date(), limit: number = 5): Promise<Question[]> => {
 		const whereClause: WhereClause = new WhereClause(level);
 		whereClause.addClause("answered_questions", "answered_date", dateStart.toISOString(), ">=", false);
 		whereClause.addClause("answered_questions", "answered_date", dateEnd.toISOString(), "<=", false);

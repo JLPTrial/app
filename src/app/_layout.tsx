@@ -18,7 +18,8 @@ export default function RootLayout() {
   const userDBCreation = `
     CREATE TABLE IF NOT EXISTS answered_questions (
       question_id INTEGER NOT NULL,
-      jlpt_level TEXT NOT NULL,
+      jlpt_level TEXT NOT NULL
+        CHECK (jlpt_level IN ('N5', 'N4')),
       answered_date TEXT DEFAULT CURRENT_TIMESTAMP,
       is_correct INTEGER NOT NULL,
       PRIMARY KEY (question_id, jlpt_level)
@@ -27,11 +28,11 @@ export default function RootLayout() {
   return (
     <Suspense fallback={<Loading />}>
       <SQLiteProvider
-        databaseName="ATmain.db"
+        databaseName="main.db"
         onInit={async (db: SQLiteDatabase) => {
           await db.execAsync("PRAGMA foreign_keys = ON;");
           await db.execAsync(`ATTACH DATABASE '${n5Path}' AS N5;`);
-           await db.execAsync(userDBCreation);
+          await db.execAsync(userDBCreation);
         }}
       >
         <Stack screenOptions={{ headerShown: false }}>

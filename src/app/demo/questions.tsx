@@ -26,16 +26,16 @@ export default function QuestionScreen() {
     }
 
     async function save(chosenAlternative: number) {
-        if(question === null) return;
+        if (question === null) return;
         const result = await questionsDB.insertAnswer(question, level, chosenAlternative);
-        alert ("Questão salva");
+        alert("Questão salva");
         load();
     }
 
-    async function sendAnswer(chosenAlternative : number){
+    async function sendAnswer(chosenAlternative: number) {
         setAnswer(chosenAlternative);
     }
-    const buttonStyle = (chosenAlternative:number) => {
+    const buttonStyle = (chosenAlternative: number) => {
         if (answer === null || question === null || answer !== chosenAlternative)
             return styles.default;
         return chosenAlternative === question.correctAlternative ? styles.rightAnswer : styles.wrongAnswer;
@@ -54,13 +54,13 @@ export default function QuestionScreen() {
             <Text>{question.text}</Text>
             {question.alternatives.map((alternative: string, i: number) => {
                 return <Button
-                    key={i+1}
-                    style={[buttonStyle(i+1)]}
-                    onPress={() => { sendAnswer(i+1); }
+                    key={i + 1}
+                    style={[buttonStyle(i + 1)]}
+                    onPress={() => { sendAnswer(i + 1); }
                     }>{alternative}</Button>;
             })}
-            <Button onPress={() => {  if(answer !== null) save(answer+1);}}> Salvar Questão </Button>
-            <Button onPress={() => {  load() }}> Nova Questão </Button>
+            <Button onPress={() => { if (answer !== null) save(answer + 1); }}> Salvar Questão </Button>
+            <Button onPress={() => { load() }}> Nova Questão </Button>
             <Button onPress={() => { setType((type + 1) % types.length); }}> Mudar tipo </Button>
         </View>
     );
@@ -79,9 +79,9 @@ const styles = StyleSheet.create({
         height: 180,
     },
     default: {
-    backgroundColor: "#fff",
-    borderColor: "#ccc",
-  } ,
+        backgroundColor: "#fff",
+        borderColor: "#ccc",
+    },
     rightAnswer: {
         backgroundColor: "green",
     },

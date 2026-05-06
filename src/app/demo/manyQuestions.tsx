@@ -37,7 +37,7 @@ export default function QuestionScreen() {
 
             <Button onPress={() => { load() }}> Buscar mais questões</Button>
 
-             <Button onPress={() => { getAnswered() }}> Buscar questões respondidas</Button>
+            <Button onPress={() => { getAnswered() }}> Buscar questões respondidas</Button>
 
             <TextInput
                 onChangeText={(limit) => setLimit(Number(limit))}
@@ -52,7 +52,7 @@ export default function QuestionScreen() {
                 data={questions}
                 keyExtractor={(question) => String(question.id)}
                 renderItem={({ item: question }) => (
-                    <View style={styles.flatlistItem}>
+                    <View style={styles.flatListItem}>
                         {question.image != null && (
                             <Image
                                 source={assetsMap[`${question.image}`]}
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
         width: 180,
         height: 180,
     },
-    flatlistItem: {
+    flatListItem: {
         backgroundColor: '#c0c0c0',
         margin: 10,
     },
