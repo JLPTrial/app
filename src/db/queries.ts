@@ -59,12 +59,15 @@ class WhereClause {
 		this.level = level;
 	}
 
-	addClause(table: string, column: string, value: string | number, condition: string = "=", isQuestionTable: boolean = true): void {
+	addClause(table: string, column: string, value: string | number | Date, condition: string = "=", isQuestionTable: boolean = true): void {
 		if (isQuestionTable)
 			this.clauses.push(`${this.level}.${table}.${column} ${condition} $${table}${column}${this.numClauses}`);
 		else
 			this.clauses.push(`${table}.${column} ${condition} $${table}${column}${this.numClauses}`);
-		this.values[`$${table}${column}${this.numClauses}`] = value;
+		if (value instanceof Date)
+			this.values[`$${table}${column}${this.numClauses}`] = value.toISOString().replace("T", " ").split(".")[0];
+		else
+			this.values[`$${table}${column}${this.numClauses}`] = value;
 		this.numClauses += 1;
 	}
 
@@ -187,10 +190,11 @@ export function useQuestions(level: JLPTLevel) {
 			return false;
 		}
 	}
+
 	const selectAnsweredByDateMany = async (dateStart: Date, dateEnd: Date = new Date(), limit: number = -1): Promise<Question[]> => {
 		const whereClause: WhereClause = new WhereClause(level);
-		whereClause.addClause("answered_questions", "answered_date", dateStart.toISOString(), ">=", false);
-		whereClause.addClause("answered_questions", "answered_date", dateEnd.toISOString(), "<=", false);
+		whereClause.addClause("answered_questions", "answered_date", dateStart, ">=", false);
+		whereClause.addClause("answered_questions", "answered_date", dateEnd, "<=", false);
 		return await selectQuestionMany(whereClause, Order.DATE, limit);
 	}
 
