@@ -10,7 +10,9 @@ type ScreenProps = PropsWithChildren<{
 export default function Screen({ children, style } : ScreenProps){
 
     return (
-        <SafeAreaView style={{flex: 1, backgroundColor: colors.background }}>
+        <SafeAreaView 
+            edges={['left', 'right', 'top']}
+            style={{flex: 1, backgroundColor: colors.background }}>
             <ScrollView contentContainerStyle={[{ 
                 flexGrow: 1,
                 alignItems: 'center',
