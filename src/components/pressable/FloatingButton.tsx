@@ -4,13 +4,12 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 
 type FloatingButtonProps = {
   options: any[];
+  onPress: Function;
 };
 
-export default function FloatingButton({ options } : FloatingButtonProps){
+export default function FloatingButton({ options, onPress} : FloatingButtonProps){
   const [open, setOpen] = useState(false);
-  const [option, setOption] = useState('N5');
-
-  
+  const [option, setOption] = useState(options[0]);
 
     return (
         <View style={styles.overlay}>
@@ -25,8 +24,9 @@ export default function FloatingButton({ options } : FloatingButtonProps){
                         key={item}
                         style={styles.option}
                         onPress={() => {
-                            setOption(item);
                             setOpen(false);
+                            setOption(item);
+                            onPress(item);
                         }}>
                         <Text style={textStyles.subtitle}>{item}</Text>
                     </Pressable>
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     height: 50,
     width: 50,
     borderRadius: 30, 
-    backgroundColor: '#a00',
+    backgroundColor: 'rgba(238, 36, 36, 1)',
     justifyContent: 'center',
     alignItems: 'center'
   },
