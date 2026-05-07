@@ -17,6 +17,7 @@ export default function Screen({ children, style } : ScreenProps){
                 flexGrow: 1,
                 alignItems: 'center',
                 paddingHorizontal: 24,
+                paddingBottom: 20,
                 gap: 20,
                 
                 }, style]}>
