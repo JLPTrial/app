@@ -2,6 +2,10 @@ import { useSQLiteContext } from 'expo-sqlite';
 
 export type JLPTLevel = 'N5' | 'N4';
 
+// For now, has no utility beside telling the whereClause to 
+// not use JLPTLevel database.
+const UserDB = "UserDB";
+
 // Interface to manage question query
 interface QuestionQuery {
 	id: number;
@@ -46,6 +50,16 @@ enum Order {
 	DATE = "answered_questions.answered_date DESC",
 }
 
+// Common comparison params for SQL queries
+enum Compare {
+	EQUAL = "=",
+	DIFF = "!=",
+	LESS = "<",
+	LESS_EQ = "<=",
+	MORE = ">",
+	MORE_EQ = ">=",
+}
+
 // Object to construct where clauses
 class WhereClause {
 	clauses: string[];
@@ -59,15 +73,22 @@ class WhereClause {
 		this.level = level;
 	}
 
-	addClause(table: string, column: string, value: string | number | Date, condition: string = "=", isQuestionTable: boolean = true): void {
-		if (isQuestionTable)
-			this.clauses.push(`${this.level}.${table}.${column} ${condition} $${table}${column}${this.numClauses}`);
-		else
-			this.clauses.push(`${table}.${column} ${condition} $${table}${column}${this.numClauses}`);
+	addClauseCompare(table: string, column: string, value: string | number | Date, comparison: Compare = Compare.EQUAL, database?: string | undefined): void {
+		const field = ((database === undefined) ? `${this.level}.` : "") + `${table}.${column}`;
+		const key = `${field}.${this.numClauses}`.replaceAll(".", "");
+		this.clauses.push(`${field} ${comparison} $${key}`);
+		this.setValue(key, value);
+	}
+
+	addClauseIsNull(table: string, column: string, isNull: boolean = true, database: string | undefined): void {
+		const field = ((database === undefined) ? `${this.level}.` : "") + `${table}.${column}`;
+		this.clauses.push(`${field} is ${(isNull) ? 'NULL' : 'NOT NULL'}`);
+	}
+
+	setValue(key: string, value: string | number | Date): void {
 		if (value instanceof Date)
-			this.values[`$${table}${column}${this.numClauses}`] = value.toISOString().replace("T", " ").split(".")[0];
-		else
-			this.values[`$${table}${column}${this.numClauses}`] = value;
+			value = value.toISOString().replace("T", " ").split(".")[0];
+		this.values[`$${key}`] = value;
 		this.numClauses += 1;
 	}
 
@@ -151,7 +172,6 @@ export function useQuestions(level: JLPTLevel) {
 			+ ` GROUP BY ${level}.questions.id ORDER BY ${order} LIMIT ${limit}`
 
 		const values = ((whereClause === undefined) ? {} : whereClause.getValues());
-
 		const results: QuestionQuery[] = await db.getAllAsync<QuestionQuery>(query, values);
 		const questions: Question[] = results.map((result) => formatQuestion(result, level));
 		return questions;
@@ -159,49 +179,50 @@ export function useQuestions(level: JLPTLevel) {
 
 	const selectById = async (id: number): Promise<Question | null> => {
 		const whereClause: WhereClause = new WhereClause(level);
-		whereClause.addClause("questions", "id", id);
+		whereClause.addClauseCompare("questions", "id", id);
 		return await selectQuestion(whereClause);
 	}
 
 	const selectByTagName = async (tagName: string, limit: number = -1): Promise<Question[]> => {
 		const whereClause: WhereClause = new WhereClause(level);
-		whereClause.addClause("tags", "name", tagName);
+		whereClause.addClauseCompare("tags", "name", tagName);
 		return await selectQuestionMany(whereClause, Order.RANDOM, limit);
 	}
 
 	const selectByType = async (type: string): Promise<Question | null> => {
 		const whereClause: WhereClause = new WhereClause(level);
-		whereClause.addClause("questions", "question_type", type);
+		whereClause.addClauseCompare("questions", "question_type", type);
 		return await selectQuestion(whereClause);
 	}
 
 	const selectByTypeMany = async (type: string, limit: number = -1): Promise<Question[]> => {
 		const whereClause: WhereClause = new WhereClause(level);
-		whereClause.addClause("questions", "question_type", type);
+		whereClause.addClauseCompare("questions", "question_type", type);
 		return await selectQuestionMany(whereClause, Order.ASC, limit);
 	}
 
 	const insertAnswer = async (question: Question, level: JLPTLevel, answer: number): Promise<boolean> => {
 		const query = `INSERT INTO answered_questions (jlpt_level, is_correct, question_id) VALUES (?,?,?)`;
 		try {
-			const result = await db.runAsync(query, `${level}`, answer === question.correctAlternative, question.id);
+			await db.runAsync(query, `${level}`, answer === question.correctAlternative, question.id);
 			return true;
-		} catch (e) {
+		} catch {
 			return false;
 		}
 	}
 
 	const selectAnsweredByDateMany = async (dateStart: Date, dateEnd: Date = new Date(), limit: number = -1): Promise<Question[]> => {
 		const whereClause: WhereClause = new WhereClause(level);
-		whereClause.addClause("answered_questions", "answered_date", dateStart, ">=", false);
-		whereClause.addClause("answered_questions", "answered_date", dateEnd, "<=", false);
+		whereClause.addClauseCompare("answered_questions", "answered_date", dateStart, Compare.MORE_EQ, UserDB);
+		whereClause.addClauseCompare("answered_questions", "answered_date", dateEnd, Compare.LESS_EQ, UserDB);
 		return await selectQuestionMany(whereClause, Order.DATE, limit);
 	}
 
 	const selectAnsweredMany = async (limit: number = -1): Promise<Question[]> => {
-		return await selectQuestionMany(undefined, Order.DATE, limit);
+		const whereClause: WhereClause = new WhereClause(level);
+		whereClause.addClauseIsNull("answered_questions", "answered_date", false, UserDB);
+		return await selectQuestionMany(whereClause, Order.DATE, limit);
 	}
-
 
 	const filterAnsweredByRight = (questions: Question[]): Question[] => {
 		return questions.filter((question) => question.isCorrect);

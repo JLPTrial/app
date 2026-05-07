@@ -23,10 +23,14 @@ export default function QuestionScreen() {
         setQuestions(results);
     }
 
-    async function getAnswered() {
+    async function getAnswered(getAll: boolean = false) {
         const dayToday: Date = new Date();
         const weekAgo: Date = new Date(dayToday.getTime() - 7 * (24 * 60 * 60 * 1000));
-        const results: Question[] = await questionsDB.selectAnsweredByDateMany(weekAgo);
+        let results: Question[]
+        if (getAll)
+            results = await questionsDB.selectAnsweredMany();
+        else
+            results = await questionsDB.selectAnsweredByDateMany(weekAgo);
         setQuestions(results);
     }
 
@@ -38,6 +42,8 @@ export default function QuestionScreen() {
             <Button onPress={() => { load() }}> Buscar mais questões</Button>
 
             <Button onPress={() => { getAnswered() }}> Buscar questões respondidas</Button>
+
+            <Button onPress={() => { getAnswered(true) }}> Buscar todas as questões respondidas</Button>
 
             <TextInput
                 onChangeText={(limit) => setLimit(Number(limit))}
