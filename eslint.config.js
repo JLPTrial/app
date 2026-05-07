@@ -8,6 +8,7 @@ module.exports = defineConfig([
     files: ['**/*.{js,jsx,ts,tsx}'],
     rules: {
       'indent': ['error', 2],
+      'semi': ['error', 'always'],
     },
   },
 ]);
