@@ -42,7 +42,7 @@ export default function FloatingButton({ options, defaultValue, onPress} : Float
 const styles = StyleSheet.create({
   overlay: {
     position: 'absolute',
-    top: 0,
+    top: 30,
     right: 30,
     zIndex: 999,
     alignItems: 'flex-end',
