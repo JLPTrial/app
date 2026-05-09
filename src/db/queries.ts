@@ -85,6 +85,25 @@ class WhereClause {
     this.clauses.push(`${field} is ${(isNull) ? 'NULL' : 'NOT NULL'}`);
   }
 
+  addClauseIn(table: string, column: string, values: (string | number)[], database?: string | undefined): void {
+    if (values.length === 0) return;
+
+    const field = ((database === undefined) ? `${this.level}.` : "") + `${table}.${column}`;
+    
+    const keys = values.map((_, index) => {
+      const key = `${field}${this.numClauses}${index}`.replaceAll(".", "");
+      return `$${key}`;
+    });
+
+    this.clauses.push(`${field} IN (${keys.join(", ")})`);
+
+    values.forEach((val, index) => {
+      this.values[`$${keys[index]}`] = val;
+    });
+
+    this.numClauses += 1;
+  }
+
   setValue(key: string, value: string | number | Date): void {
     if (value instanceof Date)
       value = value.toISOString().replace("T", " ").split(".")[0];
