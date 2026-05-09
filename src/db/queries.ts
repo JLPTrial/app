@@ -244,11 +244,11 @@ export function useQuestions(level: JLPTLevel) {
   };
 
   const filterAnsweredByRight = (questions: Question[]): Question[] => {
-    return questions.filter((question) => question.isCorrect);
+    return questions.filter((question) => question.isCorrect === true);
   };
 
   const filterAnsweredByWrong = (questions: Question[]): Question[] => {
-    return questions.filter((question) => !question.isCorrect);
+    return questions.filter((question) => question.isCorrect === false);
   };
 
   return {
