@@ -9,23 +9,23 @@ type ScreenProps = PropsWithChildren<{
 
 export default function Screen({ children, style } : ScreenProps){
 
-    return (
-        <SafeAreaView 
-            edges={['left', 'right', 'top']}
-            style={{flex: 1, backgroundColor: colors.background }}>
-            <ScrollView contentContainerStyle={[{ 
-                flexGrow: 1,
-                alignItems: 'center',
-                paddingHorizontal: 24,
-                paddingBottom: 20,
-                gap: 20,
+  return (
+    <SafeAreaView 
+      edges={['left', 'right', 'top']}
+      style={{flex: 1, backgroundColor: colors.background }}>
+      <ScrollView contentContainerStyle={[{ 
+        flexGrow: 1,
+        alignItems: 'center',
+        paddingHorizontal: 24,
+        paddingBottom: 20,
+        gap: 20,
                 
-                }, style]}>
+      }, style]}>
 
-                {children}
+        {children}
 
-            </ScrollView>
-        </SafeAreaView>
-    )
+      </ScrollView>
+    </SafeAreaView>
+  );
 }
 
