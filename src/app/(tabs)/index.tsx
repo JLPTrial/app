@@ -25,9 +25,9 @@ export default function HomeScreen() {
       }}/>
 
       <Image
-      source={require('@/assets/images/logo.jpg')}
-      style={styles.logo}
-      contentFit="contain"
+        source={require('@/assets/images/logo.jpg')}
+        style={styles.logo}
+        contentFit="contain"
       />
 
       <View style={styles.table}>

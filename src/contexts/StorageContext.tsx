@@ -6,7 +6,7 @@ type StorageSchema = {
 };
 
 const defaultStorage: StorageSchema = {
-    jlptLevel: 'N5',
+  jlptLevel: 'N5',
 };
 
 type StorageContextType = {
@@ -21,36 +21,36 @@ export const StorageContext = createContext<StorageContextType | null>(null);
 
 export function StorageProvider({ children } : PropsWithChildren){
 
-    const [data, setData] = useState<StorageSchema>(() => {
-        const result: StorageSchema = { ...defaultStorage };
+  const [data, setData] = useState<StorageSchema>(() => {
+    const result: StorageSchema = { ...defaultStorage };
 
-        for (const key of Object.keys(defaultStorage) as (keyof StorageSchema)[]) {
-            const stored = Storage.getItemSync(key);
+    for (const key of Object.keys(defaultStorage) as (keyof StorageSchema)[]) {
+      const stored = Storage.getItemSync(key);
 
-            if (stored !== null) {
-                result[key] = stored as StorageSchema[typeof key];
-            }
-        }
+      if (stored !== null) {
+        result[key] = stored as StorageSchema[typeof key];
+      }
+    }
 
-        return result;
-    });
+    return result;
+  });
 
-    const setValue = <K extends keyof StorageSchema>(
-        key: K,
-        value: StorageSchema[K]
-        ) => {
-        Storage.setItemSync(key, value);
+  const setValue = <K extends keyof StorageSchema>(
+    key: K,
+    value: StorageSchema[K]
+  ) => {
+    Storage.setItemSync(key, value);
 
-        setData((prev) => ({
-            ...prev,
-            [key]: value,
-        }));
-    };
+    setData((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  };
 
-    return (
-        <StorageContext.Provider value={{ data, setValue }}>
-            {children}
-        </StorageContext.Provider>
-    );
+  return (
+    <StorageContext.Provider value={{ data, setValue }}>
+      {children}
+    </StorageContext.Provider>
+  );
 
 }

@@ -12,30 +12,30 @@ export default function FloatingButton({ options, defaultValue, onPress} : Float
   const [open, setOpen] = useState(false);
   const [option, setOption] = useState(defaultValue);
 
-    return (
-        <View style={styles.overlay}>
-            <Pressable style={styles.button} onPress={() => setOpen(!open)}>
-                <Text style={textStyles.subtitle}>{ option }</Text>
-            </Pressable>
+  return (
+    <View style={styles.overlay}>
+      <Pressable style={styles.button} onPress={() => setOpen(!open)}>
+        <Text style={textStyles.subtitle}>{ option }</Text>
+      </Pressable>
 
-            {open && (
-                <View style={styles.menu}>
-                    {options.map((item) => (
-                    <Pressable
-                        key={item}
-                        style={styles.option}
-                        onPress={() => {
-                            setOpen(false);
-                            setOption(item);
-                            onPress(item);
-                        }}>
-                        <Text style={textStyles.subtitle}>{item}</Text>
-                    </Pressable>
-                    ))}
-                </View>
-            )}
+      {open && (
+        <View style={styles.menu}>
+          {options.map((item) => (
+            <Pressable
+              key={item}
+              style={styles.option}
+              onPress={() => {
+                setOpen(false);
+                setOption(item);
+                onPress(item);
+              }}>
+              <Text style={textStyles.subtitle}>{item}</Text>
+            </Pressable>
+          ))}
         </View>
-    )
+      )}
+    </View>
+  );
     
 }
 
