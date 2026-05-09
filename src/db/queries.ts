@@ -1,6 +1,7 @@
 import { useSQLiteContext } from 'expo-sqlite';
 
 export type JLPTLevel = 'N5' | 'N4';
+export type AnsweredStatus = 'answered' | 'unanswered' | 'all';
 
 // For now, has no utility beside telling the whereClause to 
 // not use JLPTLevel database.
@@ -251,8 +252,31 @@ export function useQuestions(level: JLPTLevel) {
     return questions.filter((question) => question.isCorrect === false);
   };
 
+  const searchQuestionsFilters = async (
+    type: string,
+    tags: string[] = [],
+    answeredStatus: AnsweredStatus = 'unanswered',
+    limit: number = -1,
+    order: Order = Order.RANDOM): Promise<Question[]> => {
+
+    const whereClause = new WhereClause(level);
+
+    whereClause.addClauseCompare("questions", "question_type", type);
+
+    if (tags.length > 0) whereClause.addClauseIn("tags", "name", tags);
+
+    if (answeredStatus === 'answered') {
+      whereClause.addClauseIsNull("answered_questions", "answered_date", false, UserDB);
+    }
+    else if (answeredStatus === 'unanswered') {
+      whereClause.addClauseIsNull("answered_questions", "answered_date", true, UserDB);
+    }
+
+    return await selectQuestionMany(whereClause, order, limit);
+  };
+
   return {
     selectById, selectByTagName, selectByType, selectByTypeMany, insertAnswer, selectAnsweredByDateMany,
-    selectAnsweredMany, filterAnsweredByRight, filterAnsweredByWrong
+    selectAnsweredMany, filterAnsweredByRight, filterAnsweredByWrong, searchQuestionsFilters
   };
 }
