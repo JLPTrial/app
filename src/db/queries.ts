@@ -1,6 +1,7 @@
 import { useSQLiteContext } from 'expo-sqlite';
 
 export type JLPTLevel = 'N5' | 'N4';
+export type AnsweredStatus = 'answered' | 'unanswered' | 'all';
 
 // For now, has no utility beside telling the whereClause to 
 // not use JLPTLevel database.
@@ -83,6 +84,25 @@ class WhereClause {
   addClauseIsNull(table: string, column: string, isNull: boolean = true, database: string | undefined): void {
     const field = ((database === undefined) ? `${this.level}.` : "") + `${table}.${column}`;
     this.clauses.push(`${field} is ${(isNull) ? 'NULL' : 'NOT NULL'}`);
+  }
+
+  addClauseIn(table: string, column: string, values: (string | number)[], database?: string | undefined): void {
+    if (values.length === 0) return;
+
+    const field = ((database === undefined) ? `${this.level}.` : "") + `${table}.${column}`;
+    
+    const keys = values.map((_, index) => {
+      const key = `${field}${this.numClauses}${index}`.replaceAll(".", "");
+      return `$${key}`;
+    });
+
+    this.clauses.push(`${field} IN (${keys.join(", ")})`);
+
+    values.forEach((val, index) => {
+      this.values[`$${keys[index]}`] = val;
+    });
+
+    this.numClauses += 1;
   }
 
   setValue(key: string, value: string | number | Date): void {
@@ -225,15 +245,38 @@ export function useQuestions(level: JLPTLevel) {
   };
 
   const filterAnsweredByRight = (questions: Question[]): Question[] => {
-    return questions.filter((question) => question.isCorrect);
+    return questions.filter((question) => question.isCorrect === true);
   };
 
   const filterAnsweredByWrong = (questions: Question[]): Question[] => {
-    return questions.filter((question) => !question.isCorrect);
+    return questions.filter((question) => question.isCorrect === false);
+  };
+
+  const searchQuestionsFilters = async (
+    type: string,
+    tags: string[] = [],
+    answeredStatus: AnsweredStatus = 'unanswered',
+    limit: number = -1,
+    order: Order = Order.RANDOM): Promise<Question[]> => {
+
+    const whereClause = new WhereClause(level);
+
+    whereClause.addClauseCompare("questions", "question_type", type);
+
+    if (tags.length > 0) whereClause.addClauseIn("tags", "name", tags);
+
+    if (answeredStatus === 'answered') {
+      whereClause.addClauseIsNull("answered_questions", "answered_date", false, UserDB);
+    }
+    else if (answeredStatus === 'unanswered') {
+      whereClause.addClauseIsNull("answered_questions", "answered_date", true, UserDB);
+    }
+
+    return await selectQuestionMany(whereClause, order, limit);
   };
 
   return {
     selectById, selectByTagName, selectByType, selectByTypeMany, insertAnswer, selectAnsweredByDateMany,
-    selectAnsweredMany, filterAnsweredByRight, filterAnsweredByWrong
+    selectAnsweredMany, filterAnsweredByRight, filterAnsweredByWrong, searchQuestionsFilters
   };
 }
