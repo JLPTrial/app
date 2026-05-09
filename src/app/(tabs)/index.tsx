@@ -1,44 +1,76 @@
+import Card from '@/components/pressable/Card';
+import FloatingButton from '@/components/pressable/FloatingButton';
+import Screen from '@/components/Screen';
+import { useStorage } from '@/hooks/useStorage';
+import { vh, vw } from '@/styles/globals';
+import { textStyles } from '@/styles/texts';
 import { Image } from 'expo-image';
-import { Link } from 'expo-router';
+import { router } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
-import AudioPlayer from '../../components/AudioPlayer.tsx';
-import { assetsMap } from '../../constants/assetsMap.ts';
+
+const GAP = 16;
+
+const levels = [
+  "N5",
+  "N4"
+];
 
 export default function HomeScreen() {
+  const {data, setValue} = useStorage();
+  
   return (
-    <View style={styles.container}>
+    <Screen>
+      <FloatingButton options={levels} defaultValue={data.jlptLevel} onPress={(item : 'N5' | 'N4') => {
+        setValue('jlptLevel', item);
+      }}/>
+
       <Image
         source={require('@/assets/images/logo.jpg')}
         style={styles.logo}
         contentFit="contain"
       />
-      <Text style={styles.message}>
-        {'VOCÊ CONSEGUIU!\nTá tudo certo agora'}
-      </Text>
-      <AudioPlayer source={assetsMap["N5listening/JT4Y/L6-Q5.mp3"]}/>
-      <Link href="/demo/questions">
-      Ir para uma questão
-      </Link>
-       <Link href="/demo/manyQuestions">
-      Ir para várias questões
-      </Link>
-    </View>
+
+      <View style={styles.table}>
+        <Text style={[{marginBottom: 8}, textStyles.title]}>Teste Seus Conhecimentos</Text>
+        <View style={styles.row}>
+          <Card title='Simulado' style={{width: '100%'}} onPress={() => router.push("/practice-test")}/>
+        </View>
+      </View>
+
+      <View style={styles.table}>
+        <Text style={[{marginBottom: 8}, textStyles.title]}>Estude Por Competência</Text>
+        
+        <View style={styles.row}>
+          <Card title='Vocabulário' style={[{backgroundColor: '#d22'}, styles.card]} onPress={() => router.push("/topic-study")}/>
+          <Card title='Gramática' style={[{backgroundColor: '#a2a'}, styles.card]} onPress={() => router.push("/topic-study")}/>
+        </View>
+
+        <View style={styles.row}>
+          <Card title='Leitura' style={[{backgroundColor: '#2b7'}, styles.card]} onPress={() => router.push("/topic-study")}/>
+          <Card title='Audição' style={[{backgroundColor: '#cc3'}, styles.card]} onPress={() => router.push("/topic-study")}/>
+        </View>
+      </View>
+    </Screen>
+    
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 24,
-    gap: 20,
-  },
   logo: {
-    width: 180,
-    height: 180,
+    width: 50*vw,
+    height: 30*vh,
   },
-  message: {
-    textAlign: 'center',
+  row: { 
+    flexDirection: 'row', 
+    height: 20*vh, 
+    alignSelf: 'stretch',
+    gap: GAP,
   },
+  table: {
+    alignSelf: 'stretch',  
+    gap: GAP,
+  }, 
+  card: {
+    flex: 1
+  }
 });
