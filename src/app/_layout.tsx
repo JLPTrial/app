@@ -16,6 +16,15 @@ export default function RootLayout() {
   if (!isReady) return <Loading />;
 
   const n5Path = `${Paths.document.uri}/SQLite/N5.db`.replace('file://', '');
+  const userDBCreation = `
+    CREATE TABLE IF NOT EXISTS answered_questions (
+      question_id INTEGER NOT NULL,
+      jlpt_level TEXT NOT NULL
+        CHECK (jlpt_level IN ('N5', 'N4')),
+      answered_date TEXT DEFAULT CURRENT_TIMESTAMP,
+      is_correct INTEGER NOT NULL,
+      PRIMARY KEY (question_id, jlpt_level)
+    );`;
 
   return (
     <Suspense fallback={<Loading />}>
@@ -24,6 +33,7 @@ export default function RootLayout() {
         onInit={async (db: SQLiteDatabase) => {
           await db.execAsync("PRAGMA foreign_keys = ON;");
           await db.execAsync(`ATTACH DATABASE '${n5Path}' AS N5;`);
+          await db.execAsync(userDBCreation);
         }}
       >
         <StorageProvider>

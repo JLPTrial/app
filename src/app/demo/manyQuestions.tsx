@@ -19,7 +19,18 @@ export default function QuestionScreen() {
         'listening'
     ]
     async function load() {
-        const results = await questionsDB.selectByTypeMany(types[type], limit);
+        const results: Question[] = await questionsDB.selectByTypeMany(types[type], limit);
+        setQuestions(results);
+    }
+
+    async function getAnswered(getAll: boolean = false) {
+        const dayToday: Date = new Date();
+        const weekAgo: Date = new Date(dayToday.getTime() - 7 * (24 * 60 * 60 * 1000));
+        let results: Question[]
+        if (getAll)
+            results = await questionsDB.selectAnsweredMany();
+        else
+            results = await questionsDB.selectAnsweredByDateMany(weekAgo);
         setQuestions(results);
     }
 
@@ -29,6 +40,10 @@ export default function QuestionScreen() {
             <Text>Tipo: {types[type]} </Text>
 
             <Button onPress={() => { load() }}> Buscar mais questões</Button>
+
+            <Button onPress={() => { getAnswered() }}> Buscar questões respondidas</Button>
+
+            <Button onPress={() => { getAnswered(true) }}> Buscar todas as questões respondidas</Button>
 
             <TextInput
                 onChangeText={(limit) => setLimit(Number(limit))}
@@ -43,7 +58,7 @@ export default function QuestionScreen() {
                 data={questions}
                 keyExtractor={(question) => String(question.id)}
                 renderItem={({ item: question }) => (
-                    <View style={styles.flatlistItem}>
+                    <View style={styles.flatListItem}>
                         {question.image != null && (
                             <Image
                                 source={assetsMap[`${question.image}`]}
@@ -74,7 +89,7 @@ const styles = StyleSheet.create({
         width: 180,
         height: 180,
     },
-    flatlistItem: {
+    flatListItem: {
         backgroundColor: '#c0c0c0',
         margin: 10,
     },
