@@ -1,5 +1,5 @@
 import Screen from '@/components/Screen';
-import parser from '@/utils/parsers';
+import statementParser from '@/utils/parsers';
 
 const examples = [
   "もう　（[blank]）　を　おくりました　よ。",
@@ -13,11 +13,11 @@ export default function Exam() {
 
   return (
     <Screen>
-      {parser(examples[0])}
-      {parser(examples[1])}
-      {parser(examples[2])}
-      {parser(examples[3])}
-      {parser(examples[4])}
+      {statementParser(examples[0])}
+      {statementParser(examples[1])}
+      {statementParser(examples[2])}
+      {statementParser(examples[3])}
+      {statementParser(examples[4])}
     </Screen>
     
   );

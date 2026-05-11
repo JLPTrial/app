@@ -51,7 +51,7 @@ function Furigana({kanji, furigana, furiganaSize=7} : FuriganaProps){
   );
 }
 
-export default function parser(statement : string){
+export default function statementParser(statement : string){
   const tokens =
         statement.split(
           /(\s+|\{[^}]+\}|\[(?:blank|underline_blank|star_underline_blank)\]|(?<=\]))/g
