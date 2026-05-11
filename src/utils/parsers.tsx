@@ -1,8 +1,24 @@
-export default function statementParser(statement : string) : string[]{
-  const tokens =
-        statement.split(
-          /(\s+|\{[^}]+\}|\[(?:blank|underline_blank|star_underline_blank)\]|[、。「」『』（）！？：；]|(?<=\]))/g
-        ).filter(Boolean);
+const regex = new RegExp(
+  [
+    "\\[(?:blank|underline_blank|star_underline_blank)\\]",
 
-  return tokens;
+    "\\{[^}]+\\}",
+
+    "\\p{Script=Han}+\\[[^\\]]+\\]",
+
+    "\\p{Script=Hiragana}+",
+
+    "\\p{Script=Katakana}+",
+
+    "[、。「」『』（）！？：；]",
+
+    "\\s+",
+
+    "."
+  ].join("|"),
+  "gu"
+);
+
+export default function statementParser(statement: string): string[] {
+  return statement.match(regex)?.filter(Boolean) ?? [];
 }
