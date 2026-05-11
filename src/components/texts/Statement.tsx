@@ -4,61 +4,61 @@ import { Ionicons } from '@expo/vector-icons';
 import { PropsWithChildren } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-function Blank(){
+function Blank({ size=10 }: { size?: number}){
 
   return (
-    <View style={styles.blank}/>
+    <View style={[styles.blank, {width: size*vw}]}/>
   );
 }
 
-function UnderlineBlank(){
+function UnderlineBlank({ size=10 }: { size?: number}){
 
   return (
     <View
-      style={styles.underline_blank}
+      style={[styles.underline_blank, {width: size*vw}]}
     />
   );
 }
 
-function StarUnderlineBlank(){
+function StarUnderlineBlank({ size=10 }: { size?: number}){
 
   return (
     <View style={styles.star_underline_blank}>
       <Ionicons name="star" color="#000"/>
-      <UnderlineBlank/>
+      <UnderlineBlank size={size}/>
     </View>
         
   );
 }
 
-function Underlined({ children } : PropsWithChildren){
+function Underlined({ children, size=10 } : PropsWithChildren<{size?: number}>){
 
   return (
-    <Text style={styles.underlined}>{children}</Text>
+    <Text style={[styles.underlined, {fontSize: size*1.5}]}>{children}</Text>
   );
 }
 
 type FuriganaProps = {
     kanji: string,
     furigana: string,
-    kanjiStyle?: object,
-    furiganaStyle?: object,
+    size?: number
 };
 
-function Furigana({kanji, furigana, kanjiStyle, furiganaStyle, } : FuriganaProps){
+function Furigana({kanji, furigana, size=10} : FuriganaProps){
   return (
     <View style={styles.furigana}>
-      <Text style={[styles.furiganaText, furiganaStyle]}>{furigana}</Text>
-      <Text style={[styles.kanjiText, kanjiStyle]}>{kanji}</Text>
+      <Text style={[styles.furiganaText, {fontSize: 0.7*size}]}>{furigana}</Text>
+      <Text style={[styles.kanjiText, {fontSize: 1.5*size}]}>{kanji}</Text>
     </View>
   );
 }
 
 type StatementProps = {
   statement: string,
+  size?: number,
 }
 
-export default function Statement({ statement } : StatementProps){
+export default function Statement({ statement, size=10 } : StatementProps){
   const tokens = statementParser(statement);
 
   return (
@@ -71,13 +71,13 @@ export default function Statement({ statement } : StatementProps){
     >
       {tokens.map((token, index) => {
         if (token === "[blank]")
-          return <Blank key={index}/>;
+          return <Blank key={index} size={size}/>;
         if (token === "[underline_blank]")
-          return <UnderlineBlank key={index}/>;
+          return <UnderlineBlank key={index} size={size}/>;
         if (token === "[star_underline_blank]")
-          return <StarUnderlineBlank key={index}/>;
+          return <StarUnderlineBlank key={index} size={size}/>;
         if (token.startsWith("{"))
-          return <Underlined key={index}>{token.slice(1, -1)}</Underlined>;
+          return <Underlined key={index} size={size}>{token.slice(1, -1)}</Underlined>;
         if (token.includes("[")){
           const bracketIndex = token.indexOf("[");
 
@@ -85,10 +85,10 @@ export default function Statement({ statement } : StatementProps){
 
           const bracket = token.slice(bracketIndex);
 
-          return <Furigana key={index} kanji={prefix} furigana={bracket.slice(1, -1)}/>;
+          return <Furigana key={index} kanji={prefix} furigana={bracket.slice(1, -1)} size={size}/>;
         }
 
-        return <Text key={index}>{token}</Text>;
+        return <Text style={{fontSize: size*1.5}} key={index}>{token}</Text>;
 
       })}
     </View>
@@ -97,11 +97,9 @@ export default function Statement({ statement } : StatementProps){
 
 const styles = StyleSheet.create({
   blank: {
-    width: 10*vw,
     marginHorizontal: 4,
   },
   underline_blank: {
-    width: 10*vw,
     borderBottomWidth: 0.15*vh,
     borderBottomColor: "#000",
     marginHorizontal: 4
@@ -122,7 +120,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   furiganaText: {
-    fontSize: 7,
     textAlign: "center",
     includeFontPadding: false,
   },

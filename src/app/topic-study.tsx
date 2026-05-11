@@ -21,13 +21,13 @@ export default function Exam() {
       <View style={{alignItems: 'center', gap: 20}}>
         <Statement statement={examples[0]}/>
         <Statement statement={examples[1]}/>
-        <Statement statement={examples[2]}/>
+        <Statement statement={examples[2]} size={13}/>
         <Statement statement={examples[3]}/>
         <Statement statement={examples[4]}/>
         <Statement statement={examples[5]}/>
         <Statement statement={examples[6]}/>
         <Statement statement={examples[7]}/>
-        <Statement statement={examples[8]}/>
+        <Statement statement={examples[8]} size={15}/>
       </View>
     </Screen>
     
