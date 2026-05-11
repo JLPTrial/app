@@ -39,14 +39,15 @@ function Underlined({ children } : PropsWithChildren){
 type FuriganaProps = {
     kanji: string,
     furigana: string,
-    furiganaSize?: number,
+    kanjiStyle?: object,
+    furiganaStyle?: object,
 };
 
-function Furigana({kanji, furigana, furiganaSize=7} : FuriganaProps){
+function Furigana({kanji, furigana, kanjiStyle, furiganaStyle, } : FuriganaProps){
   return (
     <View style={styles.furigana}>
-      <Text style={{fontSize: furiganaSize}}>{furigana}</Text>
-      <Text>{kanji}</Text>
+      <Text style={[styles.furiganaText, furiganaStyle]}>{furigana}</Text>
+      <Text style={[styles.kanjiText, kanjiStyle]}>{kanji}</Text>
     </View>
   );
 }
@@ -54,7 +55,7 @@ function Furigana({kanji, furigana, furiganaSize=7} : FuriganaProps){
 export default function statementParser(statement : string){
   const tokens =
         statement.split(
-          /(\s+|\{[^}]+\}|\[(?:blank|underline_blank|star_underline_blank)\]|(?<=\]))/g
+          /(\s+|\{[^}]+\}|\[(?:blank|underline_blank|star_underline_blank)\]|[、。「」『』（）！？：；]|(?<=\]))/g
         ).filter(Boolean);
 
   return (
@@ -113,6 +114,17 @@ const styles = StyleSheet.create({
   },
   furigana: {
     justifyContent: 'flex-end', 
-    alignItems: 'center'
-  }
+    alignItems: 'center',
+    backgroundColor: 'blue',
+    marginHorizontal: 1
+  },
+  kanjiText: {
+    textAlign: "center",
+  },
+  furiganaText: {
+    fontSize: 7,
+    textAlign: "center",
+    includeFontPadding: false,
+    backgroundColor: 'red'
+  },
 });
