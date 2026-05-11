@@ -1,5 +1,6 @@
 import Screen from '@/components/Screen';
-import statementParser from '@/utils/parsers';
+import Statement from '@/components/texts/Statement';
+import { View } from 'react-native';
 
 const examples = [
   "もう　（[blank]）　を　おくりました　よ。",
@@ -16,16 +17,18 @@ const examples = [
 export default function Exam() {
 
   return (
-    <Screen>
-      {statementParser(examples[0])}
-      {statementParser(examples[1])}
-      {statementParser(examples[2])}
-      {statementParser(examples[3])}
-      {statementParser(examples[4])}
-      {statementParser(examples[5])}
-      {statementParser(examples[6])}
-      {statementParser(examples[7])}
-      {statementParser(examples[8])}
+    <Screen style={{justifyContent: 'center'}}>
+      <View style={{alignItems: 'center', gap: 20}}>
+        <Statement statement={examples[0]}/>
+        <Statement statement={examples[1]}/>
+        <Statement statement={examples[2]}/>
+        <Statement statement={examples[3]}/>
+        <Statement statement={examples[4]}/>
+        <Statement statement={examples[5]}/>
+        <Statement statement={examples[6]}/>
+        <Statement statement={examples[7]}/>
+        <Statement statement={examples[8]}/>
+      </View>
     </Screen>
     
   );
