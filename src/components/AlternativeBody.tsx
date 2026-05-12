@@ -1,17 +1,32 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { colors, vw } from '../styles/globals';
+import { useEffect, useState } from 'react';
 
-export default function AlternativeBody({ alternatives }: { alternatives: string[] }) {
+export default function AlternativeBody({ alternatives, choose, onChoose }: { alternatives: string[], choose: (choice: number) => void, onChoose: number }) {
+
+  const [chosen, setChosen] = useState<number>(-1);
+
+  useEffect(() => {
+    chosenStyle(onChoose);
+  }, [onChoose]);
+
+  const chosenStyle = (choice: number) => {
+    setChosen(choice - 1);
+  };
+
   return (
     <View style={styles.container}>
-      {alternatives.map((alternative: string, i: number) => {
+      {alternatives.map((alternativeText: string, choice: number) => {
         return <Pressable
-          style={({ pressed }) => [styles.alternative, { backgroundColor: pressed ? colors.selected : colors.surface }]}
-          key={i}
+          onPress={() => choose(choice + 1)}
+          style={
+            ({ pressed }) => [styles.alternative, { backgroundColor: chosen === choice ? colors.selected : pressed ? colors.selected : colors.surface }]
+          }
+          key={choice}
         >
-          <Text>{alternative}</Text>
-        </Pressable>
-      })}
+          <Text>{alternativeText}</Text>
+        </Pressable>;
+      })};
     </View>
   );
 }
