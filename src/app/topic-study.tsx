@@ -12,6 +12,7 @@ const examples = [
   "しけん　は　来月[らいげつ]　の　七月八日[しちがつようか]、{木よう日}、九時[くじ]　から　です。",
   "ふうとう　に　お金[かね]　が　{八万円}　入[はい]っていました。",
   "{一日}　は　二十四時間[にじゅうよじかん]　です。そして、一時間[いちじかん]　は　六十分[ろくじゅっぷん]で、一分[いっぷん]　は　六十[ろくじゅう]びょう　です。",
+  "日[にち]よう日[び] お母[かあ]さん 日本[にほん]語[ご]"
 ];
 
 export default function Exam() {
@@ -28,6 +29,7 @@ export default function Exam() {
         <Statement statement={examples[6]}/>
         <Statement statement={examples[7]}/>
         <Statement statement={examples[8]} size={15}/>
+        <Statement statement={examples[9]}/>
       </View>
     </Screen>
     
