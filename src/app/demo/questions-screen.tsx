@@ -1,16 +1,19 @@
-import { useEffect, useState } from 'react';
-import { Question, useQuestions } from '@/db/queries';
+import { useEffect, useRef, useState } from 'react';
+import { JLPTLevel, Question, useQuestions } from '@/db/queries';
 import Screen from '@/components/Screen';
 import QuestionBody from '@/components/QuestionBody';
 import AlternativeBody from '@/components/AlternativeBody';
 import Loading from '../loading';
+import { Pressable, Text } from 'react-native';
+import { useLocalSearchParams } from 'expo-router';
 
 export default function QuestionScreen() {
-  const db = useQuestions("N5");
+  const { level } = useLocalSearchParams<{ level: JLPTLevel }>();
+  const db = useQuestions(level);
   const [question, setQuestion] = useState<Question | null>(null);
   const [chosenAlternative, setChosenAlternative] = useState<number>(-1);
   const [loading, setLoading] = useState(true);
-  let index = 0;
+  const confirmRef = useRef(null);
 
   useEffect(() => {
     async function loadQuestion() {
@@ -19,18 +22,23 @@ export default function QuestionScreen() {
       setLoading(false);
     }
     loadQuestion();
-  }, [db, index]);
+  }, [db]);
 
   const choseAlternative = (alternative: number) => {
     setChosenAlternative(alternative);
   };
 
-  if (loading) return <Loading />;
+  const confirmAlternative = () => {
+    confirmRef.current.confirmAlternative(chosenAlternative);
+  };
 
+  if (loading) return <Loading />;
+  if (question === null) return null;
   return (
     <Screen>
       <QuestionBody question={question} />
-      <AlternativeBody alternatives={question.alternatives} choose={choseAlternative} onChoose={chosenAlternative} />
+      <AlternativeBody alternatives={question.alternatives} answer={question.correctAlternative - 1} choose={choseAlternative} onChoose={chosenAlternative} ref={confirmRef} />
+      <Pressable onPress={() => confirmAlternative()}> <Text>Confirmar</Text></Pressable>
     </Screen>
 
   );
