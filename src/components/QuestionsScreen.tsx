@@ -7,7 +7,7 @@ import Loading from '../app/loading';
 
 export default function QuestionScreen({ question, onNextQuestion }: { question: Question, onNextQuestion: any }) {
 
-  const [chosenAlternative, setChosenAlternative] = useState<number>(-1);
+  const [choice, setChoice] = useState<number>(-1);
   const [confirmedAnswer, setConfirmedAnswer] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
   const confirmRef = useRef(null);
@@ -15,34 +15,34 @@ export default function QuestionScreen({ question, onNextQuestion }: { question:
   useEffect(() => {
     async function load() {
       setLoading(false);
-      setChosenAlternative(-1);
+      setChoice(-1);
       setConfirmedAnswer(false);
     }
     load();
   }, [question]);
 
-  const choseAlternative = (alternative: number) => {
-    setChosenAlternative(alternative);
+  const onChoice = (alternative: number) => {
+    setChoice(alternative);
   };
 
   const confirmAlternative = () => {
-    if (chosenAlternative === -1)
+    if (choice === -1)
       return;
     setConfirmedAnswer(true);
-    confirmRef.current.confirmAlternative(chosenAlternative);
+    confirmRef.current.confirmAlternative(choice);
   };
 
 
   const handleNextQuestions = () => {
     confirmRef.current.reset();
-    onNextQuestion(chosenAlternative);
+    onNextQuestion(choice);
   };
 
   if (loading) return <Loading />;
   return (
     <View style={styles.container}>
       <QuestionBody question={question} />
-      <AlternativeBody alternatives={question.alternatives} answer={question.correctAlternative - 1} choose={choseAlternative} onChoose={chosenAlternative} ref={confirmRef} />
+      <AlternativeBody alternatives={question.alternatives} answer={question.correctAlternative - 1} onChoice={onChoice} choice={choice} ref={confirmRef} />
       {(!confirmedAnswer)
         ? <Pressable onPress={() => confirmAlternative()}> <Text>Confirmar</Text></Pressable>
         : <Pressable onPress={() => handleNextQuestions()}> <Text>Continuar</Text></Pressable>
