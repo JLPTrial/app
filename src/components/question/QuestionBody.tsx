@@ -8,7 +8,6 @@ export default function QuestionBody({ question }: { question: Question }) {
   // Variable that decides if shows audio or its transcription
   const accessibility = false;
 
-
   const type: string = question.type;
   return (
     <View style={styles.container}>
@@ -16,7 +15,7 @@ export default function QuestionBody({ question }: { question: Question }) {
         <Text style={{ backgroundColor: typeColors[type], color: '#fff' }}> {type}</Text>
         - Nº {question.id}
       </Text>
-      <Text style={styles.questionStatement}>{question.statement}</Text>
+      <Text style={styles.questionCommand}>{question.command}</Text>
       {(question.image != null) ?
         <Image
           source={assetsMap[`${question.image}`]}
@@ -51,7 +50,7 @@ const styles = StyleSheet.create({
   questionHeader: {
     marginBottom: 8,
   },
-  questionStatement: {
+  questionCommand: {
     marginBottom: 8
   },
   questionText: {
@@ -60,8 +59,8 @@ const styles = StyleSheet.create({
     marginTop: 8
   },
   questionImage: {
-    width: 'auto',
-    height: 180,
+    width: 100,
+    height: 100,
     marginBottom: 8
   },
 });

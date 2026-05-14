@@ -11,7 +11,7 @@ const UserDB = "UserDB";
 interface QuestionQuery {
 	id: number;
 	questionText: string;
-	statementText: string;
+	questionCommand: string;
 	questionType: string;
 	imagePath: string | null;
 	audioPath: string | null;
@@ -31,7 +31,7 @@ interface QuestionQuery {
 export interface Question {
 	id: number;
 	text: string;
-	statement: string;
+	command: string;
 	type: string;
 	image: string | null;
 	audio: string | null;
@@ -128,7 +128,7 @@ const formatQuestion = (result: QuestionQuery, level: JLPTLevel) => {
   const question: Question = {
     id: result.id,
     text: result.questionText,
-    statement: result.statementText,
+    command: result.questionCommand,
     type: result.questionType,
     alternatives: [result.alternative1, result.alternative2, result.alternative3, result.alternative4],
     correctAlternative: result.correctAlternative,
@@ -153,7 +153,7 @@ export function useQuestions(level: JLPTLevel) {
     ${level}.questions.question_type as questionType,
     ${level}.media.image_file_path as imagePath,
     ${level}.media.audio_file_path as audioPath,
-    ${level}.statement.statement_text as statementText,
+    ${level}.statement.question_command as questionCommand,
     ${level}.contextual_texts.contextual_text as contextualText,
     ${level}.alternatives.id as alternativeId,
     ${level}.alternatives.alternative_1 as alternative1,
