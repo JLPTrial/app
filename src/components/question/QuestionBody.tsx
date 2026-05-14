@@ -1,19 +1,20 @@
+import { assetsMap } from '@/constants/assetsMap';
+import { Question } from '@/db/queries';
 import { Image } from 'expo-image';
 import { StyleSheet, Text, View } from 'react-native';
-import { Question } from '@/db/queries';
-import { assetsMap } from '@/constants/assetsMap';
-import AudioPlayer from './AudioPlayer';
+import AudioPlayer from '../AudioPlayer';
 
 export default function QuestionBody({ question }: { question: Question }) {
   // Variable that decides if shows audio or its transcription
   const accessibility = false;
 
-  const type = question.type;
+
+  const type: string = question.type;
   return (
     <View style={styles.container}>
       <Text style={styles.questionHeader}>
         <Text style={{ backgroundColor: typeColors[type], color: '#fff' }}> {type}</Text>
-        - Questão Nº {question.id}
+        - Nº {question.id}
       </Text>
       <Text style={styles.questionStatement}>{question.statement}</Text>
       {(question.image != null) ?
@@ -48,19 +49,19 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   questionHeader: {
-    marginBottom: 10,
+    marginBottom: 8,
   },
   questionStatement: {
-    marginBottom: 10
+    marginBottom: 8
   },
   questionText: {
     backgroundColor: 'pink',
     padding: 6,
-    marginTop: 10
+    marginTop: 8
   },
   questionImage: {
     width: 'auto',
     height: 180,
-    marginBottom: 10
+    marginBottom: 8
   },
 });

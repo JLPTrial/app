@@ -1,48 +1,55 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { colors, vw } from '../styles/globals';
 import { useEffect, useImperativeHandle, useState } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { colors, vw } from '../../styles/globals';
 
 export default function AlternativeBody({ alternatives, answer, choose, onChoose, ref }: { alternatives: string[], answer: number, choose: (choice: number) => void, onChoose: number, ref: any }) {
 
-  const [chosen, setChosen] = useState<number>(-1);
+  const [choice, setChoice] = useState<number>(-1);
   const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
-
-  useEffect(() => {
-    setChosen(onChoose);
-  }, [onChoose]);
-
 
   useImperativeHandle(ref, () => {
     return {
       confirmAlternative() {
         setIsConfirmed(true);
+      },
+      reset() {
+        setChoice(-1);
+        setIsConfirmed(false);
       }
     };
   }, []);
 
-  const handlePressableStyle = (choice: number, pressed: boolean) => {
-    if (isConfirmed) {
-      if (choice === answer)
-        return styles.rightAlternative;
-      if (choice === chosen && chosen !== answer)
-        return styles.wrongAlternative;
-      return styles.disabled;
+  useEffect(() => {
+    setChoice(onChoose);
+  }, [onChoose]);
+
+
+  const handlePressableStyle = (alternative: number, pressed: boolean) => {
+    if (!isConfirmed) {
+      if (pressed || alternative === choice) {
+        return styles.pressed;
+      }
+      return styles.default;
     }
 
-    if (choice === chosen)
-      return styles.pressed;
-    return (pressed) ? styles.pressed : styles.default;
+    if (alternative === answer) {
+      return styles.rightAlternative;
+    }
+    if (alternative === choice && choice !== answer) {
+      return styles.wrongAlternative;
+    }
+    return styles.disabled;
   };
 
   return (
     <View style={styles.container}>
-      {alternatives.map((alternativeText: string, choice: number) => {
+      {alternatives.map((alternativeText: string, alternative: number) => {
         return <Pressable
-          onPress={() => choose(choice)}
+          onPress={() => { choose(alternative); }}
           style={
-            ({ pressed }) => [styles.alternative, handlePressableStyle(choice, pressed)]
+            ({ pressed }) => [styles.alternative, handlePressableStyle(alternative, pressed)]
           }
-          key={choice}
+          key={alternative}
           disabled={isConfirmed}
         >
           <Text>{alternativeText}</Text>
