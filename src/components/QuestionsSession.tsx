@@ -6,25 +6,23 @@ import { Text } from 'react-native';
 import Loading from '../app/loading';
 import QuestionScreen from './QuestionsScreen';
 
-export default function QuestionSession() {
+export default function QuestionSession({ onFinish }: { onFinish: any }) {
   const { data } = useStorage();
 
   const level = data.jlptLevel;
   const questions = data.questionsSession;
-
-
   const db = useQuestions(level);
 
   const [index, setIndex] = useState<number>(data.questionIndexSession);
   const [question, setQuestion] = useState<Question>(questions[0]);
-
+  const [rightAnswers, setRightAnswers] = useState<number>(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (index < questions.length)
       setQuestion(questions[index]);
     else
-      setIndex(0);
+      onFinish(rightAnswers, questions.length);
   }, [index]);
 
   useEffect(() => {
@@ -36,6 +34,8 @@ export default function QuestionSession() {
 
   const handleNextQuestion = (chosenAlternative: number) => {
     db.insertAnswer(question, level, chosenAlternative + 1);
+    if (chosenAlternative + 1 === question.correctAlternative)
+      setRightAnswers(rightAnswers + 1);
     setIndex(index + 1);
   };
 

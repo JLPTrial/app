@@ -20,6 +20,10 @@ export default function QuestionScreen() {
     load();
   },);
 
+  const onFinish = (rightAnswers: number, total: number) => {
+    alert(`Parabéns, você respondeu todas as questões e acertou ${rightAnswers}/${total}`);
+  };
+
   if (loading) return <Loading />;
-  return <QuestionSession />;
+  return <QuestionSession onFinish={onFinish} />;
 }
