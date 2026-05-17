@@ -6,7 +6,8 @@ import { Text } from 'react-native';
 import Loading from '../app/loading';
 import QuestionScreen from './QuestionsScreen';
 
-export default function QuestionSession({ onFinish }: { onFinish: any }) {
+// sessionType indica na tela se é um simulado ou uma seção de estudo
+export default function QuestionSession({ onFinish, sessionType }: { onFinish: any, sessionType: string }) {
   const { data } = useStorage();
 
   const level = data.jlptLevel;
@@ -14,7 +15,7 @@ export default function QuestionSession({ onFinish }: { onFinish: any }) {
   const db = useQuestions(level);
 
   const [index, setIndex] = useState<number>(data.questionIndexSession);
-  const [question, setQuestion] = useState<Question>(questions[0]);
+  const [question, setQuestion] = useState<Question>(questions[index]);
   const [rightAnswers, setRightAnswers] = useState<number>(0);
   const [loading, setLoading] = useState(true);
 
@@ -23,7 +24,7 @@ export default function QuestionSession({ onFinish }: { onFinish: any }) {
       setQuestion(questions[index]);
     else
       onFinish(rightAnswers, questions.length);
-  }, [index]);
+  }, [index, onFinish, question, rightAnswers]);
 
   useEffect(() => {
     async function load() {
@@ -42,7 +43,7 @@ export default function QuestionSession({ onFinish }: { onFinish: any }) {
   if (loading) return <Loading />;
   return (
     <Screen>
-      <Text>Questão {index + 1}/{questions.length}</Text>
+      <Text>{sessionType} - Questão {index + 1}/{questions.length}</Text>
       <QuestionScreen question={question} onNextQuestion={handleNextQuestion}></QuestionScreen>
     </Screen>
   );

@@ -3,16 +3,17 @@ import { Question, useQuestions } from '@/db/queries';
 import { useStorage } from '@/hooks/useStorage';
 import QuestionSession from '@/components/QuestionsSession';
 import Loading from '../loading';
+import { router } from 'expo-router';
 
 export default function QuestionScreen() {
 
   const { data, setValue } = useStorage();
-  const questionsDB = useQuestions(data.jlptLevel);
+  const db = useQuestions(data.jlptLevel);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function load() {
-      const results: Question[] = await questionsDB.selectByTypeMany('listening', 5);
+      const results: Question[] = await db.selectByTypeMany('listening', 5);
       setValue('questionsSession', results);
       setValue('questionIndexSession', 0);
       setLoading(false);
@@ -21,9 +22,10 @@ export default function QuestionScreen() {
   },);
 
   const onFinish = (rightAnswers: number, total: number) => {
-    alert(`Parabéns, você respondeu todas as questões e acertou ${rightAnswers}/${total}`);
+    alert(`Acertos ${rightAnswers}/${total}`);
+    router.push("/");
   };
 
   if (loading) return <Loading />;
-  return <QuestionSession onFinish={onFinish} />;
+  return <QuestionSession sessionType={"Estudo curto"} onFinish={onFinish} />;
 }

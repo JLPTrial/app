@@ -33,7 +33,7 @@ export default function QuestionScreen({ question, onNextQuestion }: { question:
   };
 
 
-  const handleNextQuestions = () => {
+  const handleNextQuestion = () => {
     confirmRef.current.reset();
     onNextQuestion(choice);
   };
@@ -44,8 +44,8 @@ export default function QuestionScreen({ question, onNextQuestion }: { question:
       <QuestionBody question={question} />
       <AlternativeBody alternatives={question.alternatives} answer={question.correctAlternative - 1} onChoice={onChoice} choice={choice} ref={confirmRef} />
       {(!confirmedAnswer)
-        ? <Pressable onPress={() => confirmAlternative()}> <Text>Confirmar</Text></Pressable>
-        : <Pressable onPress={() => handleNextQuestions()}> <Text>Continuar</Text></Pressable>
+        ? <Pressable onPress={() => confirmAlternative()}><Text>Confirmar</Text></Pressable>
+        : <Pressable onPress={() => handleNextQuestion()}><Text>Continuar</Text></Pressable>
       }
     </View>
 

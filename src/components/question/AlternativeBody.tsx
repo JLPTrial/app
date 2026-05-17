@@ -23,22 +23,25 @@ export default function AlternativeBody({ alternatives, answer, onChoice, choice
     setUserChoice(choice);
   }, [choice]);
 
-
   const handlePressableStyle = (alternative: number, pressed: boolean) => {
     if (!isConfirmed) {
-      if (pressed || alternative === userChoice) {
+      if (pressed || alternative === userChoice)
         return styles.pressed;
-      }
       return styles.default;
     }
 
-    if (alternative === answer) {
+    if (alternative === answer)
       return styles.rightAlternative;
-    }
-    if (alternative === userChoice && userChoice !== answer) {
+    if (alternative === userChoice && userChoice !== answer)
       return styles.wrongAlternative;
-    }
     return styles.disabled;
+  };
+
+  const handleTextColor = (alternative: number) => {
+    if (isConfirmed)
+      if (alternative === answer || alternative === userChoice)
+        return '#fff';
+    return;
   };
 
   return (
@@ -50,11 +53,10 @@ export default function AlternativeBody({ alternatives, answer, onChoice, choice
             ({ pressed }) => [styles.alternative, handlePressableStyle(alternative, pressed)]
           }
           key={alternative}
-          disabled={isConfirmed}
-        >
-          <Text>{alternativeText}</Text>
+          disabled={isConfirmed}>
+          <Text style={{ color: handleTextColor(alternative) }}>{alternativeText}</Text>
         </Pressable>;
-      })};
+      })}
     </View>
   );
 }
@@ -87,14 +89,11 @@ const styles = StyleSheet.create({
   },
   disabled: {
     backgroundColor: colors.textMuted,
-    color: 'white',
   },
   rightAlternative: {
     backgroundColor: 'green',
-    color: 'white',
   },
   wrongAlternative: {
     backgroundColor: 'red',
-    color: 'white',
   }
 });
