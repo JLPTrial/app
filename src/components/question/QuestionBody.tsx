@@ -24,7 +24,7 @@ export default function QuestionBody({ question }: { question: Question }) {
         /> : null}
       {(question.audio === null) ? null :
         (accessibility) ?
-          <Text> {question.contextualText}</Text> :
+          <Text>{question.contextualText}</Text> :
           <AudioPlayer source={assetsMap[`${question.audio}`]} />
       }
       {(question.type === 'listening' && !accessibility)
@@ -35,7 +35,7 @@ export default function QuestionBody({ question }: { question: Question }) {
   );
 }
 
-const typeColors = {
+const typeColors: Record<string, string> = {
   grammar: '#a2a',
   vocabulary: '#d22',
   reading: '#2b7',
@@ -63,8 +63,8 @@ const styles = StyleSheet.create({
     marginTop: 8
   },
   questionImage: {
-    width: 100,
-    height: 100,
+    height: 160,
+    aspectRatio: 16 / 9,
     marginBottom: 8
   },
 });
