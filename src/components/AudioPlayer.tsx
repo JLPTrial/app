@@ -30,9 +30,12 @@ export default function AudioPlayer({ source }: { source: AudioSource }) {
   useFocusEffect(
     useCallback(() => {
       return () => {
-        player.pause();
+        try {
+          player?.pause();
+        } catch {
+        }
       };
-    }, [player]),
+    }, [player])
   );
 
   return (
