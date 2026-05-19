@@ -5,9 +5,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import AudioPlayer from '../AudioPlayer';
 
 export default function QuestionBody({ question }: { question: Question }) {
-  // Variable that decides if shows audio or its transcription
-  const accessibility = false;
-
+ 
   const type: string = question.type;
 
   return (
@@ -16,20 +14,15 @@ export default function QuestionBody({ question }: { question: Question }) {
         <Text style={{ color: '#fff' }}> {type}  - Nº {question.id} </Text>
       </View>
       <Text style={styles.questionCommand}>{question.command}</Text>
-      {(question.image !== null) ?
-        <Image
+      {(question.image !== null) &&
+        (<Image
           source={assetsMap[`${question.image}`]}
           style={styles.questionImage}
           contentFit="contain"
-        /> : null}
-      {(question.audio === null) ? null :
-        (accessibility) ?
-          <Text>{question.contextualText}</Text> :
-          <AudioPlayer source={assetsMap[`${question.audio}`]} />
-      }
-      {(question.type === 'listening' && !accessibility)
-        ? null :
-        <Text style={styles.questionText}> {question.text}</Text>
+        />)}
+      {(question.contextualText !== null) && (question.audio === null) && (<Text>{question.contextualText}</Text>)}
+      {(question.audio !== null) && (<AudioPlayer source={assetsMap[`${question.audio}`]} />)}
+      {(question.type !== 'listening') && (<Text style={styles.questionText}> {question.text}</Text>)
       }
     </View>
   );
