@@ -1,6 +1,6 @@
 import AlternativeBody from '@/components/question/AlternativeBody';
 import QuestionBody from '@/components/question/QuestionBody';
-import { Question } from '@/db/queries';
+import { Question } from '@/types/types';
 import { useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import Loading from '../app/loading';

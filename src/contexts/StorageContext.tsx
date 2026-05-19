@@ -1,4 +1,4 @@
-import { JLPTLevel, Question } from "@/db/queries";
+import { JLPTLevel, Question } from "@/types/types";
 import { Storage } from "expo-sqlite/kv-store";
 import { createContext, PropsWithChildren, useState } from "react";
 

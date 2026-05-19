@@ -4,6 +4,7 @@ import Screen from '@/components/Screen';
 import { useStorage } from '@/hooks/useStorage';
 import { vh, vw } from '@/styles/globals';
 import { textStyles } from '@/styles/texts';
+import { JLPTLevel } from '@/types/types';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
@@ -20,7 +21,7 @@ export default function HomeScreen() {
 
   return (
     <Screen withBottomTab>
-      <FloatingButton options={levels} defaultValue={data.jlptLevel} onPress={(item : 'N5' | 'N4') => {
+      <FloatingButton options={levels} defaultValue={data.jlptLevel} onPress={(item : JLPTLevel) => {
         setValue('jlptLevel', item);
       }} />
 

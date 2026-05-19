@@ -1,5 +1,5 @@
 import { assetsMap } from '@/constants/assetsMap';
-import { Question } from '@/db/queries';
+import { Question } from '@/types/types';
 import { Image } from 'expo-image';
 import { StyleSheet, Text, View } from 'react-native';
 import AudioPlayer from '../AudioPlayer';

@@ -1,6 +1,6 @@
 import { useSQLiteContext } from 'expo-sqlite';
+import { JLPTLevel, Question } from '@/types/types';
 
-export type JLPTLevel = 'N5' | 'N4';
 export type AnsweredStatus = 'answered' | 'unanswered' | 'all';
 
 // For now, has no utility beside telling the whereClause to 
@@ -24,22 +24,6 @@ interface QuestionQuery {
 	tags: string;
 	correctAlternative: number;
 	answeredDate: string | null;
-	isCorrect: boolean | null,
-}
-
-// Interfaces for Backend and UI
-export interface Question {
-	id: number;
-	text: string;
-	command: string;
-	type: string;
-	image: string | null;
-	audio: string | null;
-	contextualText: string | null;
-	tags: string[];
-	alternatives: string[];
-	correctAlternative: number;
-	date: Date | null;
 	isCorrect: boolean | null,
 }
 

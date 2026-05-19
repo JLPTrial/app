@@ -1,7 +1,8 @@
 import Screen from '@/components/Screen';
-import { Question, useQuestions } from '@/db/queries';
+import { useQuestions } from '@/db/queries';
 import { useStorage } from '@/hooks/useStorage';
 import { useEffect, useState } from 'react';
+import { Question } from '@/types/types';
 import { Text } from 'react-native';
 import Loading from '../app/loading';
 import QuestionScreen from './QuestionsScreen';
