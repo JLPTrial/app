@@ -4,7 +4,6 @@ import { useStorage } from '@/hooks/useStorage';
 import { useEffect, useState } from 'react';
 import { Question } from '@/types/types';
 import { Text } from 'react-native';
-import Loading from '../app/loading';
 import QuestionScreen from './QuestionsScreen';
 
 // sessionType indica na tela se é um simulado ou uma seção de estudo
@@ -18,7 +17,6 @@ export default function QuestionSession({ onFinish, sessionType }: { onFinish: a
   const [index, setIndex] = useState<number>(data.questionIndexSession);
   const [question, setQuestion] = useState<Question>(questions[index]);
   const [rightAnswers, setRightAnswers] = useState<number>(0);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (index < questions.length)
@@ -27,13 +25,6 @@ export default function QuestionSession({ onFinish, sessionType }: { onFinish: a
       onFinish(rightAnswers, questions.length);
   }, [index, onFinish, question, rightAnswers]);
 
-  useEffect(() => {
-    async function load() {
-      setLoading(false);
-    }
-    load();
-  },);
-
   const handleNextQuestion = (chosenAlternative: number) => {
     db.insertAnswer(question, level, chosenAlternative + 1);
     if (chosenAlternative + 1 === question.correctAlternative)
@@ -41,7 +32,6 @@ export default function QuestionSession({ onFinish, sessionType }: { onFinish: a
     setIndex(index + 1);
   };
 
-  if (loading) return <Loading />;
   return (
     <Screen>
       <Text>{sessionType} - Questão {index + 1}/{questions.length}</Text>

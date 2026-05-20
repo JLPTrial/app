@@ -3,17 +3,14 @@ import QuestionBody from '@/components/question/QuestionBody';
 import { Question } from '@/types/types';
 import { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import Loading from '../app/loading';
 
 export default function QuestionScreen({ question, onNextQuestion }: { question: Question, onNextQuestion: any }) {
 
   const [choice, setChoice] = useState<number>(-1);
   const [confirmedAnswer, setConfirmedAnswer] = useState<boolean>(false);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function load() {
-      setLoading(false);
       setChoice(-1);
       setConfirmedAnswer(false);
     }
@@ -29,12 +26,10 @@ export default function QuestionScreen({ question, onNextQuestion }: { question:
       setConfirmedAnswer(true);
   };
 
-
   const handleNextQuestion = () => {
     onNextQuestion(choice);
   };
 
-  if (loading) return <Loading />;
   return (
     <View style={styles.container}>
       <QuestionBody question={question} />
