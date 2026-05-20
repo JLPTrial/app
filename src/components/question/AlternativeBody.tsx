@@ -1,23 +1,10 @@
-import { useEffect, useImperativeHandle, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { colors, vw } from '../../styles/globals';
 
-export default function AlternativeBody({ alternatives, answer, onChoice, choice, ref }: { alternatives: string[], answer: number, onChoice: (choice: number) => void, choice: number, ref: any }) {
+export default function AlternativeBody({ alternatives, answer, onChoice, choice, isConfirmed }: { alternatives: string[], answer: number, onChoice: (choice: number) => void, choice: number, isConfirmed: boolean }) {
 
   const [userChoice, setUserChoice] = useState<number>(-1);
-  const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
-
-  useImperativeHandle(ref, () => {
-    return {
-      confirmAlternative() {
-        setIsConfirmed(true);
-      },
-      reset() {
-        setUserChoice(-1);
-        setIsConfirmed(false);
-      }
-    };
-  }, []);
 
   useEffect(() => {
     setUserChoice(choice);

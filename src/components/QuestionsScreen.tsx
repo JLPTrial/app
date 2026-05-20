@@ -1,7 +1,7 @@
 import AlternativeBody from '@/components/question/AlternativeBody';
 import QuestionBody from '@/components/question/QuestionBody';
 import { Question } from '@/types/types';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import Loading from '../app/loading';
 
@@ -10,7 +10,6 @@ export default function QuestionScreen({ question, onNextQuestion }: { question:
   const [choice, setChoice] = useState<number>(-1);
   const [confirmedAnswer, setConfirmedAnswer] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
-  const confirmRef = useRef(null);
 
   useEffect(() => {
     async function load() {
@@ -25,16 +24,13 @@ export default function QuestionScreen({ question, onNextQuestion }: { question:
     setChoice(alternative);
   };
 
-  const confirmAlternative = () => {
-    if (choice === -1)
-      return;
-    setConfirmedAnswer(true);
-    confirmRef.current.confirmAlternative(choice);
+  const confirmAlternative = (choice: number) => {
+    if (choice !== -1)
+      setConfirmedAnswer(true);
   };
 
 
   const handleNextQuestion = () => {
-    confirmRef.current.reset();
     onNextQuestion(choice);
   };
 
@@ -42,9 +38,9 @@ export default function QuestionScreen({ question, onNextQuestion }: { question:
   return (
     <View style={styles.container}>
       <QuestionBody question={question} />
-      <AlternativeBody alternatives={question.alternatives} answer={question.correctAlternative - 1} onChoice={onChoice} choice={choice} ref={confirmRef} />
+      <AlternativeBody alternatives={question.alternatives} answer={question.correctAlternative - 1} onChoice={onChoice} choice={choice} isConfirmed={confirmedAnswer} />
       {(!confirmedAnswer)
-        ? <Pressable onPress={() => confirmAlternative()}><Text>Confirmar</Text></Pressable>
+        ? <Pressable onPress={() => confirmAlternative(choice)}><Text>Confirmar</Text></Pressable>
         : <Pressable onPress={() => handleNextQuestion()}><Text>Continuar</Text></Pressable>
       }
     </View>
