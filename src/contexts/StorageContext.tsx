@@ -6,15 +6,12 @@ type StorageSchema = {
   jlptLevel: JLPTLevel;
   questionsSession: Question[];
   questionIndexSession: number;
-  // Funcionalidade futura (?) de acessibilidade
-  accessibility: boolean;
 };
 
 const defaultStorage: StorageSchema = {
   jlptLevel: 'N5',
   questionsSession: [],
   questionIndexSession: 0,
-  accessibility: false,
 };
 
 type StorageContextType = {
