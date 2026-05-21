@@ -1,8 +1,7 @@
 import Screen from '@/components/Screen';
 import { useQuestions } from '@/db/queries';
 import { useStorage } from '@/hooks/useStorage';
-import { useEffect, useState } from 'react';
-import { Question } from '@/types/types';
+import { useRef, useState } from 'react';
 import { Text } from 'react-native';
 import QuestionScreen from './QuestionsScreen';
 
@@ -15,21 +14,20 @@ export default function QuestionSession({ onFinish, sessionType }: { onFinish: a
   const db = useQuestions(level);
 
   const [index, setIndex] = useState<number>(data.questionIndexSession);
-  const [question, setQuestion] = useState<Question>(questions[index]);
-  const [rightAnswers, setRightAnswers] = useState<number>(0);
+  let rightAnswers = useRef(0);
+  let question = questions[index];
 
-  useEffect(() => {
-    if (index < questions.length)
-      setQuestion(questions[index]);
-    else
-      onFinish(rightAnswers, questions.length);
-  }, [index, onFinish, question, rightAnswers]);
-
-  const handleNextQuestion = (chosenAlternative: number) => {
-    db.insertAnswer(question, level, chosenAlternative + 1);
-    if (chosenAlternative + 1 === question.correctAlternative)
-      setRightAnswers(rightAnswers + 1);
-    setIndex(index + 1);
+  const handleNextQuestion = async (choice: number) => {
+    if(choice + 1 === question.correctAlternative){
+      rightAnswers.current++;
+    }
+    await db.insertAnswer(question, level, choice + 1);
+    if (index + 1 < questions.length) {
+      setIndex(index => index + 1);
+    }
+    else{
+      onFinish(rightAnswers.current, questions.length); 
+    }
   };
 
   return (

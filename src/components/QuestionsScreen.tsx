@@ -1,21 +1,13 @@
 import AlternativeBody from '@/components/question/AlternativeBody';
 import QuestionBody from '@/components/question/QuestionBody';
 import { Question } from '@/types/types';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 export default function QuestionScreen({ question, onNextQuestion }: { question: Question, onNextQuestion: any }) {
 
   const [choice, setChoice] = useState<number>(-1);
   const [confirmedAnswer, setConfirmedAnswer] = useState<boolean>(false);
-
-  useEffect(() => {
-    async function load() {
-      setChoice(-1);
-      setConfirmedAnswer(false);
-    }
-    load();
-  }, [question]);
 
   const onChoice = (alternative: number) => {
     setChoice(alternative);
@@ -28,6 +20,8 @@ export default function QuestionScreen({ question, onNextQuestion }: { question:
 
   const handleNextQuestion = () => {
     onNextQuestion(choice);
+    setConfirmedAnswer(false);
+    setChoice(-1);
   };
 
   return (
@@ -39,7 +33,6 @@ export default function QuestionScreen({ question, onNextQuestion }: { question:
         : <Pressable onPress={() => handleNextQuestion()}><Text>Continuar</Text></Pressable>
       }
     </View>
-
   );
 }
 
