@@ -1,35 +1,29 @@
-import { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { colors, vw } from '../../styles/globals';
 
 export default function AlternativeBody({ alternatives, answer, onChoice, choice, isConfirmed }: { alternatives: string[], answer: number, onChoice: (choice: number) => void, choice: number, isConfirmed: boolean }) {
 
-  const [userChoice, setUserChoice] = useState<number>(-1);
-
-  useEffect(() => {
-    setUserChoice(choice);
-  }, [choice]);
-
   const handlePressableStyle = (alternative: number, pressed: boolean) => {
     if (!isConfirmed) {
-      if (pressed || alternative === userChoice)
+      if (pressed || alternative === choice)
         return styles.pressed;
       return styles.default;
     }
 
     if (alternative === answer)
       return styles.rightAlternative;
-    if (alternative === userChoice && userChoice !== answer)
+    if (alternative === choice && choice !== answer)
       return styles.wrongAlternative;
     return styles.disabled;
   };
 
   const handleTextColor = (alternative: number) => {
     if (isConfirmed)
-      if (alternative === answer || alternative === userChoice)
+      if (alternative === answer || alternative === choice)
         return '#fff';
     return;
   };
+
 
   return (
     <View style={styles.container}>
@@ -56,12 +50,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: 'none',
   },
-  questionImage: {
-    width: 180,
-    height: 180,
-  },
   alternative: {
-    backgroundColor: 'none',
     width: 70 * vw,
     padding: 10,
     borderStyle: 'solid',

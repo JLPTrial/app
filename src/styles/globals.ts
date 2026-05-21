@@ -27,4 +27,9 @@ export const colors = {
   evaluation: '#0261D2',     // Títulos e subtítulos de evaluation/advice da aba de estatística, lista do curso   
   explanation: '#E967B3',    // Botão de explicação
   readingMenuBox: '#B147AB', // Caixa de leitura e de compreensão do menu
+  grammar: '#a2a',           // Cor de destaque das questões de gramática
+  vocabulary: '#d22',        // Cor de destaque das questões de vocabulário
+  reading: '#2b7',           // Cor de destaque das questões de leitura
+  kanji: '#cc3',             // Cor de destaque das questões de kanji
+  listening: '#3ac',         // Cor de destaque das questões de audição
 };

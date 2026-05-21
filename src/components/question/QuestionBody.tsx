@@ -3,14 +3,15 @@ import { Question } from '@/types/types';
 import { Image } from 'expo-image';
 import { StyleSheet, Text, View } from 'react-native';
 import AudioPlayer from '../AudioPlayer';
+import { colors, vh } from '@/styles/globals';
 
 export default function QuestionBody({ question }: { question: Question }) {
- 
+
   const type: string = question.type;
 
   return (
     <View style={styles.container}>
-      <View style={[styles.questionHeader, { backgroundColor: typeColors[type] }]}>
+      <View style={[styles.questionHeader, { backgroundColor: colors[type] }]}>
         <Text style={{ color: '#fff' }}> {type}  - Nº {question.id} </Text>
       </View>
       <Text style={styles.questionCommand}>{question.command}</Text>
@@ -28,36 +29,26 @@ export default function QuestionBody({ question }: { question: Question }) {
   );
 }
 
-const typeColors: Record<string, string> = {
-  grammar: '#a2a',
-  vocabulary: '#d22',
-  reading: '#2b7',
-  hearing: '#cc3',
-  listening: '#3ac',
-};
-
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
-    padding: 24,
-    backgroundColor: 'none',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   questionHeader: {
-    marginBottom: 8,
-    borderRadius: 999
+    marginBottom: 1 * vh,
+    borderRadius: 999,
   },
   questionCommand: {
-    marginBottom: 8
+    marginBottom: 1 * vh,
   },
   questionText: {
     backgroundColor: 'pink',
     padding: 6,
-    marginTop: 8
+    marginTop: 1 * vh,
   },
   questionImage: {
-    height: 160,
+    height: 25 * vh,
     aspectRatio: 16 / 9,
-    marginBottom: 8
+    marginBottom: 1 * vh,
   },
 });

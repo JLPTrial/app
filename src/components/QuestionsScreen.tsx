@@ -1,5 +1,6 @@
 import AlternativeBody from '@/components/question/AlternativeBody';
 import QuestionBody from '@/components/question/QuestionBody';
+import { colors, vw } from '@/styles/globals';
 import { Question } from '@/types/types';
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
@@ -29,8 +30,8 @@ export default function QuestionScreen({ question, onNextQuestion }: { question:
       <QuestionBody question={question} />
       <AlternativeBody alternatives={question.alternatives} answer={question.correctAlternative - 1} onChoice={onChoice} choice={choice} isConfirmed={confirmedAnswer} />
       {(!confirmedAnswer)
-        ? <Pressable onPress={() => confirmAlternative(choice)}><Text>Confirmar</Text></Pressable>
-        : <Pressable onPress={() => handleNextQuestion()}><Text>Continuar</Text></Pressable>
+        ? <Pressable onPress={() => confirmAlternative(choice)} style={styles.button}><Text>Confirmar</Text></Pressable>
+        : <Pressable onPress={() => handleNextQuestion()} style={[styles.button, styles.buttonContinue]}><Text style={styles.textContinue}>Continuar</Text></Pressable>
       }
     </View>
   );
@@ -39,7 +40,22 @@ export default function QuestionScreen({ question, onNextQuestion }: { question:
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    gap: 20,
     flexDirection: 'column',
+    gap: 20,
+  },
+  button: {
+    backgroundColor: colors.primaryLight,
+    color: colors.textDark,
+    width: 50 * vw,
+    borderRadius: 999,
+    padding: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  buttonContinue: {
+    backgroundColor: colors.primary,
+  },
+  textContinue: {
+    color: colors.textLight,
   }
 });

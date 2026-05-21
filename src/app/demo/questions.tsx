@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Question, useQuestions } from '@/db/queries';
+import { useQuestions } from '@/db/queries';
 import { useStorage } from '@/hooks/useStorage';
 import QuestionSession from '@/components/QuestionsSession';
 import Loading from '../loading';
 import { router } from 'expo-router';
+import { Question } from '@/types/types';
 
 export default function QuestionScreen() {
 
