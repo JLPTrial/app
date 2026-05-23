@@ -7,7 +7,7 @@ import { colors, vh } from '@/styles/globals';
 import { textStyles } from '@/styles/texts';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import { Alert, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 
 const QUESTION_COUNTS = [5, 10, 20, 50];
 
@@ -55,6 +55,23 @@ export default function SessionLobby() {
   const startSession = async () => {
     setStarting(true);
     const questions = await db.searchQuestionsFilters(type, selectedTags, 'unanswered', maxQuestions);
+
+    if (questions.length === 0) {
+      let feedback = "Você já respondeu todas as questões desse tipo!";
+      if (selectedTags.length > 0) {
+        feedback = "Você já respondeu todas as questões com essas tags!";
+      }
+
+      Alert.alert(
+        "Nenhuma questão encontrada",
+        feedback,
+        [{ text: 'Voltar', style: 'cancel' }]
+      );
+
+      setStarting(false);
+      return;
+    }
+
     setValue('questionsSession', questions);
     setValue('questionIndexSession', 0);
     router.replace({ pathname: '/session-handler', params: { label } });
