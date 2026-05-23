@@ -21,7 +21,7 @@ export default function HomeScreen() {
 
   return (
     <Screen withBottomTab>
-      <FloatingButton options={levels} defaultValue={data.jlptLevel} onPress={(item : JLPTLevel) => {
+      <FloatingButton options={levels} defaultValue={data.jlptLevel} onPress={(item: JLPTLevel) => {
         setValue('jlptLevel', item);
       }} />
 
@@ -42,13 +42,13 @@ export default function HomeScreen() {
         <Text style={[{ marginBottom: 8 }, textStyles.title]}>Estude Por Competência</Text>
 
         <View style={styles.row}>
-          <Card title='Vocabulário' style={[{ backgroundColor: '#d22' }, styles.card]} onPress={() => router.push("/topic-study")} />
-          <Card title='Gramática' style={[{ backgroundColor: '#a2a' }, styles.card]} onPress={() => router.push("/topic-study")} />
+          <Card title='Vocabulário' style={[{ backgroundColor: '#d22' }, styles.card]} onPress={() => router.push({pathname: "/session-lobby", params: { type: "vocabulary", label: "Vocabulário"}})} />
+          <Card title='Gramática' style={[{ backgroundColor: '#a2a' }, styles.card]} onPress={() => router.push({pathname: "/session-lobby", params: { type: "grammar", label: "Gramática"}})} />
         </View>
 
         <View style={styles.row}>
-          <Card title='Leitura' style={[{ backgroundColor: '#2b7' }, styles.card]} onPress={() => router.push("/topic-study")} />
-          <Card title='Audição' style={[{ backgroundColor: '#cc3' }, styles.card]} onPress={() => router.push("/topic-study")} />
+          <Card title='Leitura' style={[{ backgroundColor: '#2b7' }, styles.card]} onPress={() => router.push({pathname: "/session-lobby", params: { type: "reading", label: "Leitura"}})} />
+          <Card title='Audição' style={[{ backgroundColor: '#cc3' }, styles.card]} onPress={() => router.push({pathname: "/session-lobby", params: { type: "listening", label: "Audição"}})} />
         </View>
       </View>
 
