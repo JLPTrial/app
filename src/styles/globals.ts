@@ -22,6 +22,8 @@ export const colors = {
   success: '#0AB263',        // Texto da quantidade de questões corretas
   error: '#DC2626',          // Questões e alternativas incorretas
   successBlock: '#F5F5DC',   // Fundo dos blocos da tela de resultado
+  mid: '#F5A623',            // Cor do texto quando o desempenho é mediano
+  failure: '#d60237',        // Cor do texto de fracasso
   graphInner: '#CBD4ED',     // Interior do gráfico de estatísticas
   graphBorder: '#0261D2',    // Bordas do gráfico de estatísticas
   graphText: '#0b3894',      // Texto em volta do gráfico de estatísticas
