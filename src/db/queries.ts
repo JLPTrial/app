@@ -83,7 +83,7 @@ class WhereClause {
     this.clauses.push(`${field} IN (${keys.join(", ")})`);
 
     values.forEach((val, index) => {
-      this.values[`$${keys[index]}`] = val;
+      this.values[`${keys[index]}`] = val;
     });
 
     this.numClauses += 1;
