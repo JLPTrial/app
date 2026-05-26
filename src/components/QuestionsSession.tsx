@@ -17,16 +17,16 @@ export default function QuestionSession({ onFinish, sessionType }: { onFinish: a
   let rightAnswers = useRef(0);
   let question = questions[index];
 
-  const handleNextQuestion = async (choice: number) => {
-    if(choice + 1 === question.correctAlternative){
+  const handleNextQuestion = (choice: number) => {
+    if (choice + 1 === question.correctAlternative) {
       rightAnswers.current++;
     }
-    await db.insertAnswer(question, level, choice + 1);
+    db.insertAnswer(question, level, choice + 1);
     if (index + 1 < questions.length) {
       setIndex(index => index + 1);
     }
-    else{
-      onFinish(rightAnswers.current, questions.length); 
+    else {
+      onFinish(rightAnswers.current, questions.length);
     }
   };
 
