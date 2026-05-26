@@ -27,7 +27,7 @@ export const StorageContext = createContext<StorageContextType | null>(null);
 export function StorageProvider({ children }: PropsWithChildren) {
 
   const [data, setData] = useState<StorageSchema>(() => {
-    const result: StorageSchema = { ...defaultStorage };
+    const result: any = { ...defaultStorage };
 
     for (const key of Object.keys(defaultStorage) as (keyof StorageSchema)[]) {
       const stored: any = Storage.getItemSync(key);

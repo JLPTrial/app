@@ -11,7 +11,7 @@ export default function QuestionBody({ question }: { question: Question }) {
 
   return (
     <View style={styles.container}>
-      <View style={[styles.questionHeader, { backgroundColor: colors[type] }]}>
+      <View style={[styles.questionHeader, { backgroundColor: colors[type as keyof typeof colors] }]}>
         <Text style={{ color: '#fff' }}> {type}  - Nº {question.id} </Text>
       </View>
       <Text style={styles.questionCommand}>{question.command}</Text>
