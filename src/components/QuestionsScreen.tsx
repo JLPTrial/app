@@ -1,19 +1,21 @@
 import AlternativeBody from '@/components/question/AlternativeBody';
 import QuestionBody from '@/components/question/QuestionBody';
-import { colors, vw } from '@/styles/globals';
+import { colors, vh, vw } from '@/styles/globals';
 import { Question } from '@/types/types';
 import { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { AppText } from './texts/AppText';
 
-const buttonStyle = (choice: number, confirmedAnswer: boolean) => {
+type buttonState = 'disabled' | 'continue' | 'confirm';
+
+const handleStyle = (choice: number, confirmedAnswer: boolean): buttonState => {
   if (choice === -1) {
-    return styles.disabledButton;
+    return 'disabled';
   }
   if (confirmedAnswer) {
-    return styles.buttonContinue;
+    return 'continue';
   }
-  return styles.buttonConfirm;
+  return 'confirm';
 };
 
 export default function QuestionScreen({ question, onNextQuestion }: { question: Question, onNextQuestion: any }) {
@@ -25,9 +27,8 @@ export default function QuestionScreen({ question, onNextQuestion }: { question:
     setChoice(alternative);
   };
 
-  const confirmAlternative = (choice: number) => {
-    if (choice !== -1)
-      setConfirmedAnswer(true);
+  const confirmAlternative = () => {
+    setConfirmedAnswer(true);
   };
 
   const handleNextQuestion = () => {
@@ -43,12 +44,31 @@ export default function QuestionScreen({ question, onNextQuestion }: { question:
         <AlternativeBody alternatives={question.alternatives} answer={question.correctAlternative - 1} onChoice={onChoice} choice={choice} isConfirmed={confirmedAnswer} />
       </ScrollView>
       {(!confirmedAnswer)
-        ? <Pressable onPress={() => confirmAlternative(choice)} style={[styles.button, buttonStyle(choice, confirmedAnswer)]}><AppText center={true}>Confirmar</AppText></Pressable>
-        : <Pressable onPress={() => handleNextQuestion()} style={[styles.button, buttonStyle(choice, confirmedAnswer)]}><AppText style={styles.textContinue} center={true}>Continuar</AppText></Pressable>
+        ? <Pressable onPress={() => confirmAlternative()}
+          disabled={(choice === -1)}
+          style={[styles.button, buttonStyle[handleStyle(choice, confirmedAnswer)]]}>
+          <AppText center={true}>Confirmar</AppText>
+        </Pressable>
+        : <Pressable onPress={() => handleNextQuestion()}
+          style={[styles.button, buttonStyle[handleStyle(choice, confirmedAnswer)]]}>
+          <AppText style={textStyle['continue']} center={true}>Continuar</AppText>
+        </Pressable>
       }
     </View>
   );
 }
+
+const buttonStyle = {
+  confirm: { backgroundColor: colors.primaryLight, },
+  continue: { backgroundColor: colors.primary, },
+  disabled: { backgroundColor: '#ccc', },
+};
+
+const textStyle = {
+  confirm: {},
+  continue: { color: colors.textLight, },
+  disabled: { color: colors.textMuted, },
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -56,23 +76,11 @@ const styles = StyleSheet.create({
     flex: 1,
     // height: 0 is needed
     height: 0,
-    gap: 20,
   },
   button: {
     width: 50 * vw,
+    marginTop: 2 * vh,
     borderRadius: 999,
     padding: 10,
   },
-  disabledButton: {
-    backgroundColor: colors.textMuted
-  },
-  buttonConfirm: {
-    backgroundColor: colors.primaryLight,
-  },
-  buttonContinue: {
-    backgroundColor: colors.primary,
-  },
-  textContinue: {
-    color: colors.textLight,
-  }
 });

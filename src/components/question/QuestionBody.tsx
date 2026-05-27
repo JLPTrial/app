@@ -3,7 +3,7 @@ import { Question } from '@/types/types';
 import { Image } from 'expo-image';
 import { StyleSheet, Text, View } from 'react-native';
 import AudioPlayer from '../AudioPlayer';
-import { colors, vh } from '@/styles/globals';
+import { colors, vh, vw } from '@/styles/globals';
 import { AppText } from '../texts/AppText';
 
 export default function QuestionBody({ question }: { question: Question }) {
@@ -11,9 +11,9 @@ export default function QuestionBody({ question }: { question: Question }) {
   const type: string = question.type;
 
   return (
-    <View style={styles.container}>
+    <View style={{ alignItems: 'center' }}>
       <View style={[styles.questionHeader, { backgroundColor: colors[type as keyof typeof colors] }]}>
-        <AppText style={{ color: '#fff' }}> {type}  - Nº {question.id} </AppText>
+        <AppText style={{ color: '#fff' }} center={true}> {type}  - Nº {question.id} </AppText>
       </View>
       <AppText style={styles.questionCommand}>{question.command}</AppText>
       {(question.image !== null) &&
@@ -31,10 +31,8 @@ export default function QuestionBody({ question }: { question: Question }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-  },
   questionHeader: {
+    width: 50 * vw,
     marginBottom: 1 * vh,
     borderRadius: 999,
   },
@@ -42,8 +40,10 @@ const styles = StyleSheet.create({
     marginBottom: 1 * vh,
   },
   questionText: {
-    backgroundColor: 'pink',
-    padding: 6,
+    borderColor: 'pink',
+    borderStyle: 'solid',
+    borderWidth: 1 * vw,
+    padding: 2 * vw,
     marginTop: 1 * vh,
   },
   questionImage: {
