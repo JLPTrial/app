@@ -14,7 +14,7 @@ export default function QuestionScreen() {
 
   useEffect(() => {
     async function load() {
-      const results: Question[] = await db.selectByTypeMany('listening', 5);
+      const results: Question[] = await db.selectByTypeMany('reading', 5);
       setValue('questionsSession', results);
       setValue('questionIndexSession', 0);
       setLoading(false);

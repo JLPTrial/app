@@ -3,7 +3,18 @@ import QuestionBody from '@/components/question/QuestionBody';
 import { colors, vw } from '@/styles/globals';
 import { Question } from '@/types/types';
 import { useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { AppText } from './texts/AppText';
+
+const buttonStyle = (choice: number, confirmedAnswer: boolean) => {
+  if (choice === -1) {
+    return styles.disabledButton;
+  }
+  if (confirmedAnswer) {
+    return styles.buttonContinue;
+  }
+  return styles.buttonConfirm;
+};
 
 export default function QuestionScreen({ question, onNextQuestion }: { question: Question, onNextQuestion: any }) {
 
@@ -27,11 +38,13 @@ export default function QuestionScreen({ question, onNextQuestion }: { question:
 
   return (
     <View style={styles.container}>
-      <QuestionBody question={question} />
-      <AlternativeBody alternatives={question.alternatives} answer={question.correctAlternative - 1} onChoice={onChoice} choice={choice} isConfirmed={confirmedAnswer} />
+      <ScrollView>
+        <QuestionBody question={question} />
+        <AlternativeBody alternatives={question.alternatives} answer={question.correctAlternative - 1} onChoice={onChoice} choice={choice} isConfirmed={confirmedAnswer} />
+      </ScrollView>
       {(!confirmedAnswer)
-        ? <Pressable onPress={() => confirmAlternative(choice)} style={styles.button}><Text>Confirmar</Text></Pressable>
-        : <Pressable onPress={() => handleNextQuestion()} style={[styles.button, styles.buttonContinue]}><Text style={styles.textContinue}>Continuar</Text></Pressable>
+        ? <Pressable onPress={() => confirmAlternative(choice)} style={[styles.button, buttonStyle(choice, confirmedAnswer)]}><AppText center={true}>Confirmar</AppText></Pressable>
+        : <Pressable onPress={() => handleNextQuestion()} style={[styles.button, buttonStyle(choice, confirmedAnswer)]}><AppText style={styles.textContinue} center={true}>Continuar</AppText></Pressable>
       }
     </View>
   );
@@ -40,17 +53,21 @@ export default function QuestionScreen({ question, onNextQuestion }: { question:
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    flexDirection: 'column',
+    flex: 1,
+    // height: 0 is needed
+    height: 0,
     gap: 20,
   },
   button: {
-    backgroundColor: colors.primaryLight,
-    color: colors.textDark,
     width: 50 * vw,
     borderRadius: 999,
     padding: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
+  },
+  disabledButton: {
+    backgroundColor: colors.textMuted
+  },
+  buttonConfirm: {
+    backgroundColor: colors.primaryLight,
   },
   buttonContinue: {
     backgroundColor: colors.primary,

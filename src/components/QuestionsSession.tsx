@@ -2,7 +2,7 @@ import Screen from '@/components/Screen';
 import { useQuestions } from '@/db/queries';
 import { useStorage } from '@/hooks/useStorage';
 import { useRef, useState } from 'react';
-import { Text } from 'react-native';
+import { AppText } from './texts/AppText';
 import QuestionScreen from './QuestionsScreen';
 
 // sessionType indica na tela se é um simulado ou uma seção de estudo
@@ -32,7 +32,7 @@ export default function QuestionSession({ onFinish, sessionType }: { onFinish: a
 
   return (
     <Screen>
-      <Text>{sessionType} - Questão {index + 1}/{questions.length}</Text>
+      <AppText>{sessionType} - Questão {index + 1}/{questions.length}</AppText>
       <QuestionScreen question={question} onNextQuestion={handleNextQuestion}></QuestionScreen>
     </Screen>
   );

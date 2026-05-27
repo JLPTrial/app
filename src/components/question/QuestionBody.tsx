@@ -4,6 +4,7 @@ import { Image } from 'expo-image';
 import { StyleSheet, Text, View } from 'react-native';
 import AudioPlayer from '../AudioPlayer';
 import { colors, vh } from '@/styles/globals';
+import { AppText } from '../texts/AppText';
 
 export default function QuestionBody({ question }: { question: Question }) {
 
@@ -12,9 +13,9 @@ export default function QuestionBody({ question }: { question: Question }) {
   return (
     <View style={styles.container}>
       <View style={[styles.questionHeader, { backgroundColor: colors[type as keyof typeof colors] }]}>
-        <Text style={{ color: '#fff' }}> {type}  - Nº {question.id} </Text>
+        <AppText style={{ color: '#fff' }}> {type}  - Nº {question.id} </AppText>
       </View>
-      <Text style={styles.questionCommand}>{question.command}</Text>
+      <AppText style={styles.questionCommand}>{question.command}</AppText>
       {(question.image !== null) &&
         (<Image
           source={assetsMap[`${question.image}`]}
@@ -31,7 +32,6 @@ export default function QuestionBody({ question }: { question: Question }) {
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'center',
     alignItems: 'center',
   },
   questionHeader: {

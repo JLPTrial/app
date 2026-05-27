@@ -1,5 +1,6 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { colors, vw } from '../../styles/globals';
+import { AppText } from '../texts/AppText';
 
 export default function AlternativeBody({ alternatives, answer, onChoice, choice, isConfirmed }: { alternatives: string[], answer: number, onChoice: (choice: number) => void, choice: number, isConfirmed: boolean }) {
 
@@ -35,7 +36,7 @@ export default function AlternativeBody({ alternatives, answer, onChoice, choice
           }
           key={alternative}
           disabled={isConfirmed}>
-          <Text style={{ color: handleTextColor(alternative) }}>{alternativeText}</Text>
+          <AppText style={{ color: handleTextColor(alternative) }}>{alternativeText}</AppText>
         </Pressable>;
       })}
     </View>
@@ -45,10 +46,8 @@ export default function AlternativeBody({ alternatives, answer, onChoice, choice
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    justifyContent: 'center',
     gap: 20,
-    flexDirection: 'column',
-    backgroundColor: 'none',
+    padding:10,
   },
   alternative: {
     width: 70 * vw,
