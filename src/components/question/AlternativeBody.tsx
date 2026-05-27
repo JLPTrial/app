@@ -2,20 +2,22 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { colors, vh, vw } from '../../styles/globals';
 import { AppText } from '../texts/AppText';
 
-type buttonState = 'pressed' | 'default' | 'rightAlternative' | 'wrongAlternative' | 'disabled';
+type buttonState = 'right' | 'wrong' | 'disabled' | 'pressed' | 'chosen' | 'default';
 export default function AlternativeBody({ alternatives, answer, onChoice, choice, isConfirmed }: { alternatives: string[], answer: number, onChoice: (choice: number) => void, choice: number, isConfirmed: boolean }) {
 
   const handleStyle = (alternative: number, pressed: boolean = false): buttonState => {
     if (!isConfirmed) {
-      if (pressed || alternative === choice)
+      if (pressed)
         return 'pressed';
+      if (alternative === choice)
+        return 'chosen';
       return 'default';
     }
 
     if (alternative === answer)
-      return 'rightAlternative';
+      return 'right';
     if (alternative === choice && choice !== answer)
-      return 'wrongAlternative';
+      return 'wrong';
     return 'disabled';
   };
 
@@ -29,7 +31,9 @@ export default function AlternativeBody({ alternatives, answer, onChoice, choice
           }
           key={alternative}
           disabled={isConfirmed}>
-          <AppText style={textStyle[handleStyle(alternative) as keyof typeof textStyle]} center={true}>{alternativeText}</AppText>
+          {({ pressed }) => (
+            <AppText style={textStyle[handleStyle(alternative, pressed) as keyof typeof textStyle]} center={true}>{alternativeText}</AppText>
+          )}
         </Pressable>;
       })}
     </View>
@@ -37,16 +41,18 @@ export default function AlternativeBody({ alternatives, answer, onChoice, choice
 }
 
 const buttonStyle = {
-  rightAlternative: { borderColor: 'green', },
-  wrongAlternative: { borderColor: 'red', },
-  pressed: { backgroundColor: colors.selected, },
+  right:    { borderColor: 'green', },
+  wrong:    { borderColor: 'red', },
+  pressed:  { backgroundColor: 'rgb(204, 255, 255)' },
+  chosen:   { borderColor: '#03F', },
   disabled: { backgroundColor: '#ccc', },
 };
 
 const textStyle = {
-  rightAlternative: { color: 'green', },
-  wrongAlternative: { color: 'red', },
-  pressed: { /* No Style for now */ },
+  right:    { color: 'green', },
+  wrong:    { color: 'red', },
+  pressed:  {  },
+  chosen:   { color: '#03F', },
   disabled: { color: colors.textMuted, },
 };
 

@@ -2,7 +2,7 @@ import AlternativeBody from '@/components/question/AlternativeBody';
 import QuestionBody from '@/components/question/QuestionBody';
 import { colors, vh, vw } from '@/styles/globals';
 import { Question } from '@/types/types';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { AppText } from './texts/AppText';
 
@@ -22,6 +22,7 @@ export default function QuestionScreen({ question, onNextQuestion }: { question:
 
   const [choice, setChoice] = useState<number>(-1);
   const [confirmedAnswer, setConfirmedAnswer] = useState<boolean>(false);
+  const scrollRef = useRef<ScrollView>(null);
 
   const onChoice = (alternative: number) => {
     setChoice(alternative);
@@ -32,6 +33,7 @@ export default function QuestionScreen({ question, onNextQuestion }: { question:
   };
 
   const handleNextQuestion = () => {
+    scrollRef.current?.scrollTo({ y: 0, animated: true });
     onNextQuestion(choice);
     setConfirmedAnswer(false);
     setChoice(-1);
@@ -39,7 +41,7 @@ export default function QuestionScreen({ question, onNextQuestion }: { question:
 
   return (
     <View style={styles.container}>
-      <ScrollView>
+      <ScrollView contentContainerStyle={styles.scroll} ref={scrollRef} showsVerticalScrollIndicator={false} >
         <QuestionBody question={question} />
         <AlternativeBody alternatives={question.alternatives} answer={question.correctAlternative - 1} onChoice={onChoice} choice={choice} isConfirmed={confirmedAnswer} />
       </ScrollView>
@@ -59,13 +61,13 @@ export default function QuestionScreen({ question, onNextQuestion }: { question:
 }
 
 const buttonStyle = {
-  confirm: { backgroundColor: colors.primaryLight, },
+  confirm:  { backgroundColor: colors.primaryLight, },
   continue: { backgroundColor: colors.primary, },
   disabled: { backgroundColor: '#ccc', },
 };
 
 const textStyle = {
-  confirm: {},
+  confirm:  {  },
   continue: { color: colors.textLight, },
   disabled: { color: colors.textMuted, },
 };
@@ -83,4 +85,8 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     padding: 10,
   },
+  scroll: {
+    flexGrow: 1,
+    justifyContent: 'space-between',
+  }
 });

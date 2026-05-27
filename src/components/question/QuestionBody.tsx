@@ -37,6 +37,8 @@ const styles = StyleSheet.create({
     borderRadius: 999,
   },
   questionCommand: {
+    fontSize: 15,
+    color: colors.textMuted,
     marginBottom: 1 * vh,
   },
   questionText: {
