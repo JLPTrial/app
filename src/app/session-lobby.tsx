@@ -6,7 +6,7 @@ import { useStorage } from '@/hooks/useStorage';
 import { colors, vh } from '@/styles/globals';
 import { textStyles } from '@/styles/texts';
 import { router, useLocalSearchParams } from 'expo-router';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Alert, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 
 const QUESTION_COUNTS = [5, 10, 20, 50];
@@ -15,7 +15,6 @@ export default function SessionLobby() {
   const { type, label } = useLocalSearchParams<{ type: string; label: string }>();
   const { data, setValue } = useStorage();
   const db = useQuestions(data.jlptLevel);
-  const inputRef = useRef<TextInput>(null); // Referência para o TextInput da quantidade de questões
 
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredTags, setFilteredTags] = useState<string[]>([]);
@@ -77,19 +76,6 @@ export default function SessionLobby() {
     router.replace({ pathname: '/session-handler', params: { label } });
   };
 
-  const handleInputChange = (text: string) => {
-    const cleanedText = Number(text.replace(/[^0-9]/g, ''));
-    setMaxQuestions(cleanedText);
-  };
-
-  const updateMaxQuestions = (n: number) => {
-    if (inputRef.current) {
-      inputRef.current.clear(); // Limpa o TextInput da quantidade de questões
-    }
-
-    setMaxQuestions(n);
-  };
-
   if (loadingTags || starting) return <Loading />;
 
   return (
@@ -108,23 +94,13 @@ export default function SessionLobby() {
             <Pressable
               key={n}
               style={[styles.chip, maxQuestions === n && styles.chipSelected]}
-              onPress={() => updateMaxQuestions(n)}
+              onPress={() => setMaxQuestions(n)}
             >
               <AppText style={maxQuestions === n && { color: colors.textLight }}>
                 {n}
               </AppText>
             </Pressable>
           ))}
-
-          <TextInput
-            ref={inputRef}
-            style={[styles.chip, styles.quantitySelector]}
-            onChangeText={handleInputChange}
-            keyboardType="numeric"
-            maxLength={3}
-            placeholder={maxQuestions ? 'Outro' : '0'}
-            placeholderTextColor={colors.textMuted}
-          />
         </View>
       </View>
 
