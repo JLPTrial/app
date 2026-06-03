@@ -9,7 +9,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Alert, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 
-const QUESTION_COUNTS = [5, 10, 20, 50];
+const QUESTION_COUNTS = [5, 10, 15, 20];
 
 export default function SessionLobby() {
   const { type, label } = useLocalSearchParams<{ type: string; label: string }>();
