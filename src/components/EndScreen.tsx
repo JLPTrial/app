@@ -3,7 +3,8 @@ import Screen from '@/components/Screen';
 import { AppText } from '@/components/texts/AppText';
 import { colors } from '@/styles/globals';
 import { router } from 'expo-router';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import BottomButton from './BottomButton';
 
 type SessionResult = {
     right: number;
@@ -47,13 +48,7 @@ export default function EndScreen({ result }: { result: SessionResult }) {
         {feedbackText}
       </AppText>
 
-      <View style={styles.footer}>
-        <Pressable style={styles.homeButton} onPress={() => router.dismissAll()}>
-          <AppText bold={true} variant='title' style={{ color: colors.textLight }}>
-                        Voltar ao Início
-          </AppText>
-        </Pressable>
-      </View>
+      <BottomButton onPress={() => router.dismissAll()} text="Voltar ao Início" />
     </Screen>);
 }
 const styles = StyleSheet.create({
@@ -70,16 +65,5 @@ const styles = StyleSheet.create({
   },
   percentageText: {
     fontSize: 24,
-  },
-  footer: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignSelf: 'stretch',
-  },
-  homeButton: {
-    backgroundColor: colors.primary,
-    borderRadius: 16,
-    paddingVertical: 16,
-    alignItems: 'center',
   },
 });

@@ -1,4 +1,5 @@
 import Loading from '@/app/loading';
+import BottomButton from '@/components/BottomButton';
 import Screen from '@/components/Screen';
 import { AppText } from '@/components/texts/AppText';
 import { useQuestions } from '@/db/queries';
@@ -139,13 +140,7 @@ export default function SessionLobby() {
         )
       }
 
-      <View style={styles.footer}>
-        <Pressable style={styles.startButton} onPress={startSession}>
-          <AppText variant='title' style={{ color: colors.textLight }}>
-            Iniciar
-          </AppText>
-        </Pressable>
-      </View>
+      <BottomButton onPress={startSession} text="Iniciar" />
     </Screen >
   );
 }
@@ -212,18 +207,5 @@ const styles = StyleSheet.create({
   chipSelected: {
     backgroundColor: colors.primary,
     borderColor: colors.primary,
-  },
-
-  footer: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignSelf: 'stretch',
-  },
-
-  startButton: {
-    backgroundColor: colors.primary,
-    borderRadius: 16,
-    paddingVertical: 16,
-    alignItems: 'center',
   },
 });
