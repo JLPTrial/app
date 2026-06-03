@@ -88,7 +88,7 @@ export default function SessionLobby() {
       </View>
 
       <View style={styles.section}>
-        <AppText variant='subtitle'>Quantidade de Questões</AppText>
+        <AppText variant='subtitle'>Quantidade Máxima de Questões</AppText>
         <View style={styles.chipRow}>
           {QUESTION_COUNTS.map(n => (
             <Pressable
