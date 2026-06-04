@@ -7,6 +7,17 @@ import { Switch } from 'react-native-switch';
 
 type icon = keyof typeof Ionicons.glyphMap;
 
+type SliderProps = {
+  title: string,
+  value: number,
+  onChange: () => void,
+  min: number,
+  step: number,
+  max: number,
+  left: React.ComponentType,
+  right: any
+};
+
 const dot = ({ index, currentValue }: { index: number, currentValue: number }) => {
   return <View
     style={[styles.dot, {
@@ -17,7 +28,7 @@ const dot = ({ index, currentValue }: { index: number, currentValue: number }) =
   />;
 };
 
-export function SwitchSetting({ icon, title, value, onChange }: { icon: icon, title: string, value: boolean, onChange: any }) {
+export function SwitchSetting({ icon, title, value, onChange }: { icon: icon, title: string, value: boolean, onChange: () => void }) {
   return (
     <View style={[styles.container, styles.horizontal]}>
       <Ionicons
@@ -46,11 +57,11 @@ export function SwitchSetting({ icon, title, value, onChange }: { icon: icon, ti
   );
 }
 
-export function SliderSetting({ title, value, onChange, min, step, max, left, right }: { title: string, value: number, onChange: any, min: number, step: number, max: number, left: any, right: any }) {
+export function SliderSetting({ title, value, onChange, min, step, max, left, right }: SliderProps) {
   return (
-    <View style={[styles.container]}>
-      <AppText>{title}</AppText>
-      <View style={styles.horizontal}>
+    <View>
+      <AppText center>{title}</AppText>
+      <View style={[styles.container, styles.horizontal]}>
         {left}
         <Slider
           minimumValue={min}
@@ -83,10 +94,22 @@ export function ActionSetting({ icon, title }: { icon: icon, title: string }) {
     </View>
   );
 }
+
+export function SettingCard({ title, children }: { title: string, children: any }) {
+  return (
+    <View>
+      <AppText>{title}</AppText>
+      <View style={styles.card}>
+        {children}
+      </View>
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.background,
-    width: '80%',
+    width: '100%',
     padding: 10,
     borderRadius: 20,
     gap: 10,
@@ -95,6 +118,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  card: {
+    alignItems: 'center',
+    width: '80%',
+    borderRadius: 20,
+    backgroundColor: colors.background
   },
   dot: {
     width: 20,
