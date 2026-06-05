@@ -4,28 +4,20 @@ import Slider from '@react-native-community/slider';
 import { StyleSheet, View } from 'react-native';
 import { AppText } from './texts/AppText';
 import { Switch } from 'react-native-switch';
+import { Marker, MarkerType } from './slider/marker';
 
 type icon = keyof typeof Ionicons.glyphMap;
 
 type SliderProps = {
   title: string,
   value: number,
-  onChange: () => void,
+  onChange: (value : number) => void,
   min: number,
-  step: number,
+  step?: number,
   max: number,
-  left: React.ComponentType,
-  right: any
-};
-
-const dot = ({ index, currentValue }: { index: number, currentValue: number }) => {
-  return <View
-    style={[styles.dot, {
-      backgroundColor: (index <= currentValue) ? colors.primary : colors.textMuted,
-      borderWidth: 4,
-      borderColor: colors.background,
-    }]}
-  />;
+  left?: any,
+  right?: any,
+  marker?: MarkerType
 };
 
 export function SwitchSetting({ icon, title, value, onChange }: { icon: icon, title: string, value: boolean, onChange: () => void }) {
@@ -36,7 +28,9 @@ export function SwitchSetting({ icon, title, value, onChange }: { icon: icon, ti
         size={32}
         color={colors.textDark}
       />
+
       <AppText>{title}</AppText>
+      
       <Switch
         value={value} onValueChange={onChange}
         circleSize={32}
@@ -57,7 +51,7 @@ export function SwitchSetting({ icon, title, value, onChange }: { icon: icon, ti
   );
 }
 
-export function SliderSetting({ title, value, onChange, min, step, max, left, right }: SliderProps) {
+export function SliderSetting({ title, value, onChange, min, max, step = 0, left, right, marker = 'none' }: SliderProps) {
   return (
     <View>
       <AppText center>{title}</AppText>
@@ -71,9 +65,9 @@ export function SliderSetting({ title, value, onChange, min, step, max, left, ri
           onValueChange={onChange}
           minimumTrackTintColor={colors.primaryLight}
           maximumTrackTintColor={colors.textMuted}
-          StepMarker={dot}
+          StepMarker={Marker[marker]}
           thumbSize={20}
-          thumbTintColor={colors.background}
+          thumbTintColor={(marker === 'none') ? colors.primary : 'transparent'}
           style={{ flex: 1, height: 0 }}
         />
         {right}
@@ -98,7 +92,7 @@ export function ActionSetting({ icon, title }: { icon: icon, title: string }) {
 export function SettingCard({ title, children }: { title: string, children: any }) {
   return (
     <View>
-      <AppText>{title}</AppText>
+      <AppText bold>{title}</AppText>
       <View style={styles.card}>
         {children}
       </View>
@@ -108,11 +102,9 @@ export function SettingCard({ title, children }: { title: string, children: any 
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.background,
     width: '100%',
-    padding: 10,
-    borderRadius: 20,
-    gap: 10,
+    // borderColor:'#000',
+    // borderBottomWidth:1,
   },
   horizontal: {
     flexDirection: 'row',
@@ -121,8 +113,12 @@ const styles = StyleSheet.create({
   },
   card: {
     alignItems: 'center',
-    width: '80%',
+    width: '84%',
+    padding:10,
     borderRadius: 20,
+    gap:20,
+    marginTop:5,
+    justifyContent:'space-evenly',
     backgroundColor: colors.background
   },
   dot: {
