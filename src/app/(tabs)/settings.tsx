@@ -2,7 +2,6 @@ import { AppText } from '@/components/texts/AppText';
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { SwitchSetting, SliderSetting, ActionSetting, SettingCard } from '../../components/Settings';
-import { colors } from '@/styles/globals';
 import { VolumeManager } from 'react-native-volume-manager';
 
 async function changeVolume(volume: number): Promise<void> {
@@ -21,7 +20,7 @@ export default function SettingsScreen() {
       <SettingCard title='Aparência'>
         <SwitchSetting icon={isEnabled ? 'moon' : 'sunny'} title='Modo' onChange={toggle} value={isEnabled} />
 
-        <SwitchSetting icon='ellipse' title='Furigana' onChange={toggle} value={isEnabled} />
+        <SwitchSetting icon='振り仮名' title='Furigana' onChange={toggle} value={isEnabled} />
 
         <SliderSetting
           title='Fonte'
@@ -42,15 +41,13 @@ export default function SettingsScreen() {
         <SliderSetting
           title='Volume'
           value={0}
-          onChange={(value: number) => { changeVolume(value) }}
+          onChange={(value: number) => { changeVolume(value); }}
           min={0}
           max={100}
           left={<AppText style={{ fontSize: 40 }}>-</AppText>}
           right={<AppText style={{ fontSize: 40 }}>+</AppText>}
         />
       </SettingCard>
-
-
 
       <SettingCard title='Suporte'>
         <ActionSetting icon='star' title='Avalie o app' />

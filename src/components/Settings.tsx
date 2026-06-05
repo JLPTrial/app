@@ -1,12 +1,10 @@
 import { colors } from '@/styles/globals';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from './Icon';
 import Slider from '@react-native-community/slider';
 import { StyleSheet, View } from 'react-native';
 import { AppText } from './texts/AppText';
 import { Switch } from 'react-native-switch';
-import { Marker, MarkerType } from './slider/marker';
-
-type icon = keyof typeof Ionicons.glyphMap;
+import { Marker, MarkerType } from './slider/Marker';
 
 type SliderProps = {
   title: string,
@@ -20,10 +18,10 @@ type SliderProps = {
   marker?: MarkerType
 };
 
-export function SwitchSetting({ icon, title, value, onChange }: { icon: icon, title: string, value: boolean, onChange: () => void }) {
+export function SwitchSetting({ icon, title, value, onChange }: { icon: string, title: string, value: boolean, onChange: () => void }) {
   return (
     <View style={[styles.container, styles.horizontal]}>
-      <Ionicons
+      <Icon
         name={icon}
         size={32}
         color={colors.textDark}
@@ -76,10 +74,10 @@ export function SliderSetting({ title, value, onChange, min, max, step = 0, left
   );
 }
 
-export function ActionSetting({ icon, title }: { icon: icon, title: string }) {
+export function ActionSetting({ icon, title }: { icon: string, title: string }) {
   return (
     <View style={[styles.container, styles.horizontal]}>
-      <Ionicons
+      <Icon
         name={icon}
         size={32}
         color={colors.textDark}
@@ -103,8 +101,6 @@ export function SettingCard({ title, children }: { title: string, children: any 
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    // borderColor:'#000',
-    // borderBottomWidth:1,
   },
   horizontal: {
     flexDirection: 'row',
