@@ -2,11 +2,7 @@ import { AppText } from '@/components/texts/AppText';
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { SwitchSetting, SliderSetting, ActionSetting, SettingCard } from '../../components/Settings';
-import { VolumeManager } from 'react-native-volume-manager';
 
-async function changeVolume(volume: number): Promise<void> {
-  await VolumeManager.setVolume(volume / 100);
-}
 export default function SettingsScreen() {
   const [isEnabled, setIsEnabled] = useState(false);
   const toggle = () => {
@@ -41,7 +37,7 @@ export default function SettingsScreen() {
         <SliderSetting
           title='Volume'
           value={0}
-          onChange={(value: number) => { changeVolume(value); }}
+          onChange={() => {}}
           min={0}
           max={100}
           left={<AppText style={{ fontSize: 40 }}>-</AppText>}
