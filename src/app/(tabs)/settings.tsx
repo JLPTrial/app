@@ -1,6 +1,6 @@
 import { AppText } from '@/components/texts/AppText';
 import { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { SwitchSetting, SliderSetting, ActionSetting, SettingCard } from '../../components/Settings';
 
 export default function SettingsScreen() {
@@ -8,50 +8,53 @@ export default function SettingsScreen() {
   const toggle = () => {
     setIsEnabled(previousState => !previousState);
   };
+  const slide = (value: number) => {
+
+  };
 
   return (
-    <View style={styles.container}>
-      <AppText>Configurações</AppText>
+    <ScrollView>
+      <View style={styles.container}>
+        <AppText>Configurações</AppText>
 
-      <SettingCard title='Aparência'>
-        <SwitchSetting icon={isEnabled ? 'moon' : 'sunny'} title='Modo' onChange={toggle} value={isEnabled} />
+        <SettingCard title='Aparência'>
+          <SwitchSetting icon={isEnabled ? 'moon' : 'sunny'} title='Modo' onChange={toggle} value={isEnabled} />
 
-        <SwitchSetting icon='振り仮名' title='Furigana' onChange={toggle} value={isEnabled} />
+          <SwitchSetting icon='振' title='Furigana' onChange={toggle} value={isEnabled} />
 
-        <SliderSetting
-          title='Fonte'
-          onChange={() => { }} value={0}
-          min={0}
-          step={1}
-          max={3}
-          marker={'dot'}
-          left={<AppText>Aa</AppText>}
-          right={<AppText style={{ fontSize: 40 }}>Aa</AppText>}
-        />
-      </SettingCard>
+          <SliderSetting
+            title='Fonte'
+            onChange={(value) => slide(value)}
+            min={0}
+            value={0}
+            step={1}
+            max={3}
+            marker={'dot'}
+            left={<AppText>Aa</AppText>}
+            right={<AppText style={{ fontSize: 40 }}>Aa</AppText>}
+          />
+        </SettingCard>
 
+        <SettingCard title='Som'>
+          <SwitchSetting icon='ellipse' title='Feedback tátil' onChange={toggle} value={isEnabled} />
 
-      <SettingCard title='Som'>
-        <SwitchSetting icon='ellipse' title='Vibração' onChange={toggle} value={isEnabled} />
+          <SliderSetting
+            title='Volume Interno'
+            value={0}
+            onChange={() => { }}
+            min={0}
+            max={100}
+          />
+        </SettingCard>
 
-        <SliderSetting
-          title='Volume'
-          value={0}
-          onChange={() => {}}
-          min={0}
-          max={100}
-          left={<AppText style={{ fontSize: 40 }}>-</AppText>}
-          right={<AppText style={{ fontSize: 40 }}>+</AppText>}
-        />
-      </SettingCard>
-
-      <SettingCard title='Suporte'>
-        <ActionSetting icon='star' title='Avalie o app' />
-        <ActionSetting icon='mail' title='Fale conosco' />
-        <ActionSetting icon='open' title='Termos de uso' />
-        <ActionSetting icon='bug' title='Relatar bugs' />
-      </SettingCard>
-    </View>
+        <SettingCard title='Suporte'>
+          <ActionSetting icon='star' title='Avalie o app' />
+          <ActionSetting icon='mail' title='Fale conosco' />
+          <ActionSetting icon='open' title='Termos de uso' />
+          <ActionSetting icon='bug' title='Relatar bugs' />
+        </SettingCard>
+      </View>
+    </ScrollView>
   );
 }
 
@@ -59,6 +62,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'space-around',
-    alignItems: 'center'
+    alignItems: 'center',
   },
 });
