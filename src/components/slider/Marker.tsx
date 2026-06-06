@@ -6,7 +6,7 @@ const dot = ({ index, currentValue }: { index: number, currentValue: number }) =
     style={[styles.dot, {
       backgroundColor: (index <= currentValue) ? colors.primary : colors.textMuted,
       borderWidth: 4,
-      borderColor: colors.background,
+      borderColor: '#FFF',
     }]}
   />;
 };

@@ -5,20 +5,29 @@ import { StyleSheet, View } from 'react-native';
 import { AppText } from './texts/AppText';
 import { Switch } from 'react-native-switch';
 import { Marker, MarkerType } from './slider/Marker';
+import React from 'react';
 
 type SliderProps = {
   title: string,
   value: number,
-  onChange: (value : number) => void,
+  onChange: (value: number) => void,
   min: number,
   step?: number,
   max: number,
-  left?: any,
-  right?: any,
+  left?: React.ReactNode,
+  right?: React.ReactNode,
   marker?: MarkerType
 };
 
-export function SwitchSetting({ icon, title, value, onChange }: { icon: string, title: string, value: boolean, onChange: () => void }) {
+type SwitchProps = {
+  icon: string,
+  title: string,
+  value: boolean,
+  onChange: () => void
+}
+
+export function SwitchSetting({ icon, title, value, onChange }: SwitchProps) {
+
   return (
     <View style={[styles.container, styles.horizontal]}>
       <Icon
@@ -27,10 +36,11 @@ export function SwitchSetting({ icon, title, value, onChange }: { icon: string, 
         color={colors.textDark}
       />
 
-      <AppText>{title}</AppText>
-      
+      <AppText style={styles.switchTitle}>{title}</AppText>
+
       <Switch
-        value={value} onValueChange={onChange}
+        value={value}
+        onValueChange={onChange}
         circleSize={32}
         barHeight={40}
         circleBorderWidth={0}
@@ -49,7 +59,9 @@ export function SwitchSetting({ icon, title, value, onChange }: { icon: string, 
   );
 }
 
-export function SliderSetting({ title, value, onChange, min, max, step = 0, left, right, marker = 'none' }: SliderProps) {
+export function SliderSetting({ title, value, onChange, min, max, step = 0,
+  left, right, marker = 'none' }: SliderProps) {
+
   return (
     <View>
       <AppText center>{title}</AppText>
@@ -66,7 +78,7 @@ export function SliderSetting({ title, value, onChange, min, max, step = 0, left
           StepMarker={Marker[marker]}
           thumbSize={20}
           thumbTintColor={(marker === 'none') ? colors.primary : 'transparent'}
-          style={{ flex: 1, height: 0 }}
+          style={styles.slider}
         />
         {right}
       </View>
@@ -75,6 +87,7 @@ export function SliderSetting({ title, value, onChange, min, max, step = 0, left
 }
 
 export function ActionSetting({ icon, title }: { icon: string, title: string }) {
+
   return (
     <View style={[styles.container, styles.horizontal]}>
       <Icon
@@ -82,17 +95,26 @@ export function ActionSetting({ icon, title }: { icon: string, title: string }) 
         size={32}
         color={colors.textDark}
       />
-      <AppText style={{ flex: 1 }}>{title}</AppText>
+      <AppText style={{ flex: 1 }} center>{title}</AppText>
     </View>
   );
 }
 
 export function SettingCard({ title, children }: { title: string, children: any }) {
+
+  const setting = React.Children.toArray(children);
   return (
     <View>
       <AppText bold>{title}</AppText>
+
       <View style={styles.card}>
-        {children}
+        {setting.map((child, index) =>
+          (
+            <View key={index} style={(index < setting.length - 1) && styles.line}>
+              {child}
+            </View>
+          ))
+        }
       </View>
     </View>
   );
@@ -108,18 +130,27 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   card: {
-    alignItems: 'center',
     width: '84%',
-    padding:10,
-    borderRadius: 20,
-    gap:20,
-    marginTop:5,
-    justifyContent:'space-evenly',
-    backgroundColor: colors.background
+    padding: 20,
+    borderRadius: 30,
+    gap: 20,
+    marginTop: 5,
+    backgroundColor: '#FFF',
+    marginBottom: 20,
   },
-  dot: {
-    width: 20,
-    height: 20,
-    borderRadius: 999,
+  slider: {
+    paddingVertical: 20,
+    flex: 1,
+    justifyContent: 'center',
+  },
+  switchTitle: {
+    flex:1,
+    marginLeft: 10,
+  },
+  line: {
+    justifyContent: 'center',
+    paddingBottom: 16,
+    borderBottomWidth: 1,
+    borderColor: colors.backgroundSecondary,
   }
 });
