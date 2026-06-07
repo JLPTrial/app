@@ -4,13 +4,13 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import { SwitchSetting, SliderSetting, ActionSetting, SettingCard } from '../../components/Settings';
 
 export default function SettingsScreen() {
-  const [isEnabled, setIsEnabled] = useState(false);
-  const toggle = () => {
-    setIsEnabled(previousState => !previousState);
-  };
-  const slide = (value: number) => {
+  const [isDarkMode, setDarkMode] = useState(false);
+  const [isFuriganaOn, setFurigana] = useState(false);
 
-  };
+  const [isHapticFeedbackOn, setHapticFeedback] = useState(false);
+
+  const [fontSize, setFontSize] = useState(0);
+  const [volume, setVolume] = useState(0);
 
   return (
     <ScrollView>
@@ -18,15 +18,15 @@ export default function SettingsScreen() {
         <AppText>Configurações</AppText>
 
         <SettingCard title='Aparência'>
-          <SwitchSetting icon={isEnabled ? 'moon' : 'sunny'} title='Modo' onChange={toggle} value={isEnabled} />
+          <SwitchSetting icon={isDarkMode ? 'moon' : 'sunny'} title='Modo' onChange={setDarkMode} value={isDarkMode} />
 
-          <SwitchSetting icon='振' title='Furigana' onChange={toggle} value={isEnabled} />
+          <SwitchSetting icon='振' title='Furigana' onChange={setFurigana} value={isFuriganaOn} />
 
           <SliderSetting
             title='Fonte'
-            onChange={(value) => slide(value)}
+            onChange={(value) => setFontSize(value)}
+            value={fontSize}
             min={0}
-            value={0}
             step={1}
             max={3}
             marker={'dot'}
@@ -36,22 +36,22 @@ export default function SettingsScreen() {
         </SettingCard>
 
         <SettingCard title='Som'>
-          <SwitchSetting icon='ellipse' title='Feedback tátil' onChange={toggle} value={isEnabled} />
+          <SwitchSetting icon='ellipse' title='Feedback tátil' onChange={setHapticFeedback} value={isHapticFeedbackOn} />
 
           <SliderSetting
             title='Volume Interno'
-            value={0}
-            onChange={() => { }}
+            value={volume}
+            onChange={(value) => setVolume(value)}
             min={0}
             max={100}
           />
         </SettingCard>
 
         <SettingCard title='Suporte'>
-          <ActionSetting icon='star' title='Avalie o app' />
-          <ActionSetting icon='mail' title='Fale conosco' />
-          <ActionSetting icon='open' title='Termos de uso' />
-          <ActionSetting icon='bug' title='Relatar bugs' />
+          <ActionSetting icon='star' title='Avalie o app' url='' />
+          <ActionSetting icon='mail' title='Fale conosco' url='' />
+          <ActionSetting icon='open' title='Termos de uso' url='' />
+          <ActionSetting icon='bug' title='Relatar bugs' url='' />
         </SettingCard>
       </View>
     </ScrollView>

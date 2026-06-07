@@ -1,11 +1,11 @@
 import { colors } from '@/styles/globals';
 import { Icon } from './Icon';
 import Slider from '@react-native-community/slider';
-import { StyleSheet, View } from 'react-native';
+import { Alert, Linking, Pressable, StyleSheet, View } from 'react-native';
 import { AppText } from './texts/AppText';
 import { Switch } from 'react-native-switch';
 import { Marker, MarkerType } from './slider/Marker';
-import React from 'react';
+import React, { useCallback } from 'react';
 
 type SliderProps = {
   title: string,
@@ -23,7 +23,13 @@ type SwitchProps = {
   icon: string,
   title: string,
   value: boolean,
-  onChange: () => void
+  onChange: (value: boolean) => void
+}
+
+type ActionProps = {
+  icon: string,
+  title: string,
+  url: string,
 }
 
 export function SwitchSetting({ icon, title, value, onChange }: SwitchProps) {
@@ -40,7 +46,7 @@ export function SwitchSetting({ icon, title, value, onChange }: SwitchProps) {
 
       <Switch
         value={value}
-        onValueChange={onChange}
+        onValueChange={(value) => onChange(value)}
         circleSize={32}
         barHeight={40}
         circleBorderWidth={0}
@@ -86,17 +92,29 @@ export function SliderSetting({ title, value, onChange, min, max, step = 0,
   );
 }
 
-export function ActionSetting({ icon, title }: { icon: string, title: string }) {
+export function ActionSetting({ icon, title, url }: ActionProps) {
+  const handlePress = useCallback(async () => {
+    const isSupported = await Linking.canOpenURL(url);
+
+    if (isSupported) {
+      await Linking.openURL(url);
+    } else {
+      Alert.alert('Não foi possível te redirecionar.');
+    }
+  }, [url]);
 
   return (
-    <View style={[styles.container, styles.horizontal]}>
+    <Pressable
+      style={[styles.container, styles.horizontal]}
+      onPress={handlePress}
+    >
       <Icon
         name={icon}
         size={32}
         color={colors.textDark}
       />
       <AppText style={{ flex: 1 }} center>{title}</AppText>
-    </View>
+    </Pressable>
   );
 }
 
@@ -144,7 +162,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   switchTitle: {
-    flex:1,
+    flex: 1,
     marginLeft: 10,
   },
   line: {
