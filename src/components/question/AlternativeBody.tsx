@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     minHeight: 10 * vh,
     justifyContent: 'center',
     padding: 10,
-    borderRadius: 999,
+    borderRadius: 10,
     borderStyle: 'solid',
     borderWidth: 2,
     borderColor: colors.border,
