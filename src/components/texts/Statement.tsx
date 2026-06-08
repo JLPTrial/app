@@ -2,11 +2,13 @@ import { vh, vw } from "@/styles/globals";
 import statementParser from "@/utils/parsers";
 import { Ionicons } from '@expo/vector-icons';
 import { PropsWithChildren } from "react";
-import { StyleProp, StyleSheet, TextStyle, View, ViewStyle } from "react-native";
-import { AppText } from "./AppText";
+import { StyleSheet, TextStyle, View } from "react-native";
+import { textStyles } from '../../styles/texts';
+import { AppText, AppTextProps } from "./AppText";
 
-function Blank({ style }: { style?: StyleProp<ViewStyle>}){ 
-  const width = StyleSheet.flatten(style)?.width;
+interface StatementProps extends Omit<AppTextProps, 'children'> {
+  statement: string;
+}
 
   return (
     <View style={[styles.blank, {width: width}]}/>
@@ -60,14 +62,25 @@ function Furigana({kanji, furigana, style} : FuriganaProps){
   );
 }
 
-type StatementProps = {
-  statement: string,
-  textStyle?: StyleProp<TextStyle>,
-  underlineStyle?: StyleProp<ViewStyle>,
-}
-
-export default function Statement({ statement, textStyle, underlineStyle } : StatementProps){
+export default function Statement({ statement, ...appTextProps }: StatementProps) {
   const tokens = statementParser(statement);
+
+  const { variant = 'base', answer, bold, underlining, center, style: customStyle } = appTextProps;
+
+  const combinedStyles = [
+    textStyles['base'],
+    textStyles[variant],
+    answer && textStyles.answer,
+    bold && textStyles.bold,
+    underlining && textStyles.underlining,
+    center && textStyles.center,
+    customStyle,
+  ];
+
+  const flattenedStyle = StyleSheet.flatten(combinedStyles) as TextStyle;
+
+  const fontSize = flattenedStyle?.fontSize ?? 16;
+  const color = (flattenedStyle?.color as string) ?? '#000';
 
   return (
     <View
