@@ -1,7 +1,7 @@
 import { assetsMap } from '@/constants/assetsMap';
 import { Question } from '@/types/types';
 import { Image } from 'expo-image';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import AudioPlayer from '../AudioPlayer';
 import { colors, vh, vw } from '@/styles/globals';
 import { AppText } from '../texts/AppText';

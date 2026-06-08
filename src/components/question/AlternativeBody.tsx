@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, View } from 'react-native';
-import { colors, vh, vw } from '../../styles/globals';
+import { colors, vh } from '../../styles/globals';
 import { AppText } from '../texts/AppText';
 
 type buttonState = 'right' | 'wrong' | 'disabled' | 'pressed' | 'chosen' | 'default';
