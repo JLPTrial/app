@@ -22,10 +22,9 @@ export default function QuestionBody({ question }: { question: Question }) {
           style={styles.questionImage}
           contentFit="contain"
         />)}
-      {(question.contextualText !== null) && (question.audio === null) && (<Text>{question.contextualText}</Text>)}
+      {(question.contextualText !== null) && (question.audio === null) && (<AppText>{question.contextualText}</AppText>)}
       {(question.audio !== null) && (<AudioPlayer source={assetsMap[`${question.audio}`]} />)}
-      {(question.type !== 'listening') && (<Text style={styles.questionText}> {question.text}</Text>)
-      }
+      {(question.type !== 'listening') && (<AppText style={styles.questionText}> {question.text}</AppText>)}
     </View>
   );
 }
