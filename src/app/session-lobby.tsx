@@ -1,5 +1,5 @@
 import Loading from '@/app/loading';
-import BottomButton from '@/components/BottomButton';
+import BottomButton from '@/components/pressable/BottomButton';
 import Screen from '@/components/Screen';
 import { AppText } from '@/components/texts/AppText';
 import { useQuestions } from '@/db/queries';

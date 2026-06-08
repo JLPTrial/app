@@ -4,7 +4,7 @@ import { AppText } from '@/components/texts/AppText';
 import { colors } from '@/styles/globals';
 import { router } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
-import BottomButton from './BottomButton';
+import BottomButton from './pressable/BottomButton';
 
 type SessionResult = {
     right: number;
