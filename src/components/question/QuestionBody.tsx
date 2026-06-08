@@ -44,10 +44,11 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
   },
   questionText: {
-    borderColor: 'pink',
-    borderStyle: 'solid',
+    borderColor: colors.primaryLight,
+    borderStyle: 'dotted',
     borderWidth: 1 * vw,
     padding: 2 * vw,
+    borderRadius: 10,
   },
   questionImage: {
     height: 25 * vh,
