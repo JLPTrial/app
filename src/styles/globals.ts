@@ -20,6 +20,7 @@ export const colors = {
   border: '#D7D7D7',         // Bordas das alternativas
   audioPlayer: '#ddd',       // Fundo do player de áudio
   success: '#0AB263',        // Texto da quantidade de questões corretas
+  error: '#DC2626',          // Questões e alternativas incorretas
   successBlock: '#F5F5DC',   // Fundo dos blocos da tela de resultado
   graphInner: '#CBD4ED',     // Interior do gráfico de estatísticas
   graphBorder: '#0261D2',    // Bordas do gráfico de estatísticas
@@ -27,4 +28,9 @@ export const colors = {
   evaluation: '#0261D2',     // Títulos e subtítulos de evaluation/advice da aba de estatística, lista do curso   
   explanation: '#E967B3',    // Botão de explicação
   readingMenuBox: '#B147AB', // Caixa de leitura e de compreensão do menu
+  grammar: '#a2a',           // Cor de destaque das questões de gramática
+  vocabulary: '#d22',        // Cor de destaque das questões de vocabulário
+  reading: '#2b7',           // Cor de destaque das questões de leitura
+  kanji: '#cc3',             // Cor de destaque das questões de kanji
+  listening: '#3ac',         // Cor de destaque das questões de audição
 };

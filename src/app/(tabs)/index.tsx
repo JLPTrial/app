@@ -4,6 +4,7 @@ import Screen from '@/components/Screen';
 import { useStorage } from '@/hooks/useStorage';
 import { vh, vw } from '@/styles/globals';
 import { textStyles } from '@/styles/texts';
+import { JLPTLevel } from '@/types/types';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
@@ -16,13 +17,13 @@ const levels = [
 ];
 
 export default function HomeScreen() {
-  const {data, setValue} = useStorage();
-  
+  const { data, setValue } = useStorage();
+
   return (
     <Screen withBottomTab>
-      <FloatingButton options={levels} defaultValue={data.jlptLevel} onPress={(item : 'N5' | 'N4') => {
+      <FloatingButton options={levels} defaultValue={data.jlptLevel} onPress={(item : JLPTLevel) => {
         setValue('jlptLevel', item);
-      }}/>
+      }} />
 
       <Image
         source={require('@/assets/images/logo.jpg')}
@@ -31,45 +32,52 @@ export default function HomeScreen() {
       />
 
       <View style={styles.table}>
-        <Text style={[{marginBottom: 8}, textStyles.title]}>Teste Seus Conhecimentos</Text>
+        <Text style={[{ marginBottom: 8 }, textStyles.title]}>Teste Seus Conhecimentos</Text>
         <View style={styles.row}>
-          <Card title='Simulado' style={{width: '100%'}} onPress={() => router.push("/practice-test")}/>
+          <Card title='Simulado' style={{ width: '100%' }} onPress={() => router.push("/practice-test")} />
         </View>
       </View>
 
       <View style={styles.table}>
-        <Text style={[{marginBottom: 8}, textStyles.title]}>Estude Por Competência</Text>
-        
+        <Text style={[{ marginBottom: 8 }, textStyles.title]}>Estude Por Competência</Text>
+
         <View style={styles.row}>
-          <Card title='Vocabulário' style={[{backgroundColor: '#d22'}, styles.card]} onPress={() => router.push("/topic-study")}/>
-          <Card title='Gramática' style={[{backgroundColor: '#a2a'}, styles.card]} onPress={() => router.push("/topic-study")}/>
+          <Card title='Vocabulário' style={[{ backgroundColor: '#d22' }, styles.card]} onPress={() => router.push("/topic-study")} />
+          <Card title='Gramática' style={[{ backgroundColor: '#a2a' }, styles.card]} onPress={() => router.push("/topic-study")} />
         </View>
 
         <View style={styles.row}>
-          <Card title='Leitura' style={[{backgroundColor: '#2b7'}, styles.card]} onPress={() => router.push("/topic-study")}/>
-          <Card title='Audição' style={[{backgroundColor: '#cc3'}, styles.card]} onPress={() => router.push("/topic-study")}/>
+          <Card title='Leitura' style={[{ backgroundColor: '#2b7' }, styles.card]} onPress={() => router.push("/topic-study")} />
+          <Card title='Audição' style={[{ backgroundColor: '#cc3' }, styles.card]} onPress={() => router.push("/topic-study")} />
+        </View>
+      </View>
+
+      <View style={styles.table}>
+        <Text style={[{ marginBottom: 8 }, textStyles.title]}>Demo</Text>
+        <View style={styles.row}>
+          <Card title='Demo Questão' style={{ width: '100%' }} onPress={() => router.push("/demo/questions")} />
         </View>
       </View>
     </Screen>
-    
+
   );
 }
 
 const styles = StyleSheet.create({
   logo: {
-    width: 50*vw,
-    height: 30*vh,
+    width: 50 * vw,
+    height: 30 * vh,
   },
-  row: { 
-    flexDirection: 'row', 
-    height: 20*vh, 
+  row: {
+    flexDirection: 'row',
+    height: 20 * vh,
     alignSelf: 'stretch',
     gap: GAP,
   },
   table: {
-    alignSelf: 'stretch',  
+    alignSelf: 'stretch',
     gap: GAP,
-  }, 
+  },
   card: {
     flex: 1
   }
