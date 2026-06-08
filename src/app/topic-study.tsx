@@ -20,16 +20,16 @@ export default function Exam() {
   return (
     <Screen style={{justifyContent: 'center'}}>
       <View style={{alignItems: 'center', gap: 20}}>
-        <Statement statement={examples[0]} textStyle={{fontStyle: 'italic'}}/>
-        <Statement statement={examples[1]}/>
-        <Statement statement={examples[2]} textStyle={{fontSize: 13}}/>
+        <Statement statement={examples[0]} style={{fontStyle: 'italic'}}/>
+        <Statement statement={examples[1]} variant="success"/>
+        <Statement statement={examples[2]}/>
         <Statement statement={examples[3]}/>
         <Statement statement={examples[4]}/>
         <Statement statement={examples[5]}/>
         <Statement statement={examples[6]}/>
         <Statement statement={examples[7]}/>
-        <Statement statement={examples[8]} textStyle={{fontSize: 15}}/>
-        <Statement statement={examples[9]} textStyle={{fontWeight: 'bold'}}/>
+        <Statement statement={examples[8]} bold style={{fontSize: 15}}/>
+        <Statement statement={examples[9]} bold/>
       </View>
     </Screen>
     

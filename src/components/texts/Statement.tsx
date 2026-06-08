@@ -10,54 +10,51 @@ interface StatementProps extends Omit<AppTextProps, 'children'> {
   statement: string;
 }
 
+function Blank() {
+  return <View style={styles.blank} />;
+}
+
+function UnderlineBlank({ color }: { color: string }) {
   return (
-    <View style={[styles.blank, {width: width}]}/>
+    <View style={[styles.underline_blank, { borderBottomColor: color }]} />
   );
 }
 
-function UnderlineBlank({ style }: { style?: StyleProp<ViewStyle>}){
-
+function StarUnderlineBlank({ color }: { color: string }) {
   return (
-    <View
-      style={[styles.underline_blank, style]}
-    />
-  );
-}
-
-function StarUnderlineBlank({ style }: { style?: StyleProp<ViewStyle>}){
-
-  return (
-    <View style={[styles.star_underline_blank]}>
-      <Ionicons name="star" color="#000"/>
-      <UnderlineBlank style={style}/>
+    <View style={styles.star_underline_blank}>
+      <Ionicons name="star" color={color} />
+      <UnderlineBlank color={color} />
     </View>
-        
   );
 }
 
-function Underlined({ children, textStyle, underlineStyle } : PropsWithChildren<{textStyle?: StyleProp<TextStyle>, underlineStyle?: StyleProp<ViewStyle>}>){
-
+function Underlined({ children, color, appTextProps }: PropsWithChildren<{ color: string, appTextProps: Omit<AppTextProps, 'children'> }>) {
   return (
     <View style={styles.underlined}>
-      <AppText style={[styles.text, textStyle]}>{children}</AppText>
-      <UnderlineBlank style={[underlineStyle, {width: '100%'}]}/>
+      <AppText {...appTextProps}>{children}</AppText>
+      <View style={[styles.underline_blank, { width: '100%', borderBottomColor: color }]} />
     </View>
   );
 }
 
 type FuriganaProps = {
-    kanji: string,
-    furigana: string,
-    style?: StyleProp<TextStyle>,
+  kanji: string;
+  furigana: string;
+  fontSize: number;
+  appTextProps: Omit<AppTextProps, 'children'>;
 };
 
-function Furigana({kanji, furigana, style} : FuriganaProps){
-  const fontSize = StyleSheet.flatten(style)?.fontSize || StyleSheet.flatten(styles.kanjiText)?.fontSize;
-
+function Furigana({ kanji, furigana, fontSize, appTextProps }: FuriganaProps) {
   return (
     <View style={styles.furiganaContainer}>
-      <AppText style={[styles.furiganaText, style, {fontSize: fontSize * 0.8}]}>{furigana}</AppText>
-      <AppText style={[styles.kanjiText, style]}>{kanji}</AppText>
+      <AppText 
+        {...appTextProps} 
+        style={[appTextProps.style, styles.furiganaText, { fontSize: fontSize * 0.6 }]}
+      >
+        {furigana}
+      </AppText>
+      <AppText {...appTextProps}>{kanji}</AppText>
     </View>
   );
 }
@@ -86,25 +83,33 @@ export default function Statement({ statement, ...appTextProps }: StatementProps
     <View style={styles.container}>
       {tokens.map((token, index) => {
         if (token === "[blank]")
-          return <Blank key={index} style={underlineStyle}/>;
+          return <Blank key={index} />;
         if (token === "[underline_blank]")
-          return <UnderlineBlank key={index} style={underlineStyle}/>;
+          return <UnderlineBlank key={index} color={color} />;
         if (token === "[star_underline_blank]")
-          return <StarUnderlineBlank key={index} style={underlineStyle}/>;
+          return <StarUnderlineBlank key={index} color={color} />;
         if (token.startsWith("{"))
-          return <Underlined key={index} textStyle={textStyle} underlineStyle={underlineStyle}>{token.slice(1, -1)}</Underlined>;
-        if (token.includes("[")){
+          return (
+            <Underlined key={index} color={color} appTextProps={appTextProps}>
+              {token.slice(1, -1)}
+            </Underlined>
+          );
+        if (token.includes("[")) {
           const bracketIndex = token.indexOf("[");
-
           const prefix = token.slice(0, bracketIndex);
-
           const bracket = token.slice(bracketIndex);
-
-          return <Furigana key={index} style={textStyle} kanji={prefix} furigana={bracket.slice(1, -1)}/>;
+          return (
+            <Furigana 
+              key={index} 
+              kanji={prefix} 
+              furigana={bracket.slice(1, -1)} 
+              fontSize={fontSize}
+              appTextProps={appTextProps} 
+            />
+          );
         }
 
-        return <AppText style={[styles.text, textStyle]} key={index}>{token}</AppText>;
-
+        return <AppText key={index} {...appTextProps}>{token}</AppText>;
       })}
     </View>
   );
@@ -123,7 +128,6 @@ const styles = StyleSheet.create({
   underline_blank: {
     width: 15*vw,
     borderBottomWidth: 0.2*vh,
-    borderBottomColor: "#000",
     marginHorizontal: 4
   },
   star_underline_blank: {
@@ -139,14 +143,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end', 
     alignItems: 'center',
   },
-  kanjiText: {
-    fontSize: 16,
-  },
   furiganaText: {
     marginBottom: -6,
     includeFontPadding: false,
   },
-  text: {
-    fontSize: 16,
-  }
 });
