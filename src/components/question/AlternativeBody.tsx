@@ -41,18 +41,18 @@ export default function AlternativeBody({ alternatives, answer, onChoice, choice
 }
 
 const buttonStyle = {
-  right:    { borderColor: 'green', },
-  wrong:    { borderColor: 'red', },
+  right:    { borderColor: colors.success, },
+  wrong:    { borderColor: colors.error, },
   pressed:  { backgroundColor: 'rgb(204, 255, 255)' },
-  chosen:   { borderColor: '#03F', },
+  chosen:   { borderColor: '#1D4ED8', },
   disabled: { backgroundColor: '#ccc', },
 };
 
 const textStyle = {
-  right:    { color: 'green', },
-  wrong:    { color: 'red', },
+  right:    { color: colors.success, },
+  wrong:    { color: colors.error, },
   pressed:  {  },
-  chosen:   { color: '#03F', },
+  chosen:   { color: '#1D4ED8', },
   disabled: { color: colors.textMuted, },
 };
 
