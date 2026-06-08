@@ -83,13 +83,7 @@ export default function Statement({ statement, ...appTextProps }: StatementProps
   const color = (flattenedStyle?.color as string) ?? '#000';
 
   return (
-    <View
-      style={{
-        flexDirection: "row",
-        flexWrap: "wrap",
-        alignItems: "flex-end",
-      }}
-    >
+    <View style={styles.container}>
       {tokens.map((token, index) => {
         if (token === "[blank]")
           return <Blank key={index} style={underlineStyle}/>;
@@ -117,6 +111,11 @@ export default function Statement({ statement, ...appTextProps }: StatementProps
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "flex-end",
+  },
   blank: {
     width: 15*vw,
     marginHorizontal: 4,
