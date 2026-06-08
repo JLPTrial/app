@@ -13,7 +13,7 @@ export default function QuestionBody({ question }: { question: Question }) {
   return (
     <View style={styles.container}>
       <View style={[styles.questionHeader, { backgroundColor: colors[type as keyof typeof colors] }]}>
-        <AppText style={{ color: '#fff' }} center={true}> {type}  - Nº {question.id} </AppText>
+        <AppText style={{ color: colors.textLight }} center={true}> {type.charAt(0).toUpperCase() + type.slice(1)}  - Nº  {question.id} </AppText>
       </View>
       <AppText style={styles.questionCommand}>{question.command}</AppText>
       {(question.image !== null) &&
@@ -35,7 +35,8 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   questionHeader: {
-    width: 50 * vw,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
     borderRadius: 999,
   },
   questionCommand: {
