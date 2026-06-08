@@ -1,5 +1,5 @@
-import { useSQLiteContext } from 'expo-sqlite';
 import { JLPTLevel, Question } from '@/types/types';
+import { useSQLiteContext } from 'expo-sqlite';
 
 export type AnsweredStatus = 'answered' | 'unanswered' | 'all';
 
@@ -9,40 +9,40 @@ const UserDB = "UserDB";
 
 // Interface to manage question query
 interface QuestionQuery {
-	id: number;
-	questionText: string;
-	questionCommand: string;
-	questionType: string;
-	imagePath: string | null;
-	audioPath: string | null;
-	contextualText: string | null;
-	alternativeId: number;
-	alternative1: string;
-	alternative2: string;
-	alternative3: string;
-	alternative4: string;
-	tags: string;
-	correctAlternative: number;
-	answeredDate: string | null;
-	isCorrect: boolean | null,
+  id: number;
+  questionText: string;
+  questionCommand: string;
+  questionType: string;
+  imagePath: string | null;
+  audioPath: string | null;
+  contextualText: string | null;
+  alternativeId: number;
+  alternative1: string;
+  alternative2: string;
+  alternative3: string;
+  alternative4: string;
+  tags: string;
+  correctAlternative: number;
+  answeredDate: string | null;
+  isCorrect: boolean | null,
 }
 
 // Common order params for SQL queries
 enum Order {
-	RANDOM = "RANDOM()",
-	ASC = "id ASC",
-	DESC = "id DESC",
-	DATE = "answered_questions.answered_date DESC",
+  RANDOM = "RANDOM()",
+  ASC = "id ASC",
+  DESC = "id DESC",
+  DATE = "answered_questions.answered_date DESC",
 }
 
 // Common comparison params for SQL queries
 enum Compare {
-	EQUAL = "=",
-	DIFF = "!=",
-	LESS = "<",
-	LESS_EQ = "<=",
-	MORE = ">",
-	MORE_EQ = ">=",
+  EQUAL = "=",
+  DIFF = "!=",
+  LESS = "<",
+  LESS_EQ = "<=",
+  MORE = ">",
+  MORE_EQ = ">=",
 }
 
 // Object to construct where clauses
@@ -74,7 +74,7 @@ class WhereClause {
     if (values.length === 0) return;
 
     const field = ((database === undefined) ? `${this.level}.` : "") + `${table}.${column}`;
-    
+
     const keys = values.map((_, index) => {
       const key = `${field}${this.numClauses}${index}`.replaceAll(".", "");
       return `$${key}`;
@@ -83,7 +83,7 @@ class WhereClause {
     this.clauses.push(`${field} IN (${keys.join(", ")})`);
 
     values.forEach((val, index) => {
-      this.values[`$${keys[index]}`] = val;
+      this.values[`${keys[index]}`] = val;
     });
 
     this.numClauses += 1;
@@ -173,7 +173,7 @@ export function useQuestions(level: JLPTLevel) {
 
   const selectQuestionMany = async (whereClause?: WhereClause, order: Order = Order.RANDOM, limit: number = -1): Promise<Question[]> => {
     const query = ((whereClause === undefined) ? `${queryBase}` : `${queryBase} WHERE ${whereClause.getClauses()}`)
-			+ ` GROUP BY ${level}.questions.id ORDER BY ${order} LIMIT ${limit}`;
+      + ` GROUP BY ${level}.questions.id ORDER BY ${order} LIMIT ${limit}`;
 
     const values = ((whereClause === undefined) ? {} : whereClause.getValues());
     const results: QuestionQuery[] = await db.getAllAsync<QuestionQuery>(query, values);
@@ -197,6 +197,19 @@ export function useQuestions(level: JLPTLevel) {
     const whereClause: WhereClause = new WhereClause(level);
     whereClause.addClauseCompare("questions", "question_type", type);
     return await selectQuestion(whereClause);
+  };
+
+  const selectTagsByType = async (type: string): Promise<string[]> => {
+    const query = `
+      SELECT DISTINCT ${level}.tags.name as name
+      FROM ${level}.questions
+      INNER JOIN ${level}.question_tags ON ${level}.questions.id = ${level}.question_tags.question_id
+      INNER JOIN ${level}.tags ON ${level}.question_tags.tag_id = ${level}.tags.id
+      WHERE ${level}.questions.question_type = $type
+      ORDER BY ${level}.tags.name ASC
+    `;
+    const results = await db.getAllAsync<{ name: string }>(query, { $type: type });
+    return results.map(r => r.name);
   };
 
   const selectByTypeMany = async (type: string, limit: number = -1): Promise<Question[]> => {
@@ -260,7 +273,7 @@ export function useQuestions(level: JLPTLevel) {
   };
 
   return {
-    selectById, selectByTagName, selectByType, selectByTypeMany, insertAnswer, selectAnsweredByDateMany,
+    selectById, selectByTagName, selectByType, selectTagsByType, selectByTypeMany, insertAnswer, selectAnsweredByDateMany,
     selectAnsweredMany, filterAnsweredByRight, filterAnsweredByWrong, searchQuestionsFilters
   };
 }
