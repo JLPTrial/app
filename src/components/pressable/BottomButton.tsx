@@ -1,13 +1,25 @@
 import { AppText } from '@/components/texts/AppText';
 import { colors } from '@/styles/globals';
 import React from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleProp, StyleSheet, TextStyle, View, ViewStyle } from 'react-native';
 
-const BottomButton = ({ onPress, text }: { onPress: () => void; text: string }) => {
+interface BottomButtonProps {
+  onPress: () => void;
+  text: string;
+  disabled?: boolean;
+  style?: StyleProp<ViewStyle>;
+  textStyle?: StyleProp<TextStyle>;
+}
+
+const BottomButton = ({ onPress, text, disabled, style, textStyle }: BottomButtonProps) => {
   return (
     <View style={styles.footer}>
-      <Pressable style={styles.startButton} onPress={onPress}>
-        <AppText variant="title" style={styles.buttonText}>
+      <Pressable 
+        style={[styles.startButton, style]} 
+        onPress={onPress}
+        disabled={disabled}
+      >
+        <AppText variant="title" style={[styles.buttonText, textStyle]} center={true}>
           {text}
         </AppText>
       </Pressable>
