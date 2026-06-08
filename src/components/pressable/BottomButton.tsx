@@ -9,11 +9,12 @@ interface BottomButtonProps {
   disabled?: boolean;
   style?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
+  toFlex?: boolean;
 }
 
-const BottomButton = ({ onPress, text, disabled, style, textStyle }: BottomButtonProps) => {
+const BottomButton = ({ onPress, text, disabled, style, textStyle, toFlex=true }: BottomButtonProps) => {
   return (
-    <View style={styles.footer}>
+    <View style={[styles.footer, !toFlex && { flex: 0 }]}>
       <Pressable 
         style={[styles.startButton, style]} 
         onPress={onPress}
@@ -32,6 +33,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-end',
     alignSelf: 'stretch',
+    marginTop: 16,
   },
   startButton: {
     backgroundColor: colors.primary,

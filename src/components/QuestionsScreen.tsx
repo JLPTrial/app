@@ -5,6 +5,7 @@ import { Question } from '@/types/types';
 import { useRef, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { AppText } from './texts/AppText';
+import BottomButton from './pressable/BottomButton';
 
 type buttonState = 'disabled' | 'continue' | 'confirm';
 
@@ -41,20 +42,22 @@ export default function QuestionScreen({ question, onNextQuestion }: { question:
 
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scroll} ref={scrollRef} showsVerticalScrollIndicator={false} >
+      <ScrollView style={{flex: 1}} contentContainerStyle={styles.scroll} ref={scrollRef} showsVerticalScrollIndicator={false} >
         <QuestionBody question={question} />
         <AlternativeBody alternatives={question.alternatives} answer={question.correctAlternative - 1} onChoice={onChoice} choice={choice} isConfirmed={confirmedAnswer} />
       </ScrollView>
       {(!confirmedAnswer)
-        ? <Pressable onPress={() => confirmAlternative()}
+        ? <BottomButton onPress={() => confirmAlternative()}
           disabled={(choice === -1)}
-          style={[styles.button, buttonStyle[handleStyle(choice, confirmedAnswer)]]}>
-          <AppText center={true}>Confirmar</AppText>
-        </Pressable>
-        : <Pressable onPress={() => handleNextQuestion()}
-          style={[styles.button, buttonStyle[handleStyle(choice, confirmedAnswer)]]}>
-          <AppText style={textStyle['continue']} center={true}>Continuar</AppText>
-        </Pressable>
+          style={buttonStyle[handleStyle(choice, confirmedAnswer)]}
+          textStyle={textStyle[handleStyle(choice, confirmedAnswer)]}
+          text="Confirmar"
+          toFlex={false}/>
+        : <BottomButton onPress={() => handleNextQuestion()}
+          style={buttonStyle[handleStyle(choice, confirmedAnswer)]}
+          textStyle={textStyle[handleStyle(choice, confirmedAnswer)]}
+          text="Continuar"
+          toFlex={false}/>
       }
     </View>
   );
@@ -78,12 +81,6 @@ const styles = StyleSheet.create({
     flex: 1,
     // height: 0 is needed
     height: 0,
-  },
-  button: {
-    width: 50 * vw,
-    marginTop: 2 * vh,
-    borderRadius: 999,
-    padding: 10,
   },
   scroll: {
     flexGrow: 1,
