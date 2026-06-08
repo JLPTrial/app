@@ -63,8 +63,8 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   alternative: {
-    width: (90 * vw) - 48,
-    height: 10 * vh,
+    width: `100%`,
+    minHeight: 10 * vh,
     justifyContent: 'center',
     padding: 10,
     borderRadius: 999,
