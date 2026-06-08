@@ -10,21 +10,21 @@ interface StatementProps extends Omit<AppTextProps, 'children'> {
   statement: string;
 }
 
-function Blank() {
-  return <View style={styles.blank} />;
+function Blank({ width }: { width: number }) {
+  return <View style={[styles.blank, { width: width }]} />;
 }
 
-function UnderlineBlank({ color }: { color: string }) {
+function UnderlineBlank({ color, width, thickness }: { color: string, width: number, thickness: number }) {
   return (
-    <View style={[styles.underline_blank, { borderBottomColor: color }]} />
+    <View style={[styles.underline_blank, { borderBottomColor: color, borderBottomWidth: thickness, width: width }]} />
   );
 }
 
-function StarUnderlineBlank({ color }: { color: string }) {
+function StarUnderlineBlank({ color, width, fontSize, thickness }: { color: string, width: number, fontSize: number, thickness: number }) {
   return (
     <View style={styles.star_underline_blank}>
-      <Ionicons name="star" color={color} />
-      <UnderlineBlank color={color} />
+      <Ionicons name="star" color={color} size={0.8 * fontSize} />
+      <UnderlineBlank color={color} width={width} thickness={thickness} />
     </View>
   );
 }
@@ -79,15 +79,19 @@ export default function Statement({ statement, ...appTextProps }: StatementProps
   const fontSize = flattenedStyle?.fontSize ?? 16;
   const color = (flattenedStyle?.color as string) ?? '#000';
 
+  const scale = fontSize / textStyles['base'].fontSize;
+  const blankWidth = scale * (15 * vw);
+  const lineThickness = Math.max(0.2 * vh, scale * (0.2 * vh));
+
   return (
     <View style={styles.container}>
       {tokens.map((token, index) => {
         if (token === "[blank]")
-          return <Blank key={index} />;
+          return <Blank key={index} width={blankWidth} />;
         if (token === "[underline_blank]")
-          return <UnderlineBlank key={index} color={color} />;
+          return <UnderlineBlank key={index} color={color} width={blankWidth} thickness={lineThickness} />;
         if (token === "[star_underline_blank]")
-          return <StarUnderlineBlank key={index} color={color} />;
+          return <StarUnderlineBlank key={index} color={color} width={blankWidth} fontSize={fontSize} thickness={lineThickness} />;
         if (token.startsWith("{"))
           return (
             <Underlined key={index} color={color} appTextProps={appTextProps}>
@@ -122,16 +126,12 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   blank: {
-    width: 15*vw,
     marginHorizontal: 4,
   },
   underline_blank: {
-    width: 15*vw,
-    borderBottomWidth: 0.2*vh,
     marginHorizontal: 4
   },
   star_underline_blank: {
-    width: 15*vw,
     alignItems: 'center', 
     justifyContent: 'flex-end'
   },

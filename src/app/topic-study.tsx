@@ -21,7 +21,10 @@ export default function Exam() {
     <Screen style={{justifyContent: 'center'}}>
       <View style={{alignItems: 'center', gap: 20}}>
         <Statement statement={examples[0]} style={{fontStyle: 'italic'}}/>
+        <Statement statement={examples[0]} variant='title'/>
         <Statement statement={examples[1]} variant="success"/>
+        <Statement statement={examples[1]} variant="title"/>
+        <Statement statement={examples[1]} variant="subtitle"/>
         <Statement statement={examples[2]}/>
         <Statement statement={examples[3]}/>
         <Statement statement={examples[4]}/>
