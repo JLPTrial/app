@@ -88,5 +88,6 @@ const styles = StyleSheet.create({
   scroll: {
     flexGrow: 1,
     justifyContent: 'space-between',
+    gap: 3 * vh,
   }
 });
