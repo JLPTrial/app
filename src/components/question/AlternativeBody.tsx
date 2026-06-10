@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, View } from 'react-native';
 import { colors, vh } from '../../styles/globals';
-import { AppText } from '../texts/AppText';
+import Statement from '../texts/Statement';
 
 type buttonState = 'right' | 'wrong' | 'disabled' | 'pressed' | 'chosen' | 'default';
 export default function AlternativeBody({ alternatives, answer, onChoice, choice, isConfirmed }: { alternatives: string[], answer: number, onChoice: (choice: number) => void, choice: number, isConfirmed: boolean }) {
@@ -32,7 +32,7 @@ export default function AlternativeBody({ alternatives, answer, onChoice, choice
           key={alternative}
           disabled={isConfirmed}>
           {({ pressed }) => (
-            <AppText style={textStyle[handleStyle(alternative, pressed) as keyof typeof textStyle]} center={true}>{alternativeText}</AppText>
+            <Statement style={textStyle[handleStyle(alternative, pressed) as keyof typeof textStyle]} center={true} statement={alternativeText} />
           )}
         </Pressable>;
       })}
