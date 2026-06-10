@@ -84,7 +84,7 @@ export default function Statement({ statement, ...appTextProps }: StatementProps
   const lineThickness = Math.max(0.2 * vh, scale * (0.2 * vh));
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, center && { justifyContent: 'center' }]}>
       {tokens.map((token, index) => {
         if (token === "[blank]")
           return <Blank key={index} width={blankWidth} />;
