@@ -16,7 +16,7 @@ function Blank({ width }: { width: number }) {
 
 function UnderlineBlank({ color, width, thickness }: { color: string, width: number, thickness: number }) {
   return (
-    <View style={[styles.underline_blank, { borderBottomColor: color, borderBottomWidth: thickness, width: width }]} />
+    <View style={{ borderBottomColor: color, borderBottomWidth: thickness, width: width }} />
   );
 }
 
@@ -33,7 +33,7 @@ function Underlined({ children, color, lineThickness, appTextProps }: PropsWithC
   return (
     <View style={styles.underlined}>
       <AppText style={{ top: 4.5 * lineThickness }} {...appTextProps}>{children}</AppText>
-      <View style={[styles.underline_blank, { top: 4.5 * lineThickness, width: '100%', borderBottomWidth: lineThickness, borderBottomColor: color }]} />
+      <View style={{ top: 4.5 * lineThickness, width: '100%', borderBottomWidth: lineThickness, borderBottomColor: color }} />
     </View>
   );
 }
@@ -98,9 +98,22 @@ export default function Statement({ statement, ...appTextProps }: StatementProps
         if (token === "[blank]")
           return <Blank key={index} width={blankWidth} />;
         if (token === "[underline_blank]")
-          return <UnderlineBlank key={index} color={color} width={blankWidth} thickness={lineThickness} />;
+          return (
+            <AppText key={index}>
+              {" "}
+              <UnderlineBlank color={color} width={blankWidth} thickness={lineThickness} />
+              {" "}
+            </AppText>
+          );
+        
         if (token === "[star_underline_blank]")
-          return <StarUnderlineBlank key={index} color={color} width={blankWidth} fontSize={fontSize} thickness={lineThickness} />;
+          return (
+            <AppText key={index}>
+              {" "}
+              <StarUnderlineBlank color={color} width={blankWidth} fontSize={fontSize} thickness={lineThickness} />
+              {" "}
+            </AppText>
+        );
         if (token.startsWith("{"))
           return (
             <Underlined key={index} color={color} lineThickness={lineThickness} appTextProps={appTextProps}>
@@ -131,9 +144,6 @@ export default function Statement({ statement, ...appTextProps }: StatementProps
 const styles = StyleSheet.create({
   blank: {
     marginHorizontal: 4,
-  },
-  underline_blank: {
-    marginHorizontal: 4
   },
   star_underline_blank: {
     alignItems: 'center', 
