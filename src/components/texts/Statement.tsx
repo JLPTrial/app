@@ -50,11 +50,13 @@ function Furigana({ kanji, furigana, fontSize, appTextProps }: FuriganaProps) {
     <View style={styles.furiganaContainer}>
       <AppText 
         {...appTextProps} 
-        style={[appTextProps.style, styles.furiganaText, { fontSize: fontSize * 0.6 }]}
+        style={[appTextProps.style, styles.furiganaText, { top: 1, fontSize: fontSize * 0.6, lineHeight: fontSize }]}
       >
         {furigana}
       </AppText>
-      <AppText {...appTextProps}>{kanji}</AppText>
+      <AppText {...appTextProps} style={[appTextProps.style, { top: 1, lineHeight: fontSize }]}>
+        {kanji}
+      </AppText>
     </View>
   );
 }
@@ -84,7 +86,14 @@ export default function Statement({ statement, ...appTextProps }: StatementProps
   const lineThickness = Math.max(0.2 * vh, scale * (0.2 * vh));
 
   return (
-    <View style={[styles.container, center && { justifyContent: 'center' }]}>
+    <AppText 
+      {...appTextProps}
+      style={[
+        { textAlign: 'justify', lineHeight: 1.8*fontSize }, 
+        center && { textAlign: 'center' },
+        appTextProps.style
+      ]}
+    >
       {tokens.map((token, index) => {
         if (token === "[blank]")
           return <Blank key={index} width={blankWidth} />;
@@ -115,16 +124,11 @@ export default function Statement({ statement, ...appTextProps }: StatementProps
 
         return <AppText key={index} {...appTextProps}>{token}</AppText>;
       })}
-    </View>
+    </AppText>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "flex-end",
-  },
   blank: {
     marginHorizontal: 4,
   },
@@ -144,7 +148,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   furiganaText: {
-    marginBottom: -6,
+    marginBottom: -4,
     includeFontPadding: false,
   },
 });
