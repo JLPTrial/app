@@ -6,12 +6,22 @@ type StorageSchema = {
   jlptLevel: JLPTLevel;
   questionsSession: Question[];
   questionIndexSession: number;
+  darkMode: boolean;
+  furigana: boolean;
+  hapticFeedback: boolean;
+  fontSize: number;
+  volume: number;
 };
 
 const defaultStorage: StorageSchema = {
   jlptLevel: 'N5',
   questionsSession: [],
   questionIndexSession: 0,
+  darkMode: false,
+  furigana: false,
+  hapticFeedback: true,
+  fontSize: 0,
+  volume: 0
 };
 
 type StorageContextType = {
