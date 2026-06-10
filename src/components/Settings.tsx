@@ -85,7 +85,6 @@ export function SliderSetting({ title, value, onChange, min, max, step = 0,
           minimumTrackTintColor={colors.primaryLight}
           maximumTrackTintColor={colors.textMuted}
           StepMarker={Marker[marker]}
-          thumbSize={20}
           thumbTintColor={(marker === 'none') ? colors.primary : 'transparent'}
           style={styles.slider}
         />
@@ -97,12 +96,17 @@ export function SliderSetting({ title, value, onChange, min, max, step = 0,
 
 export function ActionSetting({ icon, title, url }: ActionProps) {
   const handlePress = useCallback(async () => {
-    const isSupported = await Linking.canOpenURL(url);
+    try {
+      const isSupported = await Linking.canOpenURL(url);
 
-    if (isSupported) {
-      await Linking.openURL(url);
-    } else {
-      Alert.alert('Não foi possível te redirecionar.');
+      if (isSupported) {
+        await Linking.openURL(url);
+      } else {
+        Alert.alert('Não foi possível te redirecionar.');
+      }
+    }
+    catch {
+      Alert.alert('Ocorreu um erro ao te redirecionar.');
     }
   }, [url]);
 

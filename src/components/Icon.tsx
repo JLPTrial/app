@@ -3,29 +3,35 @@ import { AppText } from "./texts/AppText";
 import { WithLocalSvg } from 'react-native-svg/css';
 import Statement from './texts/Statement';
 import { View } from 'react-native';
+import { VibrateIcon } from 'phosphor-react-native';
+import type { IconProps } from 'phosphor-react-native';
 
-type icon = keyof typeof Ionicons.glyphMap;
+type ionicon = keyof typeof Ionicons.glyphMap;
 
 const assets: Record<string, any> = {
   //"name": require("../../assets/icons/name.svg"),
 };
 
+const phosphorIcons: Record<string, React.FC<IconProps>> = {
+  vibrate: VibrateIcon,
+};
+
 type iconProps = {
-  name : string, 
-  size : number, 
-  color : string,
+  name: string,
+  size: number,
+  color: string,
   furigana?: string,
 };
 
-export const Icon = ({name, size, color, furigana = ''} : iconProps ) => {
-  if(name in Ionicons.glyphMap){
+export const Icon = ({ name, size, color, furigana = '' }: iconProps) => {
+  if (name in Ionicons.glyphMap) {
     return <Ionicons
-      name={name as icon}
+      name={name as ionicon}
       size={size}
       color={color}
     />;
   }
-  if(name in assets){
+  if (name in assets) {
     return <WithLocalSvg
       asset={assets[name]}
       width={size}
@@ -34,10 +40,14 @@ export const Icon = ({name, size, color, furigana = ''} : iconProps ) => {
       color={color}
     />;
   }
-  if(name === 'furigana'){
-    return <View style={{width:size, height:size}}>
-      <Statement statement={furigana} style={{fontSize:size*0.9, color:color}}/>
+  if (name in phosphorIcons) {
+    const Icon = phosphorIcons[name];
+    return <Icon size={size} color={color} />;
+  }
+  if (name === 'furigana') {
+    return <View style={{ width: size, height: size }}>
+      <Statement statement={furigana} style={{ fontSize: size * 0.9, color: color }} />
     </View>;
   }
-  return <AppText style={{fontSize:size, color:color}}>{name}</AppText>;
+  return <AppText style={{ fontSize: size, color: color }}>{name}</AppText>;
 };

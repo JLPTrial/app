@@ -6,7 +6,7 @@ import { useStorage } from '@/hooks/useStorage';
 import { colors } from '@/styles/globals';
 
 export default function SettingsScreen() {
-  const {data, setValue} = useStorage();
+  const { data, setValue } = useStorage();
 
   const [isDarkMode, setDarkMode] = useState(data.darkMode);
   const [isFuriganaOn, setFurigana] = useState(data.furigana);
@@ -22,23 +22,23 @@ export default function SettingsScreen() {
         <AppText bold style={styles.header}>Configurações</AppText>
 
         <SettingCard title='Aparência'>
-          <SwitchSetting 
-            icon={isDarkMode ? 'moon' : 'sunny'} 
-            title='Modo' 
-            onChange={(value) => {setDarkMode(value); setValue('darkMode', value); }} 
+          <SwitchSetting
+            icon={isDarkMode ? 'moon' : 'sunny'}
+            title='Modo'
+            onChange={(value) => { setDarkMode(value); setValue('darkMode', value); }}
             value={isDarkMode} />
 
-          <SwitchSetting 
+          <SwitchSetting
             icon='furigana'
-            title='Furigana' 
-            furigana={isFuriganaOn ? '振[入]': '振[切]'}
+            title='Furigana'
+            furigana={isFuriganaOn ? '振[入]' : '振[切]'}
             color={isFuriganaOn ? colors.textDark : colors.textMuted}
-            onChange={(value) => {setFurigana(value); setValue('furigana', value); }}
+            onChange={(value) => { setFurigana(value); setValue('furigana', value); }}
             value={isFuriganaOn} />
 
           <SliderSetting
             title='Fonte'
-            onChange={(value) => {setFontSize(value); setValue('fontSize', value);}}
+            onChange={(value) => { setFontSize(value); setValue('fontSize', value); }}
             value={fontSize}
             min={0}
             step={1}
@@ -50,16 +50,17 @@ export default function SettingsScreen() {
         </SettingCard>
 
         <SettingCard title='Interação'>
-          <SwitchSetting 
-            icon='ellipse' 
-            title='Feedback tátil' 
-            onChange={(value) => {setHapticFeedback(value); setValue('hapticFeedback', value); }}
+          <SwitchSetting
+            icon='vibrate'
+            title='Feedback tátil'
+            color={isHapticFeedbackOn ? colors.textDark : colors.textMuted}
+            onChange={(value) => { setHapticFeedback(value); setValue('hapticFeedback', value); }}
             value={isHapticFeedbackOn} />
 
           <SliderSetting
             title='Volume Interno'
             value={volume}
-            onChange={(value) => {setVolume(value); setValue('volume', value);}}
+            onChange={(value) => { setVolume(value); setValue('volume', value); }}
             min={0}
             max={100}
           />
@@ -69,7 +70,7 @@ export default function SettingsScreen() {
           <ActionSetting icon='star' title='Avalie o app' url='' />
           <ActionSetting icon='mail' title='Fale conosco' url='' />
           <ActionSetting icon='open' title='Termos de uso' url='' />
-          <ActionSetting icon='bug' title='Relatar bugs' url='' />
+          <ActionSetting icon='bug' title='Relatar bugs' url='https://github.com/JLPTrial/JLPTrial/blob/main/docs/ISSUES.MD' />
         </SettingCard>
       </View>
     </ScrollView>
@@ -82,11 +83,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
   },
-  header:{
-    backgroundColor:colors.primary,
+  header: {
+    backgroundColor: colors.primary,
     color: colors.background,
-    padding:10,
-    borderRadius:999,
-    margin:10,
+    padding: 10,
+    borderRadius: 999,
+    margin: 10,
   },
 });
