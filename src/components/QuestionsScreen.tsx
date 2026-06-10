@@ -1,10 +1,9 @@
 import AlternativeBody from '@/components/question/AlternativeBody';
 import QuestionBody from '@/components/question/QuestionBody';
-import { colors, vh, vw } from '@/styles/globals';
+import { colors, vh } from '@/styles/globals';
 import { Question } from '@/types/types';
 import { useRef, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { AppText } from './texts/AppText';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import BottomButton from './pressable/BottomButton';
 
 type buttonState = 'disabled' | 'continue' | 'confirm';

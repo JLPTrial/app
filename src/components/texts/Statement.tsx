@@ -113,7 +113,7 @@ export default function Statement({ statement, ...appTextProps }: StatementProps
               <StarUnderlineBlank color={color} width={blankWidth} fontSize={fontSize} thickness={lineThickness} />
               {" "}
             </AppText>
-        );
+          );
         if (token.startsWith("{"))
           return (
             <Underlined key={index} color={color} lineThickness={lineThickness} appTextProps={appTextProps}>

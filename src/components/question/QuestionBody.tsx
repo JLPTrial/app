@@ -29,7 +29,7 @@ export default function QuestionBody({ question }: { question: Question }) {
         <View style={styles.questionTextContainer}>
           <Statement statement={question.text} />
         </View>
-        )}
+      )}
     </View>
   );
 }
