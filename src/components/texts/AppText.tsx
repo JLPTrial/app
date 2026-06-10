@@ -2,10 +2,10 @@ import React from 'react';
 import { StyleProp, Text, TextProps, TextStyle } from 'react-native';
 import { textStyles } from '../../styles/texts';
 
-type TextVariant = Exclude<keyof typeof textStyles, 'bold' | 'center' | 'underlining' | 'answer'>;
+export type TextVariant = Exclude<keyof typeof textStyles, 'bold' | 'center' | 'underlining' | 'answer'>;
 
 // Interface estendendo TextProps para aceitar as propriedades padrão do <Text>
-interface AppTextProps extends TextProps {
+export interface AppTextProps extends TextProps {
   variant?: TextVariant;
   answer?: boolean;
   bold?: boolean;
