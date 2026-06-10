@@ -9,7 +9,6 @@ export const colors = {
   primary: '#CC0033',        // Fundo dos cabeçalhos das questões e das tags
   primaryLight: '#F68178',   // Texto da alternativa correta, tab ativa
   background: '#FAFAFA',     // Fundo padrão
-  backgroundSecondary: '#dfdfdf',     // Fundo padrão
   surface: '#F1F4F6',        // Círculo das alternativas inativas
   selected: '#FFE6E6',       // Círculo externo da alternativa ativa
   selectedDark: '#EA909C',   // Círculo interno da alternativa ativa

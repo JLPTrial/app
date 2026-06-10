@@ -1,6 +1,7 @@
 import { AppText } from '@/components/texts/AppText';
 import { useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
+import Screen from '@/components/Screen';
 import { SwitchSetting, SliderSetting, ActionSetting, SettingCard } from '../../components/Settings';
 import { useStorage } from '@/hooks/useStorage';
 import { colors } from '@/styles/globals';
@@ -17,71 +18,67 @@ export default function SettingsScreen() {
   const [volume, setVolume] = useState(data.volume);
 
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        <AppText bold style={styles.header}>Configurações</AppText>
+    <Screen style={styles.container} withBottomTab>
+      <AppText bold style={styles.header}>Configurações</AppText>
 
-        <SettingCard title='Aparência'>
-          <SwitchSetting
-            icon={isDarkMode ? 'moon' : 'sunny'}
-            title='Modo'
-            onChange={(value) => { setDarkMode(value); setValue('darkMode', value); }}
-            value={isDarkMode} />
+      <SettingCard title='Aparência'>
+        <SwitchSetting
+          icon={isDarkMode ? 'moon' : 'sunny'}
+          title='Modo'
+          onChange={(value) => { setDarkMode(value); setValue('darkMode', value); }}
+          value={isDarkMode} />
 
-          <SwitchSetting
-            icon='furigana'
-            title='Furigana'
-            furigana={isFuriganaOn ? '振[入]' : '振[切]'}
-            color={isFuriganaOn ? colors.textDark : colors.textMuted}
-            onChange={(value) => { setFurigana(value); setValue('furigana', value); }}
-            value={isFuriganaOn} />
+        <SwitchSetting
+          icon='furigana'
+          title='Furigana'
+          furigana={isFuriganaOn ? '振[入]' : '振[切]'}
+          color={isFuriganaOn ? colors.textDark : colors.textMuted}
+          onChange={(value) => { setFurigana(value); setValue('furigana', value); }}
+          value={isFuriganaOn} />
 
-          <SliderSetting
-            title='Fonte'
-            onChange={(value) => { setFontSize(value); setValue('fontSize', value); }}
-            value={fontSize}
-            min={0}
-            step={1}
-            max={3}
-            marker={'dot'}
-            left={<AppText>Aa</AppText>}
-            right={<AppText style={{ fontSize: 40 }}>Aa</AppText>}
-          />
-        </SettingCard>
+        <SliderSetting
+          title='Fonte'
+          onChange={(value) => { setFontSize(value); setValue('fontSize', value); }}
+          value={fontSize}
+          min={0}
+          step={1}
+          max={3}
+          marker={'dot'}
+          left={<AppText>Aa</AppText>}
+          right={<AppText style={{ fontSize: 40 }}>Aa</AppText>}
+        />
+      </SettingCard>
 
-        <SettingCard title='Interação'>
-          <SwitchSetting
-            icon='vibrate'
-            title='Feedback tátil'
-            color={isHapticFeedbackOn ? colors.textDark : colors.textMuted}
-            onChange={(value) => { setHapticFeedback(value); setValue('hapticFeedback', value); }}
-            value={isHapticFeedbackOn} />
+      <SettingCard title='Interação'>
+        <SwitchSetting
+          icon='vibrate'
+          title='Feedback tátil'
+          color={isHapticFeedbackOn ? colors.textDark : colors.textMuted}
+          onChange={(value) => { setHapticFeedback(value); setValue('hapticFeedback', value); }}
+          value={isHapticFeedbackOn} />
 
-          <SliderSetting
-            title='Volume Interno'
-            value={volume}
-            onChange={(value) => { setVolume(value); setValue('volume', value); }}
-            min={0}
-            max={100}
-          />
-        </SettingCard>
+        <SliderSetting
+          title='Volume Interno'
+          value={volume}
+          onChange={(value) => { setVolume(value); setValue('volume', value); }}
+          min={0}
+          max={100}
+        />
+      </SettingCard>
 
-        <SettingCard title='Suporte'>
-          <ActionSetting icon='star' title='Avalie o app' url='' />
-          <ActionSetting icon='mail' title='Fale conosco' url='' />
-          <ActionSetting icon='open' title='Termos de uso' url='' />
-          <ActionSetting icon='bug' title='Relatar bugs' url='https://github.com/JLPTrial/JLPTrial/blob/main/docs/ISSUES.MD' />
-        </SettingCard>
-      </View>
-    </ScrollView>
+      <SettingCard title='Suporte'>
+        <ActionSetting icon='star' title='Avalie o app' url='' />
+        <ActionSetting icon='mail' title='Fale conosco' url='' />
+        <ActionSetting icon='open' title='Termos de uso' url='' />
+        <ActionSetting icon='bug' title='Relatar bugs' url='https://github.com/JLPTrial/JLPTrial/blob/main/docs/ISSUES.MD' />
+      </SettingCard>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'space-around',
-    alignItems: 'center',
+    backgroundColor: colors.surface,
   },
   header: {
     backgroundColor: colors.primary,

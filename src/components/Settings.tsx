@@ -155,7 +155,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   card: {
-    width: '84%',
     padding: 20,
     borderRadius: 30,
     gap: 20,
@@ -176,6 +175,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingBottom: 16,
     borderBottomWidth: 1,
-    borderColor: colors.backgroundSecondary,
+    borderColor: '#dfdfdf',
   }
 });
