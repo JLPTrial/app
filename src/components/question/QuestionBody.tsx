@@ -5,6 +5,7 @@ import { StyleSheet, View } from 'react-native';
 import AudioPlayer from '../AudioPlayer';
 import { colors, vh, vw } from '@/styles/globals';
 import { AppText } from '../texts/AppText';
+import Statement from '../texts/Statement';
 
 export default function QuestionBody({ question }: { question: Question }) {
 
@@ -15,16 +16,16 @@ export default function QuestionBody({ question }: { question: Question }) {
       <View style={[styles.questionHeader, { backgroundColor: colors[type as keyof typeof colors] }]}>
         <AppText style={{ color: colors.textLight }} center={true}> {type.charAt(0).toUpperCase() + type.slice(1)}  - Nº  {question.id} </AppText>
       </View>
-      <AppText style={styles.questionCommand}>{question.command}</AppText>
+      <Statement statement={question.command} style={styles.questionCommand} />
       {(question.image !== null) &&
         (<Image
           source={assetsMap[`${question.image}`]}
           style={styles.questionImage}
           contentFit="contain"
         />)}
-      {(question.contextualText !== null) && (question.audio === null) && (<AppText>{question.contextualText}</AppText>)}
+      {(question.contextualText !== null) && (question.audio === null) && (<Statement statement={question.contextualText} />)}
       {(question.audio !== null) && (<AudioPlayer source={assetsMap[`${question.audio}`]} />)}
-      {(question.type !== 'listening') && (<AppText style={styles.questionText}> {question.text}</AppText>)}
+      {(question.type !== 'listening') && (<Statement statement={question.text} style={styles.questionText} />)}
     </View>
   );
 }
