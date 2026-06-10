@@ -29,8 +29,10 @@ export default function SettingsScreen() {
             value={isDarkMode} />
 
           <SwitchSetting 
-            icon='振' 
+            icon='furigana'
             title='Furigana' 
+            furigana={isFuriganaOn ? '振[入]': '振[切]'}
+            color={isFuriganaOn ? colors.textDark : colors.textMuted}
             onChange={(value) => {setFurigana(value); setValue('furigana', value); }}
             value={isFuriganaOn} />
 

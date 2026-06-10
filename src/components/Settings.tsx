@@ -23,6 +23,8 @@ type SwitchProps = {
   icon: string,
   title: string,
   value: boolean,
+  color?: string,
+  furigana?: string,
   onChange: (value: boolean) => void
 }
 
@@ -32,14 +34,15 @@ type ActionProps = {
   url: string,
 }
 
-export function SwitchSetting({ icon, title, value, onChange }: SwitchProps) {
+export function SwitchSetting({ icon, furigana, title, color = colors.textDark, value, onChange }: SwitchProps) {
 
   return (
     <View style={[styles.container, styles.horizontal]}>
       <Icon
         name={icon}
+        furigana={furigana}
         size={32}
-        color={colors.textDark}
+        color={color}
       />
 
       <AppText style={styles.switchTitle}>{title}</AppText>
