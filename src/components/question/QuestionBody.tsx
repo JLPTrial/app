@@ -25,7 +25,11 @@ export default function QuestionBody({ question }: { question: Question }) {
         />)}
       {(question.contextualText !== null) && (question.audio === null) && (<Statement statement={question.contextualText} />)}
       {(question.audio !== null) && (<AudioPlayer source={assetsMap[`${question.audio}`]} />)}
-      {(question.type !== 'listening') && (<Statement statement={question.text} style={styles.questionText} />)}
+      {question.type !== 'listening' && (
+        <View style={styles.questionTextContainer}>
+          <Statement statement={question.text} />
+        </View>
+        )}
     </View>
   );
 }
@@ -44,7 +48,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: colors.textMuted,
   },
-  questionText: {
+  questionTextContainer: {
     borderColor: colors.primaryLight,
     borderStyle: 'dotted',
     borderWidth: 1 * vw,
