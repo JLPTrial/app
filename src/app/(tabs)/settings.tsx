@@ -5,6 +5,7 @@ import Screen from '@/components/Screen';
 import { SwitchSetting, SliderSetting, ActionSetting, SettingCard } from '../../components/Settings';
 import { useStorage } from '@/hooks/useStorage';
 import { colors } from '@/styles/globals';
+import Header from '@/components/containers/headers';
 
 export default function SettingsScreen() {
   const { data, setValue } = useStorage();
@@ -19,7 +20,7 @@ export default function SettingsScreen() {
 
   return (
     <Screen style={styles.container} withBottomTab>
-      <AppText bold style={styles.header}>Configurações</AppText>
+      <Header title="Configurações"/>
 
       <SettingCard title='Aparência'>
         <SwitchSetting
@@ -79,12 +80,5 @@ export default function SettingsScreen() {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.backgroundDim,
-  },
-  header: {
-    backgroundColor: colors.primary,
-    color: colors.background,
-    padding: 10,
-    borderRadius: 999,
-    margin: 10,
   },
 });
