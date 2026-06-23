@@ -114,7 +114,7 @@ const formatQuestion = (result: QuestionQuery, level: JLPTLevel) => {
     text: result.questionText,
     command: result.questionCommand,
     type: result.questionType,
-    alternatives: [result.alternative1, result.alternative2, result.alternative3, result.alternative4],
+    alternatives: [result.alternative1, result.alternative2, result.alternative3, result.alternative4].filter((alternative) => alternative !== null),
     correctAlternative: result.correctAlternative,
     image: image,
     audio: audio,

@@ -20,5 +20,5 @@ export default function statementParser(statement: string): string[] {
     "gu"
   );
 
-  return statement.match(regex)?.filter(Boolean) ?? [];
+  return statement?.match(regex)?.filter(Boolean) ?? [];
 }
