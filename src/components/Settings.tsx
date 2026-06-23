@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     gap: 20,
     marginTop: 5,
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background,
     marginBottom: 20,
   },
   slider: {
