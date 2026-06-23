@@ -175,6 +175,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingBottom: 16,
     borderBottomWidth: 1,
-    borderColor: '#dfdfdf',
+    borderColor: colors.border,
   }
 });
