@@ -31,7 +31,7 @@ export default function SettingsScreen() {
         <SwitchSetting
           icon='furigana'
           title='Furigana'
-          furigana={isFuriganaOn ? '振[入]' : '振[切]'}
+          furigana='振[ふ]'
           color={isFuriganaOn ? colors.textDark : colors.textMuted}
           onChange={(value) => { setFurigana(value); setValue('furigana', value); }}
           value={isFuriganaOn} />
