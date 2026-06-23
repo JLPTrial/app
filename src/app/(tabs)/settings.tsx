@@ -78,7 +78,7 @@ export default function SettingsScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.surface,
+    backgroundColor: colors.backgroundDim,
   },
   header: {
     backgroundColor: colors.primary,
