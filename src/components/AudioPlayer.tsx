@@ -1,10 +1,10 @@
+import { useTheme } from '@/hooks/useTheme';
 import { Ionicons } from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
 import { AudioSource, useAudioPlayer, useAudioPlayerStatus } from 'expo-audio';
 import { useFocusEffect } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { colors } from '../styles/globals';
 
 function formatTime(seconds: number): string {
   const min = Math.floor(seconds / 60);
@@ -14,6 +14,7 @@ function formatTime(seconds: number): string {
 }
 
 export default function AudioPlayer({ source }: { source: AudioSource }) {
+  const { colors } = useTheme();
   const player = useAudioPlayer(source);
   const status = useAudioPlayerStatus(player);
 
@@ -39,7 +40,7 @@ export default function AudioPlayer({ source }: { source: AudioSource }) {
   );
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.audioPlayer }]}>
       <Pressable
         onPress={() => {
           if (status.playing) {
@@ -81,7 +82,7 @@ export default function AudioPlayer({ source }: { source: AudioSource }) {
         thumbTintColor={colors.textDark}
       />
 
-      <Text>{formatTime(isSliding ? sliderTime : status.currentTime)}/{formatTime(status.duration)}</Text>
+      <Text style={{ color: colors.textDark }}>{formatTime(isSliding ? sliderTime : status.currentTime)}/{formatTime(status.duration)}</Text>
     </View>
   );
 }
@@ -93,7 +94,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 10,
     borderWidth: 0,
-    backgroundColor: colors.audioPlayer,
     borderRadius: 30,
     maxWidth: '90%',
   },
