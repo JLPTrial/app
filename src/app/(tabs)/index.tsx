@@ -1,13 +1,14 @@
 import Card from '@/components/pressable/Card';
 import FloatingButton from '@/components/pressable/FloatingButton';
 import Screen from '@/components/Screen';
+import { AppText } from '@/components/texts/AppText';
 import { useStorage } from '@/hooks/useStorage';
-import { colors, vh, vw } from '@/styles/globals';
-import { textStyles } from '@/styles/texts';
+import { useTheme } from '@/hooks/useTheme';
+import { vh, vw } from '@/styles/globals';
 import { JLPTLevel } from '@/types/types';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 const GAP = 16;
 
@@ -18,6 +19,7 @@ const levels = [
 
 export default function HomeScreen() {
   const { data, setValue } = useStorage();
+  const { colors } = useTheme();
 
   return (
     <Screen withBottomTab>
@@ -32,14 +34,14 @@ export default function HomeScreen() {
       />
 
       <View style={styles.table}>
-        <Text style={[{ marginBottom: 8 }, textStyles.title]}>Teste Seus Conhecimentos</Text>
+        <AppText variant="title" style={{ marginBottom: 8 }}>Teste Seus Conhecimentos</AppText>
         <View style={styles.row}>
           <Card title='Simulado' style={{ width: '100%' }} onPress={() => router.push("/practice-test")} />
         </View>
       </View>
 
       <View style={styles.table}>
-        <Text style={[{ marginBottom: 8 }, textStyles.title]}>Estude Por Competência</Text>
+        <AppText variant="title" style={{ marginBottom: 8 }}>Estude Por Competência</AppText>
 
         <View style={styles.row}>
           <Card title='Vocabulário' style={[{ backgroundColor: colors.vocabulary }, styles.card]} onPress={() => router.push({pathname: "/session-lobby", params: { type: "vocabulary", label: "Vocabulário"}})} />
@@ -57,7 +59,7 @@ export default function HomeScreen() {
       </View>
 
       <View style={styles.table}>
-        <Text style={[{ marginBottom: 8 }, textStyles.title]}>Demo</Text>
+        <AppText variant="title" style={{ marginBottom: 8 }}>Demo</AppText>
         <View style={styles.row}>
           <Card title='Demo Questão' style={{ width: '100%' }} onPress={() => router.push("/demo/questions")} />
         </View>
