@@ -1,3 +1,4 @@
+import ThemeTransition from "@/components/ThemeTransition";
 import { StorageProvider } from "@/contexts/StorageContext";
 import { moveDatabase } from "@/db/moveDatabase";
 import { Paths } from 'expo-file-system';
@@ -37,9 +38,11 @@ export default function RootLayout() {
         }}
       >
         <StorageProvider>
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          </Stack>
+          <ThemeTransition>
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            </Stack>
+          </ThemeTransition>
         </StorageProvider>
       </SQLiteProvider>
     </Suspense>
