@@ -1,6 +1,7 @@
+import { useTheme } from '@/hooks/useTheme';
 import React from 'react';
 import { StyleProp, Text, TextProps, TextStyle } from 'react-native';
-import { textStyles } from '../../styles/texts';
+import { getVariantColor, textStyles } from '../../styles/texts';
 
 export type TextVariant = Exclude<keyof typeof textStyles, 'bold' | 'center' | 'underlining' | 'answer'>;
 
@@ -25,10 +26,14 @@ export const AppText: React.FC<AppTextProps> = ({
   children,
   ...rest
 }) => {
+  const { colors } = useTheme();
+
+  const variantColor = answer ? colors.primaryLight : getVariantColor(colors, variant);
+
   const combinedStyles = [
     textStyles['base'], // Combinando o estilo base com os subestilos
     textStyles[variant],
-    answer && textStyles.answer,
+    { color: variantColor },
     bold && textStyles.bold,
     underlining && textStyles.underlining,
     center && textStyles.center,
