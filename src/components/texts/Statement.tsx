@@ -1,9 +1,10 @@
+import { useTheme } from "@/hooks/useTheme";
 import { vh, vw } from "@/styles/globals";
 import statementParser from "@/utils/parsers";
 import { Ionicons } from '@expo/vector-icons';
 import { PropsWithChildren } from "react";
 import { StyleSheet, TextStyle, View } from "react-native";
-import { textStyles } from '../../styles/texts';
+import { getVariantColor, textStyles } from '../../styles/texts';
 import { AppText, AppTextProps } from "./AppText";
 
 interface StatementProps extends Omit<AppTextProps, 'children'> {
@@ -62,14 +63,16 @@ function Furigana({ kanji, furigana, fontSize, appTextProps }: FuriganaProps) {
 }
 
 export default function Statement({ statement, ...appTextProps }: StatementProps) {
+  const { colors } = useTheme();
   const tokens = statementParser(statement);
 
   const { variant = 'base', answer, bold, underlining, center, style: customStyle } = appTextProps;
+  const variantColor = answer ? colors.primaryLight : getVariantColor(colors, variant);
 
   const combinedStyles = [
     textStyles['base'],
     textStyles[variant],
-    answer && textStyles.answer,
+    { color: variantColor },
     bold && textStyles.bold,
     underlining && textStyles.underlining,
     center && textStyles.center,
