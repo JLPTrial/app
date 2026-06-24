@@ -1,9 +1,10 @@
 import AlternativeBody from '@/components/question/AlternativeBody';
 import QuestionBody from '@/components/question/QuestionBody';
-import { colors, vh } from '@/styles/globals';
+import { useTheme } from '@/hooks/useTheme';
 import { Question } from '@/types/types';
 import { useRef, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
+import { vh } from '../styles/globals';
 import BottomButton from './pressable/BottomButton';
 
 type buttonState = 'disabled' | 'continue' | 'confirm';
@@ -19,6 +20,7 @@ const handleStyle = (choice: number, confirmedAnswer: boolean): buttonState => {
 };
 
 export default function QuestionScreen({ question, onNextQuestion }: { question: Question, onNextQuestion: any }) {
+  const { colors } = useTheme();
 
   const [choice, setChoice] = useState<number>(-1);
   const [confirmedAnswer, setConfirmedAnswer] = useState<boolean>(false);
@@ -37,6 +39,18 @@ export default function QuestionScreen({ question, onNextQuestion }: { question:
     onNextQuestion(choice);
     setConfirmedAnswer(false);
     setChoice(-1);
+  };
+
+  const buttonStyle = {
+    confirm:  { backgroundColor: colors.primaryLight },
+    continue: { backgroundColor: colors.primary },
+    disabled: { backgroundColor: colors.alternativeDisabled },
+  };
+
+  const textStyle = {
+    confirm:  {},
+    continue: { color: colors.textLight },
+    disabled: { color: colors.textMuted },
   };
 
   return (
@@ -61,18 +75,6 @@ export default function QuestionScreen({ question, onNextQuestion }: { question:
     </View>
   );
 }
-
-const buttonStyle = {
-  confirm:  { backgroundColor: colors.primaryLight, },
-  continue: { backgroundColor: colors.primary, },
-  disabled: { backgroundColor: '#ccc', },
-};
-
-const textStyle = {
-  confirm:  { },
-  continue: { color: colors.textLight, },
-  disabled: { color: colors.textMuted, },
-};
 
 const styles = StyleSheet.create({
   container: {
