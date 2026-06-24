@@ -4,8 +4,8 @@ import Screen from '@/components/Screen';
 import { AppText } from '@/components/texts/AppText';
 import { useQuestions } from '@/db/queries';
 import { useStorage } from '@/hooks/useStorage';
-import { colors, vh } from '@/styles/globals';
-import { textStyles } from '@/styles/texts';
+import { useTheme } from '@/hooks/useTheme';
+import { vh } from '@/styles/globals';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Alert, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
@@ -15,6 +15,7 @@ const QUESTION_COUNTS = [5, 10, 15, 20];
 export default function SessionLobby() {
   const { type, label } = useLocalSearchParams<{ type: string; label: string }>();
   const { data, setValue } = useStorage();
+  const { colors } = useTheme();
   const db = useQuestions(data.jlptLevel);
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -83,7 +84,7 @@ export default function SessionLobby() {
     <Screen>
       <View style={styles.header}>
         <AppText variant='title'>{label}</AppText>
-        <View style={styles.levelBadge}>
+        <View style={[styles.levelBadge, { backgroundColor: colors.primary }]}>
           <AppText variant='tag'>{data.jlptLevel}</AppText>
         </View>
       </View>
@@ -94,7 +95,11 @@ export default function SessionLobby() {
           {QUESTION_COUNTS.map(n => (
             <Pressable
               key={n}
-              style={[styles.chip, maxQuestions === n && styles.chipSelected]}
+              style={[
+                styles.chip,
+                { backgroundColor: colors.surface, borderColor: colors.border },
+                maxQuestions === n && { backgroundColor: colors.primary, borderColor: colors.primary },
+              ]}
               onPress={() => setMaxQuestions(n)}
             >
               <AppText style={maxQuestions === n && { color: colors.textLight }}>
@@ -110,7 +115,7 @@ export default function SessionLobby() {
           <View style={styles.section}>
             <AppText variant='subtitle'>Tags</AppText>
             <TextInput
-              style={styles.searchBar}
+              style={[styles.searchBar, { backgroundColor: colors.surface, borderColor: colors.border, color: colors.textDark }]}
               placeholder="Pesquisar tag..."
               placeholderTextColor={colors.textMuted}
               value={searchQuery}
@@ -119,15 +124,19 @@ export default function SessionLobby() {
 
             {filteredTags.length > 0 && (
               <View>
-                <ScrollView nestedScrollEnabled={true} style={styles.tagsBoxContainer}>
+                <ScrollView nestedScrollEnabled={true} style={[styles.tagsBoxContainer, { borderColor: colors.border, backgroundColor: colors.background }]}>
                   <View style={styles.chipRow}>
                     {filteredTags.map(tag => (
                       <Pressable
                         key={tag}
-                        style={[styles.chip, selectedTags.includes(tag) && styles.chipSelected]}
+                        style={[
+                          styles.chip,
+                          { backgroundColor: colors.surface, borderColor: colors.border },
+                          selectedTags.includes(tag) && { backgroundColor: colors.primary, borderColor: colors.primary },
+                        ]}
                         onPress={() => toggleTag(tag)}
                       >
-                        <AppText style={[selectedTags.includes(tag) && textStyles.tag]}>
+                        <AppText style={[selectedTags.includes(tag) && { color: colors.textLight }]}>
                           {tag}
                         </AppText>
                       </Pressable>
@@ -154,15 +163,12 @@ const styles = StyleSheet.create({
 
   tagsBoxContainer: {
     borderWidth: 1.5,
-    borderColor: colors.border,
     borderRadius: 16,
-    backgroundColor: colors.background,
     padding: 12,
     maxHeight: 55 * vh,
   },
 
   levelBadge: {
-    backgroundColor: colors.primary,
     borderRadius: 8,
     paddingHorizontal: 10,
     paddingVertical: 4,
@@ -173,20 +179,11 @@ const styles = StyleSheet.create({
     gap: 12,
   },
 
-  quantitySelector: {
-    flexWrap: 'wrap',
-    minWidth: 70,
-    textAlign: 'center',
-    color: colors.textDark,
-  },
-
   searchBar: {
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: colors.surface,
     borderWidth: 1.5,
-    borderColor: colors.border,
   },
 
   chipRow: {
@@ -199,13 +196,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: colors.surface,
     borderWidth: 1.5,
-    borderColor: colors.border,
-  },
-
-  chipSelected: {
-    backgroundColor: colors.primary,
-    borderColor: colors.primary,
   },
 });
