@@ -1,4 +1,4 @@
-import { colors } from '@/styles/globals';
+import { useTheme } from '@/hooks/useTheme';
 import React, { PropsWithChildren } from 'react';
 import { ScrollView, StyleProp, ViewStyle } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -9,6 +9,7 @@ type ScreenProps = PropsWithChildren<{
 }>;
 
 export default function Screen({ children, style, withBottomTab = false } : ScreenProps){
+  const { colors } = useTheme();
 
   return (
     <SafeAreaView
