@@ -3,9 +3,9 @@ import { Icon } from './Icon';
 import Slider from '@react-native-community/slider';
 import { Alert, Linking, Pressable, StyleSheet, View } from 'react-native';
 import { AppText } from './texts/AppText';
-import { Switch } from 'react-native-switch';
 import { Marker, MarkerType } from './slider/Marker';
 import React, { useCallback } from 'react';
+import { AppSwitch } from './pressable/AppSwitch';
 
 type SliderProps = {
   title: string,
@@ -16,7 +16,7 @@ type SliderProps = {
   max: number,
   left?: React.ReactNode,
   right?: React.ReactNode,
-  marker?: MarkerType
+  marker?: MarkerType,
 };
 
 type SwitchProps = {
@@ -25,13 +25,18 @@ type SwitchProps = {
   value: boolean,
   color?: string,
   furigana?: string,
-  onChange: (value: boolean) => void
+  onChange: (value: boolean) => void,
 }
 
 type ActionProps = {
   icon: string,
   title: string,
   url: string,
+}
+
+type CardProps = {
+  title: string,
+  children: React.ReactNode,
 }
 
 export function SwitchSetting({ icon, furigana, title, color = colors.textDark, value, onChange }: SwitchProps) {
@@ -47,22 +52,9 @@ export function SwitchSetting({ icon, furigana, title, color = colors.textDark, 
 
       <AppText style={styles.switchTitle}>{title}</AppText>
 
-      <Switch
+      <AppSwitch
         value={value}
-        onValueChange={(value) => onChange(value)}
-        circleSize={32}
-        barHeight={40}
-        circleBorderWidth={0}
-        backgroundInactive={colors.textMuted}
-        circleInActiveColor={colors.background}
-        backgroundActive={colors.primaryLight}
-        circleActiveColor={colors.primary}
-        changeValueImmediately={true}
-        renderActiveText={false}
-        renderInActiveText={false}
-        switchLeftPx={1.1}
-        switchRightPx={1.1}
-        switchWidthMultiplier={3}
+        onChange={(value : boolean) => onChange(value)}
       />
     </View>
   );
@@ -125,7 +117,7 @@ export function ActionSetting({ icon, title, url }: ActionProps) {
   );
 }
 
-export function SettingCard({ title, children }: { title: string, children: any }) {
+export function SettingCard({ title, children }: CardProps) {
 
   const setting = React.Children.toArray(children);
   return (
