@@ -1,5 +1,4 @@
 import { AppText } from '@/components/texts/AppText';
-import { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import Screen from '@/components/Screen';
 import { SwitchSetting, SliderSetting, ActionSetting, SettingCard } from '../../components/Settings';
@@ -10,37 +9,29 @@ import Header from '@/components/containers/headers';
 export default function SettingsScreen() {
   const { data, setValue } = useStorage();
 
-  const [isDarkMode, setDarkMode] = useState(data.darkMode);
-  const [isFuriganaOn, setFurigana] = useState(data.furigana);
-
-  const [isHapticFeedbackOn, setHapticFeedback] = useState(data.hapticFeedback);
-
-  const [fontSize, setFontSize] = useState(data.fontSize);
-  const [volume, setVolume] = useState(data.volume);
-
   return (
     <Screen style={styles.container} withBottomTab>
       <Header title="Configurações"/>
 
       <SettingCard title='Aparência'>
         <SwitchSetting
-          icon={isDarkMode ? 'moon' : 'sunny'}
+          icon={data.darkMode ? 'moon' : 'sunny'}
           title='Modo'
-          onChange={(value) => { setDarkMode(value); setValue('darkMode', value); }}
-          value={isDarkMode} />
+          onChange={(value) => setValue('darkMode', value) }
+          value={data.darkMode} />
 
         <SwitchSetting
           icon='furigana'
           title='Furigana'
           furigana='振[ふ]'
-          color={isFuriganaOn ? colors.textDark : colors.textMuted}
-          onChange={(value) => { setFurigana(value); setValue('furigana', value); }}
-          value={isFuriganaOn} />
+          color={data.furigana ? colors.textDark : colors.textMuted}
+          onChange={(value) => setValue('furigana', value) }
+          value={data.furigana} />
 
         <SliderSetting
           title='Fonte'
-          onChange={(value) => { setFontSize(value); setValue('fontSize', value); }}
-          value={fontSize}
+          onChange={(value) => setValue('fontSize', value) }
+          value={data.fontSize}
           min={0}
           step={1}
           max={3}
@@ -54,14 +45,14 @@ export default function SettingsScreen() {
         <SwitchSetting
           icon='vibrate'
           title='Feedback tátil'
-          color={isHapticFeedbackOn ? colors.textDark : colors.textMuted}
-          onChange={(value) => { setHapticFeedback(value); setValue('hapticFeedback', value); }}
-          value={isHapticFeedbackOn} />
+          color={data.hapticFeedback ? colors.textDark : colors.textMuted}
+          onChange={(value) => setValue('hapticFeedback', value) }
+          value={data.hapticFeedback} />
 
         <SliderSetting
           title='Volume Interno'
-          value={volume}
-          onChange={(value) => { setVolume(value); setValue('volume', value); }}
+          value={data.volume}
+          onChange={(value) => setValue('volume', value) }
           min={0}
           max={100}
         />
