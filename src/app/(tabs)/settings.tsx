@@ -1,4 +1,3 @@
-import { AppText } from '@/components/texts/AppText';
 import { StyleSheet } from 'react-native';
 import Screen from '@/components/Screen';
 import { SwitchSetting, SliderSetting, ActionSetting, SettingCard } from '../../components/Settings';
@@ -30,14 +29,13 @@ export default function SettingsScreen() {
 
         <SliderSetting
           title='Fonte'
+          icon='textAa'
           onChange={(value) => setValue('fontSize', value) }
           value={data.fontSize}
           min={0}
           step={1}
           max={3}
           marker={'dot'}
-          left={<AppText>Aa</AppText>}
-          right={<AppText style={{ fontSize: 40 }}>Aa</AppText>}
         />
       </SettingCard>
 
@@ -51,6 +49,7 @@ export default function SettingsScreen() {
 
         <SliderSetting
           title='Volume Interno'
+          icon='volume-medium'
           value={data.volume}
           onChange={(value) => setValue('volume', value) }
           min={0}
@@ -71,5 +70,6 @@ export default function SettingsScreen() {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.backgroundDim,
+    gap:40,
   },
 });

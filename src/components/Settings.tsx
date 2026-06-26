@@ -9,6 +9,7 @@ import { AppSwitch } from './pressable/AppSwitch';
 
 type SliderProps = {
   title: string,
+  icon: string,
   value: number,
   onChange: (value: number) => void,
   min: number,
@@ -42,7 +43,7 @@ type CardProps = {
 export function SwitchSetting({ icon, furigana, title, color = colors.textDark, value, onChange }: SwitchProps) {
 
   return (
-    <View style={[styles.container, styles.horizontal]}>
+    <View style={styles.horizontal}>
       <Icon
         name={icon}
         furigana={furigana}
@@ -60,20 +61,29 @@ export function SwitchSetting({ icon, furigana, title, color = colors.textDark, 
   );
 }
 
-export function SliderSetting({ title, value, onChange, min, max, step = 0,
+export function SliderSetting({ title, icon, value, onChange, min, max, step = 0,
   left, right, marker = 'none' }: SliderProps) {
 
   return (
     <View>
-      <AppText center>{title}</AppText>
-      <View style={[styles.container, styles.horizontal]}>
+      <View style={styles.horizontal}>
+        <Icon
+          name={icon}
+          size={32}
+          color={colors.textDark}
+        />
+
+        <AppText style={styles.switchTitle}>{title}</AppText>
+      </View>
+      
+      <View>
         {left}
         <Slider
           minimumValue={min}
           maximumValue={max}
           step={step}
           value={value}
-          onValueChange={onChange}
+          onSlidingComplete={onChange}
           minimumTrackTintColor={colors.primaryLight}
           maximumTrackTintColor={colors.textMuted}
           StepMarker={Marker[marker]}
@@ -103,31 +113,30 @@ export function ActionSetting({ icon, title, url }: ActionProps) {
   }, [url]);
 
   return (
-    <Pressable
-      style={[styles.container, styles.horizontal]}
-      onPress={handlePress}
-    >
-      <Icon
-        name={icon}
-        size={32}
-        color={colors.textDark}
-      />
-      <AppText style={{ flex: 1 }} center>{title}</AppText>
+    <Pressable onPress={handlePress} >
+      <View style={styles.horizontal}>
+        <Icon
+          name={icon}
+          size={32}
+          color={colors.textDark}
+        />
+
+        <AppText style={styles.switchTitle}>{title}</AppText>
+      </View>
     </Pressable>
   );
 }
 
 export function SettingCard({ title, children }: CardProps) {
-
   const setting = React.Children.toArray(children);
   return (
-    <View>
-      <AppText bold>{title}</AppText>
+    <View style={styles.container}>
+      <AppText bold style={{marginBottom:5}}>{title}</AppText>
 
       <View style={styles.card}>
         {setting.map((child, index) =>
           (
-            <View key={index} style={(index < setting.length - 1) && styles.line}>
+            <View key={index} style={[(index < setting.length - 1) && styles.line]}>
               {child}
             </View>
           ))
@@ -137,22 +146,23 @@ export function SettingCard({ title, children }: CardProps) {
   );
 }
 
+
+
 const styles = StyleSheet.create({
   container: {
+    flex:1,
     width: '100%',
   },
-  horizontal: {
+  horizontal:{
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
   },
   card: {
     padding: 20,
     borderRadius: 30,
     gap: 20,
-    marginTop: 5,
     backgroundColor: colors.background,
-    marginBottom: 20,
   },
   slider: {
     paddingVertical: 20,

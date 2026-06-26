@@ -3,17 +3,18 @@ import { AppText } from "./texts/AppText";
 import { WithLocalSvg } from 'react-native-svg/css';
 import Statement from './texts/Statement';
 import { View } from 'react-native';
-import { VibrateIcon } from 'phosphor-react-native';
+import { VibrateIcon, TextAaIcon } from 'phosphor-react-native';
 import type { IconProps } from 'phosphor-react-native';
 
 type ionicon = keyof typeof Ionicons.glyphMap;
 
-const assets: Record<string, any> = {
+const svgAssets: Record<string, any> = {
   //"name": require("../../assets/icons/name.svg"),
 };
 
 const phosphorIcons: Record<string, React.FC<IconProps>> = {
   vibrate: VibrateIcon,
+  textAa: TextAaIcon,
 };
 
 type iconProps = {
@@ -31,9 +32,9 @@ export const Icon = ({ name, size, color, furigana = '' }: iconProps) => {
       color={color}
     />;
   }
-  if (name in assets) {
+  if (name in svgAssets) {
     return <WithLocalSvg
-      asset={assets[name]}
+      asset={svgAssets[name]}
       width={size}
       height={size}
       fill={color}
