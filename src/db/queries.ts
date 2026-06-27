@@ -233,7 +233,64 @@ export function useQuestions(level: JLPTLevel) {
     return await selectQuestions(whereClause, order, limit);
   };
 
+  const selectStatementId = async (
+    statementText: string
+  ): Promise<number | null> => {
+    const query = `
+      SELECT id
+      FROM ${level}.statement
+      WHERE question_command = $statementText
+    `;
+
+    const result = await db.getFirstAsync<{ id: number }>(
+      query,
+      { $statementText: statementText }
+    );
+
+    return result?.id ?? null;
+  };
+
+  const searchQuestionsByStatement = async (
+    statementText: string,
+    answeredStatus: AnsweredStatus = 'unanswered',
+    limit: number = -1,
+    order: Order = Order.RANDOM,
+  ): Promise<Question[]> => {
+
+    const statementId = await selectStatementId(statementText);
+
+    if (statementId === null) {
+      return [];
+    }
+
+    const whereClause = new WhereClause(level);
+
+    whereClause.addClauseCompare(
+      "questions",
+      "statement_id",
+      statementId
+    );
+
+    if (answeredStatus === 'answered') {
+      whereClause.addClauseIsNull(
+        "answered_questions",
+        "answered_date",
+        UserDB,
+        false
+      );
+    } else if (answeredStatus === 'unanswered') {
+      whereClause.addClauseIsNull(
+        "answered_questions",
+        "answered_date",
+        UserDB,
+        true
+      );
+    }
+
+    return await selectQuestions(whereClause, order, limit);
+  };
+
   return {
-    selectTagsByType, selectAnsweredByDateMany, selectAnsweredMany, searchQuestionsFilters
+    selectTagsByType, selectAnsweredByDateMany, selectAnsweredMany, searchQuestionsFilters, searchQuestionsByStatement
   };
 }
