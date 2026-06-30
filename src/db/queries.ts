@@ -3,9 +3,8 @@ import { useSQLiteContext } from 'expo-sqlite';
 
 export type AnsweredStatus = 'answered' | 'unanswered' | 'all';
 
-// For now, has no utility beside telling the whereClause to
-// not use JLPTLevel database.
-const UserDB = "UserDB";
+// Define prefix to access answers database
+const UserDB = "main";
 
 // Interface to manage question query
 interface QuestionQuery {
@@ -58,22 +57,26 @@ class WhereClause {
     this.level = level;
   }
 
-  addClauseCompare(table: string, column: string, value: string | number | Date, comparison: Compare = Compare.EQUAL, database?: string | undefined): void {
-    const field = ((database === undefined) ? `${this.level}.` : "") + `${table}.${column}`;
+  addClauseCompare(table: string, column: string, value: string | number | Date, comparison: Compare = Compare.EQUAL, database: JLPTLevel | string = this.level): void {
+    const field = `${database}.${table}.${column}`;
     const key = `${field}.${this.numClauses}`.replaceAll(".", "");
     this.clauses.push(`${field} ${comparison} $${key}`);
     this.setValue(key, value);
   }
 
-  addClauseIsNull(table: string, column: string, isNull: boolean = true, database: string | undefined): void {
-    const field = ((database === undefined) ? `${this.level}.` : "") + `${table}.${column}`;
+  addClauseIsNull(table: string, column: string, database: JLPTLevel | string = this.level, isNull = true): void {
+    const field = `${database}.${table}.${column}`;
     this.clauses.push(`${field} is ${(isNull) ? 'NULL' : 'NOT NULL'}`);
   }
 
-  addClauseIn(table: string, column: string, values: (string | number)[], database?: string | undefined): void {
+  addClauseIsNotNull(table: string, column: string, database: JLPTLevel | string = this.level): void {
+    this.addClauseIsNull(table, column, database, false);
+  }
+
+  addClauseIn(table: string, column: string, values: (string | number)[], database = this.level): void {
     if (values.length === 0) return;
 
-    const field = ((database === undefined) ? `${this.level}.` : "") + `${table}.${column}`;
+    const field = `${database}.${table}.${column}`;
 
     const keys = values.map((_, index) => {
       const key = `${field}${this.numClauses}${index}`.replaceAll(".", "");
@@ -130,8 +133,7 @@ const formatQuestion = (result: QuestionQuery, level: JLPTLevel) => {
 export function useQuestions(level: JLPTLevel) {
   const db = useSQLiteContext();
 
-  const queryBase = `
-    SELECT
+  const queryBase = `SELECT
     ${level}.questions.id as id,  
     ${level}.questions.question_text as questionText,
     ${level}.questions.question_type as questionType,
@@ -165,19 +167,25 @@ export function useQuestions(level: JLPTLevel) {
 		ON ${level}.questions.id = answered_questions.question_id
 		AND answered_questions.jlpt_level = '${level}'`;
 
-
   const selectQuestion = async (whereClause?: WhereClause, order: Order = Order.RANDOM): Promise<Question | null> => {
     const question: Question[] = await selectQuestionMany(whereClause, order, 1);
     return (question.length > 0) ? question[0] : null;
   };
 
   const selectQuestionMany = async (whereClause?: WhereClause, order: Order = Order.RANDOM, limit: number = -1): Promise<Question[]> => {
-    const query = ((whereClause === undefined) ? `${queryBase}` : `${queryBase} WHERE ${whereClause.getClauses()}`)
-      + ` GROUP BY ${level}.questions.id ORDER BY ${order} LIMIT ${limit}`;
+   
+    const hasCondition = (whereClause !== undefined);
 
-    const values = ((whereClause === undefined) ? {} : whereClause.getValues());
+    const where = (hasCondition) ? `WHERE ${whereClause.getClauses()}` : ``;
+    
+    const query = `${queryBase} ${where} GROUP BY ${level}.questions.id ORDER BY ${order} LIMIT ${limit}`;
+
+    const values = (hasCondition) ? whereClause.getValues() : {};
+
     const results: QuestionQuery[] = await db.getAllAsync<QuestionQuery>(query, values);
+    
     const questions: Question[] = results.map((result) => formatQuestion(result, level));
+    
     return questions;
   };
 
@@ -207,7 +215,7 @@ export function useQuestions(level: JLPTLevel) {
       INNER JOIN ${level}.tags ON ${level}.question_tags.tag_id = ${level}.tags.id
       WHERE ${level}.questions.question_type = $type
       ORDER BY ${level}.tags.name ASC
-    `;
+     `;
     const results = await db.getAllAsync<{ name: string }>(query, { $type: type });
     return results.map(r => r.name);
   };
@@ -237,7 +245,7 @@ export function useQuestions(level: JLPTLevel) {
 
   const selectAnsweredMany = async (limit: number = -1): Promise<Question[]> => {
     const whereClause: WhereClause = new WhereClause(level);
-    whereClause.addClauseIsNull("answered_questions", "answered_date", false, UserDB);
+    whereClause.addClauseIsNotNull("answered_questions", "answered_date", UserDB);
     return await selectQuestionMany(whereClause, Order.DATE, limit);
   };
 
@@ -263,10 +271,10 @@ export function useQuestions(level: JLPTLevel) {
     if (tags.length > 0) whereClause.addClauseIn("tags", "name", tags);
 
     if (answeredStatus === 'answered') {
-      whereClause.addClauseIsNull("answered_questions", "answered_date", false, UserDB);
+      whereClause.addClauseIsNotNull("answered_questions", "answered_date", UserDB);
     }
     else if (answeredStatus === 'unanswered') {
-      whereClause.addClauseIsNull("answered_questions", "answered_date", true, UserDB);
+      whereClause.addClauseIsNull("answered_questions", "answered_date", UserDB);
     }
 
     return await selectQuestionMany(whereClause, order, limit);
