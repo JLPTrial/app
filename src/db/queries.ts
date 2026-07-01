@@ -197,16 +197,6 @@ export function useQuestions(level: JLPTLevel) {
     return results.map(r => r.name);
   };
 
-  const insertAnswer = async (question: Question, level: JLPTLevel, answer: number): Promise<boolean> => {
-    const query = `INSERT INTO answered_questions (jlpt_level, is_correct, question_id) VALUES (?,?,?)`;
-    try {
-      await db.runAsync(query, `${level}`, answer === question.correctAlternative, question.id);
-      return true;
-    } catch {
-      return false;
-    }
-  };
-
   const selectAnsweredByDateMany = async (dateStart: Date, dateEnd: Date = new Date(), limit: number = -1): Promise<Question[]> => {
     const whereClause: WhereClause = new WhereClause(level);
     whereClause.addClauseCompare("answered_questions", "answered_date", dateStart, Compare.MORE_EQ, UserDB);
@@ -244,6 +234,6 @@ export function useQuestions(level: JLPTLevel) {
   };
 
   return {
-    selectTagsByType, insertAnswer, selectAnsweredByDateMany, selectAnsweredMany, searchQuestionsFilters
+    selectTagsByType, selectAnsweredByDateMany, selectAnsweredMany, searchQuestionsFilters
   };
 }
