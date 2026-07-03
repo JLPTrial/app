@@ -14,3 +14,20 @@ export interface Question {
 	date: Date | null;
 	isCorrect: boolean | null,
 }
+
+export interface SessionResult {
+  right: {
+    total: number,
+    kanji: number,
+    vocabulary: number,
+    grammar: number,
+    reading: number,
+  };
+  total: {
+    total: number,
+    kanji: number,
+    vocabulary: number,
+    grammar: number,
+    reading: number,
+  };
+};
