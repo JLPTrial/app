@@ -2,18 +2,14 @@ import PercentageBar from '@/components/PercentageBar';
 import Screen from '@/components/Screen';
 import { AppText } from '@/components/texts/AppText';
 import { useColors } from '@/hooks/useTheme';
+import { SessionResult } from '@/types/types';
 import { router } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 import BottomButton from './pressable/BottomButton';
 
-type SessionResult = {
-    right: number;
-    total: number;
-};
-
 export default function EndScreen({ result }: { result: SessionResult }) {
   const colors = useColors();
-  const percentage = result.total > 0 ? Math.round((result.right / result.total) * 100) : 0;
+  const percentage = result.total.total > 0 ? Math.round((result.right.total / result.total.total) * 100) : 0;
   const scoreColor =
         percentage >= 70 ? colors.success :
           percentage >= 50 ? colors.mid :
@@ -33,7 +29,7 @@ export default function EndScreen({ result }: { result: SessionResult }) {
       <View style={[styles.resultCard, { backgroundColor: colors.successBlock }]}>
         <AppText style={{ color: colors.textMuted }}>Questões corretas</AppText>
         <AppText bold={true} style={[styles.scoreText, { color: scoreColor }]}>
-          {result.right}/{result.total}
+          {result.right.total}/{result.total.total}
         </AppText>
         <AppText style={[styles.percentageText, { color: scoreColor }]}>
           {percentage}%
