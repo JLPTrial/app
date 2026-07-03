@@ -4,7 +4,7 @@ export interface Question {
 	id: number;
 	text: string;
 	command: string;
-	type: string;
+	type: 'kanji' | 'vocabulary' | 'reading' | 'grammar' | 'listening';
 	image: string | null;
 	audio: string | null;
 	contextualText: string | null;
@@ -22,6 +22,7 @@ export interface SessionResult {
     vocabulary: number,
     grammar: number,
     reading: number,
+	listening: number
   };
   total: {
     total: number,
@@ -29,5 +30,6 @@ export interface SessionResult {
     vocabulary: number,
     grammar: number,
     reading: number,
+	listening: number
   };
 };
