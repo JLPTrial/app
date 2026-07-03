@@ -16,11 +16,16 @@ export default function QuestionSession({ onFinish, sessionType }: { onFinish: a
   const [index, setIndex] = useState<number>(data.questionIndexSession);
   let rightAnswers = useRef(0);
   let question = questions[index];
-  const [seconds, setSeconds] = useState(15);
+  const [seconds, setSeconds] = useState(3600);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setSeconds((s) => s - 1);
+      setSeconds((s) => {
+        if (s - 1 > 0) s = s-1;
+        else s = 0;
+
+        return s;
+      });
     }, 1000);
 
     return () => clearInterval(interval);
@@ -43,16 +48,41 @@ export default function QuestionSession({ onFinish, sessionType }: { onFinish: a
   const db = useUserDatabase();
   const level = data.jlptLevel;
 
+  var result = useRef({
+    right: {
+      total: 0,
+      kanji: 0,
+      vocabulary: 0,
+      grammar: 0,
+      reading: 0,
+      listening: 0,
+    },
+    total: {
+      total: 0,
+      kanji: 0,
+      vocabulary: 0,
+      grammar: 0,
+      reading: 0,
+      listening: 0
+    }
+  });
+
   const handleNextQuestion = (choice: number) => {
+    const res = result.current;
     if (choice + 1 === question.correctAlternative) {
       rightAnswers.current++;
+      res.right.total++;
+      res.right[question.type]++;
+      
     }
+    res.total.total++;
+    res.total[question.type]++;
     db.insertAnswer(question, level, choice + 1);
     if (index + 1 < questions.length) {
       setIndex(index => index + 1);
     }
     else {
-      onFinish(rightAnswers.current, questions.length);
+      onFinish(res);
     }
   };
 
