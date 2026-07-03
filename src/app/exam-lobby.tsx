@@ -20,11 +20,6 @@ export default function ExamLobby() {
   const [loading, setLoading] = useState(true);
   const [starting, setStarting] = useState(false);
 
-  const [useTimer, setUseTimer] = useState(true);
-
-  const [mockInfo, setMockInfo] = useState<any>(null);
-  const [lastAttempt, setLastAttempt] = useState<any>(null);
-
   useEffect(() => {
     async function load() {
       setLoading(true);
@@ -73,6 +68,12 @@ export default function ExamLobby() {
 
       questions.push(...currentQuestions);
     }
+
+    questions.sort((a, b) => {
+      if (a.type < b.type) return -1;
+      if (a.type > b.type) return 1;
+      return 0;
+    });
 
     if (questions.length === 0) {
         let feedback = "Você já respondeu todas as questões desse tipo!";
