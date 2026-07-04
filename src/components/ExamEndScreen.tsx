@@ -1,27 +1,29 @@
 import Screen from '@/components/Screen';
 import { AppText } from '@/components/texts/AppText';
-import { colors } from '@/styles/globals';
+import { useQuestions } from '@/db/queries';
+import { useStorage } from '@/hooks/useStorage';
 import { SessionResult } from '@/types/types';
 import { router } from 'expo-router';
-import { StyleSheet } from 'react-native';
 import BottomButton from './pressable/BottomButton';
 import ResultCard from './ResultCard';
 
-export default function EndScreen({ result }: { result: SessionResult }) {
+export default function ExamEndScreen({ result, startedAt }: { result: SessionResult, startedAt : number }) {
+    const { data } = useStorage();
+    const level = data.jlptLevel;
+
     const percentage = result.total.total > 0 ? Math.round((result.right.total / result.total.total) * 100) : 0;
-    const scoreColor =
-        percentage >= 70 ? colors.success :
-          percentage >= 50 ? colors.mid :
-            colors.failure;
     const feedbackText =
         percentage >= 90 ? 'おめでとう! Desempenho excelente.' :
           percentage >= 70 ? 'Ótimo desempenho!' :
             percentage >= 50 ? 'Boa tentativa!' :
               'Lembre-se de sempre revisar os seus erros!';
 
-    const resultText = (result.right.total > 35 && result.right.listening > 4 && result.right.total - result.right.listening > 20) ?
+    const approved = (result.right.total > 35 && result.right.listening > 4 && result.right.total - result.right.listening > 20);
+
+    const resultText = approved ?
             "Aprovado!" : 
             "Reprovado...";
+
     const sections = [
         { key: 'total', label: 'Total' },
         { key: 'kanji', label: 'Kanji' },
@@ -30,6 +32,10 @@ export default function EndScreen({ result }: { result: SessionResult }) {
         { key: 'reading', label: 'Reading' },
         { key: 'listening', label: 'Listening'}
     ] as const;
+
+    const db = useQuestions(level);
+
+    db.insertExam(result.right.total, result.total.total, result.right.total, startedAt, approved, level)
 
   return (
     <Screen>
@@ -40,6 +46,7 @@ export default function EndScreen({ result }: { result: SessionResult }) {
       {
         sections.map(({key, label}) =>
         <ResultCard 
+            key={key}
             label={label} 
             right={result.right[key]} 
             total={result.total[key]}/>
@@ -54,19 +61,3 @@ export default function EndScreen({ result }: { result: SessionResult }) {
       <BottomButton onPress={() => router.dismissAll()} text="Voltar ao Início" />
     </Screen>);
 }
-const styles = StyleSheet.create({
-  resultCard: {
-    backgroundColor: colors.successBlock,
-    borderRadius: 16,
-    padding: 24,
-    alignItems: 'center',
-    alignSelf: 'stretch',
-    gap: 8,
-  },
-  scoreText: {
-    fontSize: 48,
-  },
-  percentageText: {
-    fontSize: 24,
-  },
-});

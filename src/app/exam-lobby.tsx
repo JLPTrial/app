@@ -99,11 +99,9 @@ export default function ExamLobby() {
 
   return (
     <Screen>
-      <ExamLobbyHeader
-      />
+      <ExamLobbyHeader/>
 
-      <LastAttemptCard
-      />
+      <LastAttemptCard/>
 
       <BottomButton
         text="Iniciar Simulado"
