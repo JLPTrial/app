@@ -1,4 +1,4 @@
-import { JLPTLevel, Question } from '@/types/types';
+import { ExamAttempt, JLPTLevel, Question } from '@/types/types';
 import { useSQLiteContext } from 'expo-sqlite';
 
 export type AnsweredStatus = 'answered' | 'unanswered' | 'all';
@@ -290,7 +290,41 @@ export function useQuestions(level: JLPTLevel) {
     return await selectQuestions(whereClause, order, limit);
   };
 
+  const insertExam = async (
+    score : number,
+    totalQuestions : number,
+    correctAnswers : number,
+    startedAt : number,
+    approved : boolean,
+    jlptLevel : string,
+  ): Promise<boolean> => {
+    const query = `INSERT INTO exam_attempts (score, total_questions, correct_answers, started_at, approved, jlpt_level) VALUES (?,?,?,?,?,?)`;
+    try {
+      await db.runAsync(query, `${score}`, `${totalQuestions}`, `${correctAnswers}`, `${startedAt}`, approved ? '1' : '0', `${jlptLevel}`);
+
+      return true;
+    } catch (e){
+      return false;
+    }
+  };
+
+  const selectLastExam = async () : Promise<ExamAttempt | null> => {
+    const query = `SELECT * FROM exam_attempts ORDER BY started_at DESC LIMIT 1`;
+    
+    try {
+      
+      const exam_attempt : ExamAttempt | null = await db.getFirstAsync(query);
+      if (! exam_attempt) console.log("Aqui")
+      return exam_attempt;
+    } catch (e) {
+      console.log(e)
+      return null;
+    }
+
+  };
+
   return {
-    selectTagsByType, selectAnsweredByDateMany, selectAnsweredMany, searchQuestionsFilters, searchQuestionsByStatement
+    selectTagsByType, selectAnsweredByDateMany, selectAnsweredMany, searchQuestionsFilters,
+    searchQuestionsByStatement, insertExam, selectLastExam
   };
 }
