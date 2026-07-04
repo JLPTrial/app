@@ -15,6 +15,17 @@ export interface Question {
 	isCorrect: boolean | null,
 }
 
+export interface ExamAttempt {
+	id: number;
+	score: number;
+	correct_answers: number;
+	total_questions: number;
+	started_at: number;
+	finished_at: number | null;
+	approved: boolean;
+	jlpt_level: JLPTLevel;
+}
+
 export interface SessionResult {
   right: {
     total: number,
