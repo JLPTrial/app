@@ -56,7 +56,7 @@ export default function RootLayout() {
           REFERENCES questions(id)
           ON DELETE CASCADE
       );
-    `
+    `;
 
   return (
     <Suspense fallback={<Loading />}>

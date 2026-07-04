@@ -48,7 +48,7 @@ export default function QuestionSession({ onFinish, sessionType }: { onFinish: a
   const db = useUserDatabase();
   const level = data.jlptLevel;
 
-  var result = useRef({
+  let result = useRef({
     right: {
       total: 0,
       kanji: 0,

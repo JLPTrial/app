@@ -76,16 +76,16 @@ export default function ExamLobby() {
     });
 
     if (questions.length === 0) {
-        let feedback = "Você já respondeu todas as questões desse tipo!";
+      let feedback = "Você já respondeu todas as questões desse tipo!";
 
-        Alert.alert(
+      Alert.alert(
         "Nenhuma questão encontrada",
         feedback,
         [{ text: 'Voltar', style: 'cancel' }]
-        );
+      );
 
-        setStarting(false);
-        return;
+      setStarting(false);
+      return;
     }
 
     setValue('questionsSession', questions);

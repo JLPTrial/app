@@ -5,28 +5,28 @@ import { AppText } from "./texts/AppText";
 
 
 export default function ResultCard({ label, right, total} : { label : string, right : number, total : number}){
-    const percentage = total > 0 ? Math.round((right / total) * 100) : 0;
-    const scoreColor =
+  const percentage = total > 0 ? Math.round((right / total) * 100) : 0;
+  const scoreColor =
         percentage >= 70 ? colors.success :
           percentage >= 50 ? colors.mid :
             colors.failure;
 
-    return (
-        <View style={styles.resultCard}>
-            <AppText style={{ color: colors.textMuted }}>Questões corretas - {label}</AppText>
-            <AppText bold={true} style={[styles.scoreText, { color: scoreColor }]}>
-                {right}/{total}
-            </AppText>
-            <AppText style={[styles.percentageText, { color: scoreColor }]}>
-                {percentage}%
-            </AppText>
+  return (
+    <View style={styles.resultCard}>
+      <AppText style={{ color: colors.textMuted }}>Questões corretas - {label}</AppText>
+      <AppText bold={true} style={[styles.scoreText, { color: scoreColor }]}>
+        {right}/{total}
+      </AppText>
+      <AppText style={[styles.percentageText, { color: scoreColor }]}>
+        {percentage}%
+      </AppText>
 
-            <PercentageBar
-                progress={percentage}
-                color={scoreColor}
-            />
-        </View>
-    );
+      <PercentageBar
+        progress={percentage}
+        color={scoreColor}
+      />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({

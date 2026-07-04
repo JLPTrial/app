@@ -13,7 +13,7 @@ export default function SessionHandler() {
   const startedAt = useRef(Date.now());
 
   if (result) {
-    if (label == 'Simulado') return (<ExamEndScreen result={result} startedAt={startedAt.current}/>)
+    if (label == 'Simulado') return (<ExamEndScreen result={result} startedAt={startedAt.current}/>);
 
 
     return (<EndScreen result={result} />);

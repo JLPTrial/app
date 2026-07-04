@@ -8,28 +8,28 @@ import { AppText } from "./texts/AppText";
 
 
 export default function LastAttemptCard(){
-    const { data } = useStorage();
-    const level = data.jlptLevel;
-    const db = useQuestions(level);
-    const [lastExam, setLastExam] = useState<ExamAttempt | null>(null);
+  const { data } = useStorage();
+  const level = data.jlptLevel;
+  const db = useQuestions(level);
+  const [lastExam, setLastExam] = useState<ExamAttempt | null>(null);
 
-    useEffect(() => {
-        const loadLastExam = async () => {
-        const exam = await db.selectLastExam();
-        setLastExam(exam);
-        };
+  useEffect(() => {
+    const loadLastExam = async () => {
+      const exam = await db.selectLastExam();
+      setLastExam(exam);
+    };
 
-        loadLastExam();
-    }, []);
+    loadLastExam();
+  }, []);
 
-    if (!lastExam) return <AppText>Nenhum simulado realizado.</AppText>;
+  if (!lastExam) return <AppText>Nenhum simulado realizado.</AppText>;
     
-    const date = new Date(Number(lastExam.started_at)).toLocaleString();
+  const date = new Date(Number(lastExam.started_at)).toLocaleString();
 
-    return (
-        <View>
-            <AppText>Dados da Última Tentativa:</AppText>
-            <ResultCard label={date} right={lastExam.correct_answers} total={lastExam.total_questions}/>
-        </View>
-    );
+  return (
+    <View>
+      <AppText>Dados da Última Tentativa:</AppText>
+      <ResultCard label={date} right={lastExam.correct_answers} total={lastExam.total_questions}/>
+    </View>
+  );
 }

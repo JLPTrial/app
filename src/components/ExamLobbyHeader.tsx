@@ -5,17 +5,17 @@ import { AppText } from "./texts/AppText";
 
 
 export default function ExamLobbyHeader(){
-    const { type, label } = useLocalSearchParams<{ type: string; label: string }>();
-    const { data, setValue } = useStorage();
+  const { type, label } = useLocalSearchParams<{ type: string; label: string }>();
+  const { data, setValue } = useStorage();
 
-    return (
-        <View style={styles.header}>
-            <AppText variant='title'>{label}</AppText>
-            <View >
-                <AppText variant='tag'>{data.jlptLevel}</AppText>
-            </View>
-        </View>
-    );
+  return (
+    <View style={styles.header}>
+      <AppText variant='title'>{label}</AppText>
+      <View >
+        <AppText variant='tag'>{data.jlptLevel}</AppText>
+      </View>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({

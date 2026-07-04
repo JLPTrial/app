@@ -4,11 +4,11 @@ type distributionByLevel = {
 };
 
 export const questionsDistribution : distributionByLevel[] = [
-    {
-        level: 'N5',
-        distribution: [
-            6, 5, 4, 7, 5, 7, 6, 6,
-            5, 5, 2, 4, 3, 6, 3, 3
-        ]
-    }
+  {
+    level: 'N5',
+    distribution: [
+      6, 5, 4, 7, 5, 7, 6, 6,
+      5, 5, 2, 4, 3, 6, 3, 3
+    ]
+  }
 ];

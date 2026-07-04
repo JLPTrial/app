@@ -303,7 +303,7 @@ export function useQuestions(level: JLPTLevel) {
       await db.runAsync(query, `${score}`, `${totalQuestions}`, `${correctAnswers}`, `${startedAt}`, approved ? '1' : '0', `${jlptLevel}`);
 
       return true;
-    } catch (e){
+    } catch {
       return false;
     }
   };
@@ -314,10 +314,9 @@ export function useQuestions(level: JLPTLevel) {
     try {
       
       const exam_attempt : ExamAttempt | null = await db.getFirstAsync(query);
-      if (! exam_attempt) console.log("Aqui")
+      if (! exam_attempt) console.log("Aqui");
       return exam_attempt;
-    } catch (e) {
-      console.log(e)
+    } catch {
       return null;
     }
 
