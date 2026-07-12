@@ -1,12 +1,26 @@
 import { useStorage } from '@/hooks/useStorage';
 import { ColorScheme, darkColors, lightColors } from '@/styles/globals';
+import { Storage } from 'expo-sqlite/kv-store';
 import { createContext, PropsWithChildren, useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { Animated } from 'react-native';
+import { Animated, Appearance } from 'react-native';
 
-const ThemeDisplayContext = createContext<ColorScheme>(lightColors);
+const ThemeDisplayContext = createContext<ColorScheme | null>(null);
+
+function getPreContextColors(): ColorScheme {
+  try {
+    const stored = Storage.getItemSync('theme');
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      if (parsed === 'dark') return darkColors;
+      if (parsed === 'light') return lightColors;
+    }
+  } catch {}
+  return Appearance.getColorScheme() === 'dark' ? darkColors : lightColors;
+}
 
 export function useDisplayColors(): ColorScheme {
-  return useContext(ThemeDisplayContext);
+  const contextColors = useContext(ThemeDisplayContext);
+  return contextColors ?? getPreContextColors();
 }
 
 export default function ThemeTransition({ children }: PropsWithChildren) {
@@ -32,7 +46,7 @@ export default function ThemeTransition({ children }: PropsWithChildren) {
 
   return (
     <ThemeDisplayContext.Provider value={displayedColors}>
-      <Animated.View style={{ flex: 1, opacity }}>
+      <Animated.View style={{ flex: 1, opacity, backgroundColor: displayedColors.background }}>
         {children}
       </Animated.View>
     </ThemeDisplayContext.Provider>

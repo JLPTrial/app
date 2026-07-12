@@ -1,23 +1,9 @@
-import { darkColors, lightColors } from '@/styles/globals';
+import { useDisplayColors } from '@/components/ThemeTransition';
 import { Image } from 'expo-image';
-import { Storage } from 'expo-sqlite/kv-store';
-import { Appearance, StyleSheet, Text, View } from 'react-native';
-
-// A tela de loading pode ser chamada antes do StorageProvider ser chamado
-function getColorsBeforeContext() {
-  try {
-    const stored = Storage.getItemSync('theme');
-    if (stored) {
-      const parsed = JSON.parse(stored);
-      if (parsed === 'dark') return darkColors;
-      if (parsed === 'light') return lightColors;
-    }
-  } catch {}
-  return Appearance.getColorScheme() === 'dark' ? darkColors : lightColors;
-}
+import { StyleSheet, Text, View } from 'react-native';
 
 export default function Loading() {
-  const colors = getColorsBeforeContext();
+  const colors = useDisplayColors();
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
