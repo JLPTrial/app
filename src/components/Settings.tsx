@@ -1,4 +1,4 @@
-import { colors } from '@/styles/globals';
+import { useTheme } from '@/hooks/useTheme';
 import { Icon } from './Icon';
 import Slider from '@react-native-community/slider';
 import { Alert, Linking, Pressable, StyleSheet, View } from 'react-native';
@@ -40,7 +40,9 @@ type CardProps = {
   children: React.ReactNode,
 }
 
-export function SwitchSetting({ icon, furigana, title, color = colors.textDark, value, onChange }: SwitchProps) {
+export function SwitchSetting({ icon, furigana, title, color, value, onChange }: SwitchProps) {
+  const { colors } = useTheme();
+  const iconColor = color || colors.textDark;
 
   return (
     <View style={styles.horizontal}>
@@ -48,7 +50,7 @@ export function SwitchSetting({ icon, furigana, title, color = colors.textDark, 
         name={icon}
         furigana={furigana}
         size={32}
-        color={color}
+        color={iconColor}
       />
 
       <AppText style={styles.switchTitle}>{title}</AppText>
@@ -63,6 +65,7 @@ export function SwitchSetting({ icon, furigana, title, color = colors.textDark, 
 
 export function SliderSetting({ title, icon, value, onChange, min, max, step = 0,
   left, right, marker = 'None' }: SliderProps) {
+  const { colors } = useTheme();
 
   return (
     <View>
@@ -97,6 +100,7 @@ export function SliderSetting({ title, icon, value, onChange, min, max, step = 0
 }
 
 export function ActionSetting({ icon, title, url }: ActionProps) {
+  const { colors } = useTheme();
   const handlePress = useCallback(async () => {
     try {
       const isSupported = await Linking.canOpenURL(url);
@@ -128,32 +132,38 @@ export function ActionSetting({ icon, title, url }: ActionProps) {
 }
 
 export function SettingCard({ title, children }: CardProps) {
+  const { colors } = useTheme();
   const setting = React.Children.toArray(children);
   return (
     <View style={styles.container}>
-      <AppText bold style={{marginBottom:5}}>{title}</AppText>
+      <AppText bold style={{ marginBottom: 5, color: colors.textDark }}>{title}</AppText>
 
-      <View style={styles.card}>
-        {setting.map((child, index) =>
-          (
-            <View key={index} style={[(index < setting.length - 1) && styles.line]}>
+      <View style={[styles.card, { backgroundColor: colors.background }]}>
+        {setting.map((child, index) => {
+          const isNotLast = index < setting.length - 1;
+          return (
+            <View 
+              key={index} 
+              style={[
+                isNotLast && styles.line, 
+                isNotLast && { borderColor: colors.border }
+              ]}
+            >
               {child}
             </View>
-          ))
-        }
+          );
+        })}
       </View>
     </View>
   );
 }
-
-
 
 const styles = StyleSheet.create({
   container: {
     flex:1,
     width: '100%',
   },
-  horizontal:{
+  horizontal: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
@@ -162,7 +172,6 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 30,
     gap: 20,
-    backgroundColor: colors.background,
   },
   slider: {
     paddingVertical: 20,
@@ -177,6 +186,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingBottom: 16,
     borderBottomWidth: 1,
-    borderColor: colors.border,
   }
 });

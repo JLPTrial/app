@@ -1,4 +1,4 @@
-import { colors } from "@/styles/globals";
+import { useTheme } from '@/hooks/useTheme';
 import { StyleSheet, View } from 'react-native';
 
 export type MarkerType = keyof typeof Marker;
@@ -9,13 +9,18 @@ type DotProps = {
   borderColor?: string,
 }
 
-const Dot = ({ index, currentValue, borderColor = colors.background}: DotProps) => {
-  return <View
-    style={[styles.dot, {
-      backgroundColor: (index <= currentValue) ? colors.primary : colors.textMuted,
-      borderColor: borderColor,
-    }]}
-  />;
+const Dot = ({ index, currentValue, borderColor }: DotProps) => {
+  const { colors } = useTheme();
+  const resolvedBorderColor = borderColor || colors.background;
+
+  return (
+    <View
+      style={[styles.dot, {
+        backgroundColor: (index <= currentValue) ? colors.primary : colors.textMuted,
+        borderColor: resolvedBorderColor,
+      }]}
+    />
+  );
 };
 
 const None = () => <View />;
