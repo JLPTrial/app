@@ -9,6 +9,12 @@ module.exports = defineConfig([
     rules: {
       'indent': ['error', 2],
       'semi': ['error', 'always'],
+      'no-multi-spaces': ['error', { 
+        exceptions: { 
+          'IfStatement': true,
+        },
+        ignoreEOLComments: true
+      }],
     },
   },
 ]);
