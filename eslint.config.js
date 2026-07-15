@@ -15,6 +15,7 @@ module.exports = defineConfig([
         },
         ignoreEOLComments: true
       }],
+      'no-trailing-spaces': ['error'],
     },
   },
 ]);
