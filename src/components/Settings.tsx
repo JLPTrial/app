@@ -62,7 +62,7 @@ export function SwitchSetting({ icon, furigana, title, color = colors.textDark, 
 }
 
 export function SliderSetting({ title, icon, value, onChange, min, max, step = 0,
-  left, right, marker = 'none' }: SliderProps) {
+  left, right, marker = 'None' }: SliderProps) {
 
   return (
     <View>
@@ -87,7 +87,7 @@ export function SliderSetting({ title, icon, value, onChange, min, max, step = 0
           minimumTrackTintColor={colors.primaryLight}
           maximumTrackTintColor={colors.textMuted}
           StepMarker={Marker[marker]}
-          thumbTintColor={(marker === 'none') ? colors.primary : 'transparent'}
+          thumbTintColor={(marker === 'None') ? colors.primary : 'transparent'}
           style={styles.slider}
         />
         {right}

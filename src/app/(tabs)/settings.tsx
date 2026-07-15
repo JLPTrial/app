@@ -35,7 +35,7 @@ export default function SettingsScreen() {
           min={0}
           step={1}
           max={3}
-          marker={'dot'}
+          marker={'Dot'}
         />
       </SettingCard>
 
