@@ -15,8 +15,8 @@ interface BottomButtonProps {
 const BottomButton = ({ onPress, text, disabled, style, textStyle, toFlex=true }: BottomButtonProps) => {
   return (
     <View style={[styles.footer, !toFlex && { flex: 0 }]}>
-      <Pressable 
-        style={[styles.startButton, style]} 
+      <Pressable
+        style={[styles.startButton, style]}
         onPress={onPress}
         disabled={disabled}
       >

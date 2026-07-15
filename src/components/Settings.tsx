@@ -75,7 +75,7 @@ export function SliderSetting({ title, icon, value, onChange, min, max, step = 0
 
         <AppText style={styles.switchTitle}>{title}</AppText>
       </View>
-      
+
       <View>
         {left}
         <Slider

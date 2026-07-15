@@ -8,9 +8,9 @@ type CardProps = {
 };
 
 export default function Card({ title, onPress, style} : CardProps){
-     
+
   return (
-    <Pressable  onPress={onPress}
+    <Pressable onPress={onPress}
       style={[{
         justifyContent: 'center',
         alignItems: 'center',
@@ -19,7 +19,7 @@ export default function Card({ title, onPress, style} : CardProps){
       }, style]}>
 
       {title && <Text style={[{color: 'white'}, textStyles.title]}>{ title }</Text>}
-            
+
     </Pressable>
   );
 }

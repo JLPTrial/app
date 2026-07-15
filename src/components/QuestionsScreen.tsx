@@ -69,7 +69,7 @@ const buttonStyle = {
 };
 
 const textStyle = {
-  confirm:  {  },
+  confirm:  { },
   continue: { color: colors.textLight, },
   disabled: { color: colors.textMuted, },
 };

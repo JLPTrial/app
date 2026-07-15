@@ -3,8 +3,7 @@ import { AppText } from "./texts/AppText";
 import { WithLocalSvg } from 'react-native-svg/css';
 import Statement from './texts/Statement';
 import { View } from 'react-native';
-import { VibrateIcon, TextAaIcon } from 'phosphor-react-native';
-import type { IconProps } from 'phosphor-react-native';
+import { VibrateIcon, TextAaIcon, IconProps } from 'phosphor-react-native';
 
 type ionicon = keyof typeof Ionicons.glyphMap;
 

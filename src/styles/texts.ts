@@ -33,7 +33,7 @@ export const textStyles = StyleSheet.create({
     fontWeight: 'bold',
   },
   reading: {
-    // Estilo específico para os blocos de texto maiores 
+    // Estilo específico para os blocos de texto maiores
     color: colors.textDark,
   },
   graphText: {
