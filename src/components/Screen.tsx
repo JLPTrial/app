@@ -11,20 +11,20 @@ type ScreenProps = PropsWithChildren<{
 export default function Screen({ children, style, withBottomTab = false } : ScreenProps){
 
   return (
-    <SafeAreaView 
+    <SafeAreaView
       edges={
         withBottomTab
           ? ['left', 'right', 'top']
           : ['left', 'right', 'top', 'bottom']
       }
       style={{flex: 1, backgroundColor: colors.background }}>
-      <ScrollView contentContainerStyle={[{ 
+      <ScrollView contentContainerStyle={[{
         flexGrow: 1,
         alignItems: 'center',
         paddingHorizontal: 24,
         paddingBottom: 20,
         gap: 20,
-                
+
       }, style]}>
 
         {children}

@@ -28,7 +28,7 @@ export const colors = {
   graphInner: '#CBD4ED',     // Interior do gráfico de estatísticas
   graphBorder: '#0261D2',    // Bordas do gráfico de estatísticas
   graphText: '#0b3894',      // Texto em volta do gráfico de estatísticas
-  evaluation: '#0261D2',     // Títulos e subtítulos de evaluation/advice da aba de estatística, lista do curso   
+  evaluation: '#0261D2',     // Títulos e subtítulos de evaluation/advice da aba de estatística, lista do curso
   explanation: '#E967B3',    // Botão de explicação
   readingMenuBox: '#B147AB', // Caixa de leitura e de compreensão do menu
   grammar: '#a2a',           // Cor de destaque das questões de gramática

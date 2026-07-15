@@ -48,8 +48,8 @@ type FuriganaProps = {
 function Furigana({ kanji, furigana, fontSize, appTextProps }: FuriganaProps) {
   return (
     <View style={styles.furiganaContainer}>
-      <AppText 
-        {...appTextProps} 
+      <AppText
+        {...appTextProps}
         style={[appTextProps.style, styles.furiganaText, { top: 1, fontSize: fontSize * 0.6, lineHeight: fontSize }]}
       >
         {furigana}
@@ -86,10 +86,10 @@ export default function Statement({ statement, ...appTextProps }: StatementProps
   const lineThickness = Math.max(0.2 * vh, scale * (0.2 * vh));
 
   return (
-    <AppText 
+    <AppText
       {...appTextProps}
       style={[
-        { textAlign: 'justify', lineHeight: 1.8*fontSize }, 
+        { textAlign: 'justify', lineHeight: 1.8*fontSize },
         center && { textAlign: 'center' },
         appTextProps.style
       ]}
@@ -105,7 +105,7 @@ export default function Statement({ statement, ...appTextProps }: StatementProps
               {" "}
             </AppText>
           );
-        
+
         if (token === "[star_underline_blank]")
           return (
             <AppText key={index}>
@@ -125,12 +125,12 @@ export default function Statement({ statement, ...appTextProps }: StatementProps
           const prefix = token.slice(0, bracketIndex);
           const bracket = token.slice(bracketIndex);
           return (
-            <Furigana 
-              key={index} 
-              kanji={prefix} 
-              furigana={bracket.slice(1, -1)} 
+            <Furigana
+              key={index}
+              kanji={prefix}
+              furigana={bracket.slice(1, -1)}
               fontSize={fontSize}
-              appTextProps={appTextProps} 
+              appTextProps={appTextProps}
             />
           );
         }
@@ -146,15 +146,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
   },
   star_underline_blank: {
-    alignItems: 'center', 
+    alignItems: 'center',
     justifyContent: 'flex-end'
   },
   underlined: {
-    alignItems: 'center', 
+    alignItems: 'center',
     justifyContent: 'flex-end'
   },
   furiganaContainer: {
-    justifyContent: 'flex-end', 
+    justifyContent: 'flex-end',
     alignItems: 'center',
   },
   furiganaText: {

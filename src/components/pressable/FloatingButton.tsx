@@ -36,7 +36,7 @@ export default function FloatingButton({ options, defaultValue, onPress} : Float
       )}
     </View>
   );
-    
+
 }
 
 const styles = StyleSheet.create({
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
   button: {
     height: 50,
     width: 50,
-    borderRadius: 30, 
+    borderRadius: 30,
     backgroundColor: 'rgba(238, 36, 36, 1)',
     justifyContent: 'center',
     alignItems: 'center'
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
   option: {
     height: 50,
     width: 50,
-    borderRadius: 30, 
+    borderRadius: 30,
     backgroundColor: '#eee',
     justifyContent: 'center',
     alignItems: 'center'

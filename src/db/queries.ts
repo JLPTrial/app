@@ -3,7 +3,7 @@ import { useSQLiteContext } from 'expo-sqlite';
 
 export type AnsweredStatus = 'answered' | 'unanswered' | 'all';
 
-// For now, has no utility beside telling the whereClause to 
+// For now, has no utility beside telling the whereClause to
 // not use JLPTLevel database.
 const UserDB = "UserDB";
 

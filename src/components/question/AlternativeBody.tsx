@@ -51,7 +51,7 @@ const buttonStyle = {
 const textStyle = {
   right:    { color: colors.success, },
   wrong:    { color: colors.error, },
-  pressed:  {  },
+  pressed:  { },
   chosen:   { color: '#1D4ED8', },
   disabled: { color: colors.textMuted, },
 };

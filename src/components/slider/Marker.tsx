@@ -5,7 +5,7 @@ export type MarkerType = keyof typeof Marker;
 
 type DotProps = {
   index: number,
-  currentValue: number, 
+  currentValue: number,
   borderColor?: string,
 }
 
