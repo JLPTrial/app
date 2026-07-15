@@ -168,19 +168,19 @@ export function useQuestions(level: JLPTLevel) {
 		AND answered_questions.jlpt_level = '${level}'`;
 
   const selectQuestions = async (whereClause?: WhereClause, order: Order = Order.RANDOM, limit: number = -1): Promise<Question[]> => {
-   
+
     const hasCondition = (whereClause !== undefined);
 
     const where = (hasCondition) ? `WHERE ${whereClause.getClauses()}` : ``;
-    
+
     const query = `${queryBase} ${where} GROUP BY ${level}.questions.id ORDER BY ${order} LIMIT ${limit}`;
 
     const values = (hasCondition) ? whereClause.getValues() : {};
 
     const results: QuestionQuery[] = await db.getAllAsync<QuestionQuery>(query, values);
-    
+
     const questions: Question[] = results.map((result) => formatQuestion(result, level));
-    
+
     return questions;
   };
 

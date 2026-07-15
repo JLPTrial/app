@@ -9,7 +9,7 @@ import { useUserDatabase } from '@/db/insertions';
 export default function QuestionSession({ onFinish, sessionType }: { onFinish: any, sessionType: string }) {
   const { data } = useStorage();
 
-  
+
   const questions = data.questionsSession;
 
   const [index, setIndex] = useState<number>(data.questionIndexSession);
