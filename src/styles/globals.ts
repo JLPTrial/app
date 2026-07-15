@@ -28,7 +28,7 @@ export const lightColors = {
   graphInner: '#CBD4ED',          // Interior do gráfico de estatísticas
   graphBorder: '#0261D2',         // Bordas do gráfico de estatísticas
   graphText: '#0B3894',           // Texto em volta do gráfico de estatísticas
-  evaluation: '#0261D2',          // Títulos e subtítulos de evaluation/advice da aba de estatística, lista do curso   
+  evaluation: '#0261D2',          // Títulos e subtítulos de evaluation/advice da aba de estatística, lista do curso
   explanation: '#E967B3',         // Botão de explicação
   readingMenuBox: '#B147AB',      // Caixa de leitura e de compreensão do menu
   grammar: '#AA22AA',             // Cor de destaque das questões de gramática
@@ -67,7 +67,7 @@ export const darkColors = {
   graphInner: '#1E2D47',          // Interior do gráfico de estatísticas
   graphBorder: '#0261D2',         // Bordas do gráfico de estatísticas
   graphText: '#6699CC',           // Texto em volta do gráfico de estatísticas
-  evaluation: '#6699CC',          // Títulos e subtítulos de evaluation/advice da aba de estatística, lista do curso   
+  evaluation: '#6699CC',          // Títulos e subtítulos de evaluation/advice da aba de estatística, lista do curso
   explanation: '#E967B3',         // Botão de explicação
   readingMenuBox: '#B147AB',      // Caixa de leitura e de compreensão do menu
   grammar: '#BB44BB',             // Cor de destaque das questões de gramática

@@ -142,10 +142,10 @@ export function SettingCard({ title, children }: CardProps) {
         {setting.map((child, index) => {
           const isNotLast = index < setting.length - 1;
           return (
-            <View 
-              key={index} 
+            <View
+              key={index}
               style={[
-                isNotLast && styles.line, 
+                isNotLast && styles.line,
                 isNotLast && { borderColor: colors.border }
               ]}
             >
