@@ -6,7 +6,7 @@ export type MarkerType =  keyof typeof Marker;
 type dotProps = {
   index: number,
   currentValue: number, 
-  borderColor: string,
+  borderColor?: string,
 }
 
 const dot = ({ index, currentValue, borderColor = colors.background}: dotProps) => {
