@@ -5,7 +5,7 @@ import { StyleSheet, View } from 'react-native';
 export default function Header( {title} : {title : string}) {
   return (
     <View style={[styles.header, { backgroundColor: colors.primary }]}>
-      <AppText style={{ color: colors.textLight }} center bold> {title} </AppText>
+      <AppText variant="title" style={{ color: colors.textLight }} center> {title} </AppText>
     </View>
   );
 }
