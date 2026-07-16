@@ -31,9 +31,7 @@ function StarUnderlineBlank({ color, width, fontSize, thickness }: { color: stri
 
 function Underlined({ children, appTextProps }: PropsWithChildren<{appTextProps: Omit<AppTextProps, 'children'> }>) {
   return (
-    <View style={styles.underlined}>
-      <AppText underlining {...appTextProps}>{children}</AppText>
-    </View>
+    <AppText underlining {...appTextProps}>{children}</AppText>
   );
 }
 
@@ -145,10 +143,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
   },
   star_underline_blank: {
-    alignItems: 'center',
-    justifyContent: 'flex-end'
-  },
-  underlined: {
     alignItems: 'center',
     justifyContent: 'flex-end'
   },
