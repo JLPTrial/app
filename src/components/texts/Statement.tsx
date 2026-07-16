@@ -31,7 +31,9 @@ function StarUnderlineBlank({ color, width, fontSize, thickness }: { color: stri
 
 function Underlined({ children, appTextProps }: PropsWithChildren<{appTextProps: Omit<AppTextProps, 'children'> }>) {
   return (
-    <AppText underlining {...appTextProps}>{children}</AppText>
+    <AppText underlining {...appTextProps}>
+      {children}
+    </AppText>
   );
 }
 
