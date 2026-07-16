@@ -29,11 +29,10 @@ function StarUnderlineBlank({ color, width, fontSize, thickness }: { color: stri
   );
 }
 
-function Underlined({ children, color, lineThickness, appTextProps }: PropsWithChildren<{ color: string, lineThickness: number, appTextProps: Omit<AppTextProps, 'children'> }>) {
+function Underlined({ children, appTextProps }: PropsWithChildren<{appTextProps: Omit<AppTextProps, 'children'> }>) {
   return (
     <View style={styles.underlined}>
-      <AppText style={{ top: 4.5 * lineThickness }} {...appTextProps}>{children}</AppText>
-      <View style={{ top: 4.5 * lineThickness, width: '100%', borderBottomWidth: lineThickness, borderBottomColor: color }} />
+      <AppText underlining {...appTextProps}>{children}</AppText>
     </View>
   );
 }
@@ -116,7 +115,7 @@ export default function Statement({ statement, ...appTextProps }: StatementProps
           );
         if (token.startsWith("{"))
           return (
-            <Underlined key={index} color={color} lineThickness={lineThickness} appTextProps={appTextProps}>
+            <Underlined key={index} appTextProps={appTextProps}>
               {token.slice(1, -1)}
             </Underlined>
           );
