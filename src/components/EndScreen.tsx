@@ -9,7 +9,7 @@ import ResultCard from './ResultCard';
 
 export default function EndScreen({ result }: { result: SessionResult }) {
   const colors = useColors();
-  const percentage = result.total.total > 0 ? Math.round((result.right.total / result.total.total) * 100) : 0;
+  const percentage = result.questionCount.total > 0 ? Math.round((result.right.total / result.questionCount.total) * 100) : 0;
   const scoreColor =
         percentage >= 70 ? colors.success :
           percentage >= 50 ? colors.mid :
@@ -26,7 +26,7 @@ export default function EndScreen({ result }: { result: SessionResult }) {
                 Sessão Concluída!
       </AppText>
 
-      <ResultCard label={''} right={result.right.total} total={result.total.total}/>
+      <ResultCard label={''} right={result.right.total} total={result.questionCount.total}/>
 
       <AppText center={true}>
         {feedbackText}

@@ -11,7 +11,7 @@ export default function ExamEndScreen({ result, startedAt }: { result: SessionRe
   const { data } = useStorage();
   const level = data.jlptLevel;
 
-  const percentage = result.total.total > 0 ? Math.round((result.right.total / result.total.total) * 100) : 0;
+  const percentage = result.questionCount.total > 0 ? Math.round((result.right.total / result.questionCount.total) * 100) : 0;
   const feedbackText =
         percentage >= 90 ? 'おめでとう! Desempenho excelente.' :
           percentage >= 70 ? 'Ótimo desempenho!' :
@@ -35,7 +35,7 @@ export default function ExamEndScreen({ result, startedAt }: { result: SessionRe
 
   const db = useQuestions(level);
 
-  db.insertExam(result.right.total, result.total.total, result.right.total, startedAt, approved, level);
+  db.insertExam(result.right.total, result.questionCount.total, result.right.total, startedAt, approved, level);
 
   return (
     <Screen>
@@ -49,7 +49,7 @@ export default function ExamEndScreen({ result, startedAt }: { result: SessionRe
             key={key}
             label={label} 
             right={result.right[key]} 
-            total={result.total[key]}/>
+            total={result.questionCount[key]}/>
         )
       }
 

@@ -35,7 +35,7 @@ export interface SessionResult {
     reading: number,
 	listening: number
   };
-  total: {
+  questionCount: {
     total: number,
     kanji: number,
     vocabulary: number,
