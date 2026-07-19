@@ -139,7 +139,7 @@ export function useQuestions(level: JLPTLevel) {
     ${level}.questions.question_type as questionType,
     ${level}.media.image_file_path as imagePath,
     ${level}.media.audio_file_path as audioPath,
-    ${level}.statement.question_command as questionCommand,
+    ${level}.commands.question_command as questionCommand,
     ${level}.contextual_texts.contextual_text as contextualText,
     ${level}.alternatives.id as alternativeId,
     ${level}.alternatives.alternative_1 as alternative1,
@@ -155,8 +155,8 @@ export function useQuestions(level: JLPTLevel) {
         ON ${level}.questions.alternative_id = ${level}.alternatives.id 
       LEFT JOIN ${level}.media
         ON ${level}.questions.media_id = ${level}.media.id
-      INNER JOIN ${level}.statement
-        ON ${level}.questions.statement_id = ${level}.statement.id 
+      INNER JOIN ${level}.commands
+        ON ${level}.questions.command_id = ${level}.commands.id
       LEFT JOIN ${level}.contextual_texts
         ON ${level}.media.contextual_text_id = ${level}.contextual_texts.id
       LEFT JOIN ${level}.question_tags
