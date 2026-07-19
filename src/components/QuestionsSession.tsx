@@ -1,5 +1,6 @@
 import Screen from '@/components/Screen';
 import { useStorage } from '@/hooks/useStorage';
+import { secondsToTimer } from '@/utils/parsers';
 import { useEffect, useRef, useState } from 'react';
 import { Alert } from 'react-native';
 import QuestionScreen from './QuestionsScreen';
@@ -30,16 +31,6 @@ export default function QuestionSession({ onFinish, sessionType }: { onFinish: a
 
     return () => clearInterval(interval);
   }, []);
-
-  const formatTime = (totalSeconds: number) => {
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor(totalSeconds%3600 / 60);
-    const secs = totalSeconds%3600 % 60;
-
-    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs
-      .toString()
-      .padStart(2, '0')}`;
-  };
 
   if (!seconds) {
     Alert.alert("O tempo acabou");
@@ -89,7 +80,7 @@ export default function QuestionSession({ onFinish, sessionType }: { onFinish: a
   return (
     <Screen>
       <AppText style={{ fontSize: 20, textAlign: 'center' }}>
-        ⏱ {formatTime(seconds)}
+        ⏱ {secondsToTimer(seconds)}
       </AppText>
       <AppText>{sessionType} - Questão {index + 1}/{questions.length}</AppText>
       <QuestionScreen question={question} onNextQuestion={handleNextQuestion}></QuestionScreen>
