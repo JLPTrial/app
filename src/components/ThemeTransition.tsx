@@ -2,7 +2,7 @@ import { useStorage } from '@/hooks/useStorage';
 import { ColorScheme, darkColors, lightColors } from '@/styles/globals';
 import { Storage } from 'expo-sqlite/kv-store';
 import { createContext, PropsWithChildren, useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { Animated, Appearance } from 'react-native';
+import { Animated, Appearance, StyleSheet, View } from 'react-native';
 
 const ThemeDisplayContext = createContext<ColorScheme | null>(null);
 
@@ -27,26 +27,35 @@ export default function ThemeTransition({ children }: PropsWithChildren) {
   const resolveColors = useCallback((dark: boolean) => dark ? darkColors : lightColors, []);
 
   const [displayedColors, setDisplayedColors] = useState<ColorScheme>(() => resolveColors(isDarkMode));
-  const opacity = useRef(new Animated.Value(1)).current;
+  const [overlayColor, setOverlayColor] = useState<string | null>(null);
+  const overlayOpacity = useRef(new Animated.Value(0)).current;
   const prevIsDarkMode = useRef(isDarkMode);
 
   useEffect(() => {
     if (prevIsDarkMode.current === isDarkMode) return;
     prevIsDarkMode.current = isDarkMode;
 
-    Animated.timing(opacity, { toValue: 0, duration: 150, useNativeDriver: true })
+    setOverlayColor(displayedColors.background);
+    setDisplayedColors(resolveColors(isDarkMode));
+    overlayOpacity.setValue(1);
+
+    Animated.timing(overlayOpacity, { toValue: 0, duration: 300, useNativeDriver: true })
       .start(({ finished }) => {
-        if (!finished) return;
-        setDisplayedColors(resolveColors(isDarkMode));
-        Animated.timing(opacity, { toValue: 1, duration: 250, useNativeDriver: true }).start();
+        if (finished) setOverlayColor(null);
       });
-  }, [isDarkMode, opacity, resolveColors]);
+  }, [isDarkMode, overlayOpacity, resolveColors, displayedColors.background]);
 
   return (
     <ThemeDisplayContext.Provider value={displayedColors}>
-      <Animated.View style={{ flex: 1, opacity, backgroundColor: displayedColors.background }}>
+      <View style={{ flex: 1, backgroundColor: displayedColors.background }}>
         {children}
-      </Animated.View>
+        {overlayColor && (
+          <Animated.View
+            pointerEvents="none"
+            style={[StyleSheet.absoluteFill, { backgroundColor: overlayColor, opacity: overlayOpacity }]}
+          />
+        )}
+      </View>
     </ThemeDisplayContext.Provider>
   );
 }
