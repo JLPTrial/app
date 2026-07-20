@@ -11,10 +11,6 @@ export const lightColors = {
   background: '#FAFAFA',          // Fundo padrão
   backgroundDim: '#EDEDED',       // Fundo secundário de menor contraste
   surface: '#F1F4F6',             // Círculo das alternativas inativas
-  selected: '#FFE6E6',            // Círculo externo da alternativa ativa
-  selectedDark: '#EA909C',        // Círculo interno da alternativa ativa
-  highlight: '#FFEEFF',           // Fundo dos blocos de texto de leitura
-  highlightDark: '#FFCCCC',       // Fundo do bloco alvo dentro do texto de leitura
   textDark: '#212121',            // Textos principais (quase preto para boa legibilidade)
   textMuted: '#757575',           // Textos secundários, tab inativa
   textLight: '#FAFAFA',           // Textos dos headers das questões e das tags
@@ -30,7 +26,6 @@ export const lightColors = {
   graphText: '#0B3894',           // Texto em volta do gráfico de estatísticas
   evaluation: '#0261D2',          // Títulos e subtítulos de evaluation/advice da aba de estatística, lista do curso
   explanation: '#E967B3',         // Botão de explicação
-  readingMenuBox: '#B147AB',      // Caixa de leitura e de compreensão do menu
   grammar: '#AA22AA',             // Cor de destaque das questões de gramática
   vocabulary: '#DD2222',          // Cor de destaque das questões de vocabulário
   reading: '#22BB77',             // Cor de destaque das questões de leitura
@@ -50,10 +45,6 @@ export const darkColors = {
   background: '#121212',          // Fundo padrão
   backgroundDim: '#1E1E1E',       // Fundo secundário de menor contraste
   surface: '#1E1E1E',             // Círculo das alternativas inativas
-  selected: '#3A1A1A',            // Círculo externo da alternativa ativa
-  selectedDark: '#7A3A40',        // Círculo interno da alternativa ativa
-  highlight: '#1E1A1E',           // Fundo dos blocos de texto de leitura
-  highlightDark: '#2E1A1A',       // Fundo do bloco alvo dentro do texto de leitura
   textDark: '#E1E1E1',            // Textos principais
   textMuted: '#9E9E9E',           // Textos secundários, tab inativa
   textLight: '#FAFAFA',           // Textos dos headers das questões e das tags
@@ -69,7 +60,6 @@ export const darkColors = {
   graphText: '#6699CC',           // Texto em volta do gráfico de estatísticas
   evaluation: '#6699CC',          // Títulos e subtítulos de evaluation/advice da aba de estatística, lista do curso
   explanation: '#E967B3',         // Botão de explicação
-  readingMenuBox: '#B147AB',      // Caixa de leitura e de compreensão do menu
   grammar: '#BB44BB',             // Cor de destaque das questões de gramática
   vocabulary: '#EE4444',          // Cor de destaque das questões de vocabulário
   reading: '#44CC88',             // Cor de destaque das questões de leitura
