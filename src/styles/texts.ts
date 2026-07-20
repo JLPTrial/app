@@ -25,23 +25,10 @@ export const textStyles = StyleSheet.create({
   tag: {
     // Estilo das tags, dos headers das questões, do botão de explicação (aba de estatísticas) e da lista do curso
   },
-  question: {
-    // Estilo da primeira parte das questões (a parte em negrito)
-    fontWeight: 'bold',
-  },
-  reading: {
-    // Estilo específico para os blocos de texto maiores
-  },
   graphText: {
     // Estilo usado no gráfico das estatísticas
     fontWeight: 'bold',
   },
-  success: {
-    // Estilo utilizado para mostrar a quantidade de questões corretas
-    fontSize: 6.5 * vw,
-    fontWeight: 'bold',
-  },
-  answer: {},
   bold: {
     fontWeight: 'bold',
   },
@@ -57,7 +44,6 @@ const variantColorMap = (colors: ColorScheme): Partial<Record<string, string>> =
   statSubtitle: colors.evaluation,
   tag: colors.textLight,
   graphText: colors.graphText,
-  success: colors.success,
 });
 
 export function getVariantColor(colors: ColorScheme, variant: string): string {
