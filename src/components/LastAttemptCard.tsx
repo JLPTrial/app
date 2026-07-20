@@ -1,6 +1,7 @@
 import { useQuestions } from "@/db/queries";
 import { useStorage } from "@/hooks/useStorage";
 import { ExamAttempt } from "@/types/types";
+import { secondsToTimer } from "@/utils/parsers";
 import { useEffect, useState } from "react";
 import { View } from "react-native";
 import ResultCard from "./ResultCard";
@@ -23,13 +24,18 @@ export default function LastAttemptCard(){
   }, []);
 
   if (!lastExam) return <AppText>Nenhum simulado realizado.</AppText>;
-    
-  const date = new Date(Number(lastExam.started_at)).toLocaleString();
+
+  const durationMs =
+    Number(lastExam.finished_at) - Number(lastExam.started_at);
+
+  const durationSeconds = Math.floor(durationMs / 1000);
+
+  const duration = secondsToTimer(durationSeconds);
 
   return (
     <View>
       <AppText>Dados da Última Tentativa:</AppText>
-      <ResultCard label={date} right={lastExam.correct_answers} total={lastExam.total_questions}/>
+      <ResultCard label={duration} right={lastExam.correct_answers} total={lastExam.total_questions}/>
     </View>
   );
 }

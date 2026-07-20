@@ -1,5 +1,6 @@
 import ExamEndScreen from '@/components/ExamEndScreen';
 import QuestionsSession from '@/components/QuestionsSession';
+import { useStorage } from '@/hooks/useStorage';
 import { SessionResult } from '@/types/types';
 import { useLocalSearchParams } from 'expo-router';
 import { useRef, useState } from 'react';
@@ -8,6 +9,7 @@ import EndScreen from '../components/EndScreen';
 
 export default function SessionHandler() {
   const { label } = useLocalSearchParams<{ label: string }>();
+  const { data } = useStorage();
   const [result, setResult] = useState<SessionResult | null>(null);
 
   const startedAt = useRef(Date.now());
@@ -23,6 +25,7 @@ export default function SessionHandler() {
     <QuestionsSession
       sessionType={label}
       onFinish={(res : SessionResult) => setResult(res)}
+      timer={data.timer}
     />
   );
 }
