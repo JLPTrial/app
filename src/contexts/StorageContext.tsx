@@ -3,8 +3,6 @@ import { Storage } from "expo-sqlite/kv-store";
 import { createContext, PropsWithChildren, useState } from "react";
 import { Appearance } from "react-native";
 
-export type Theme = 'light' | 'dark';
-
 type StorageSchema = {
   jlptLevel: JLPTLevel;
   questionsSession: Question[];
@@ -13,7 +11,7 @@ type StorageSchema = {
   hapticFeedback: boolean;
   fontSize: number;
   volume: number;
-  theme: Theme;
+  isDarkMode: boolean;
 };
 
 const defaultStorage: StorageSchema = {
@@ -24,7 +22,7 @@ const defaultStorage: StorageSchema = {
   hapticFeedback: true,
   fontSize: 0,
   volume: 0,
-  theme: Appearance.getColorScheme() === 'dark' ? 'dark' : 'light',
+  isDarkMode: Appearance.getColorScheme() === 'dark',
 };
 
 type StorageContextType = {

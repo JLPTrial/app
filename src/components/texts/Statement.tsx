@@ -1,4 +1,4 @@
-import { useTheme } from "@/hooks/useTheme";
+import { useColors } from "@/hooks/useTheme";
 import { vh, vw } from "@/styles/globals";
 import statementParser from "@/utils/parsers";
 import { Ionicons } from '@expo/vector-icons';
@@ -63,7 +63,7 @@ function Furigana({ kanji, furigana, fontSize, appTextProps }: FuriganaProps) {
 }
 
 export default function Statement({ statement, ...appTextProps }: StatementProps) {
-  const { colors } = useTheme();
+  const colors = useColors();
   const tokens = statementParser(statement);
 
   const { variant = 'base', answer, bold, underlining, center, style: customStyle } = appTextProps;

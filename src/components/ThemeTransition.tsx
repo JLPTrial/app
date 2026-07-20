@@ -8,11 +8,9 @@ const ThemeDisplayContext = createContext<ColorScheme | null>(null);
 
 function getPreContextColors(): ColorScheme {
   try {
-    const stored = Storage.getItemSync('theme');
-    if (stored) {
-      const parsed = JSON.parse(stored);
-      if (parsed === 'dark') return darkColors;
-      if (parsed === 'light') return lightColors;
+    const stored = Storage.getItemSync('isDarkMode');
+    if (stored !== null) {
+      return JSON.parse(stored) ? darkColors : lightColors;
     }
   } catch {}
   return Appearance.getColorScheme() === 'dark' ? darkColors : lightColors;
@@ -25,24 +23,24 @@ export function useDisplayColors(): ColorScheme {
 
 export default function ThemeTransition({ children }: PropsWithChildren) {
   const { data } = useStorage();
-  const theme = data.theme;
-  const resolveColors = useCallback((t: typeof theme) => t === 'dark' ? darkColors : lightColors, []);
+  const isDarkMode = data.isDarkMode;
+  const resolveColors = useCallback((dark: boolean) => dark ? darkColors : lightColors, []);
 
-  const [displayedColors, setDisplayedColors] = useState<ColorScheme>(() => resolveColors(theme));
+  const [displayedColors, setDisplayedColors] = useState<ColorScheme>(() => resolveColors(isDarkMode));
   const opacity = useRef(new Animated.Value(1)).current;
-  const prevTheme = useRef(theme);
+  const prevIsDarkMode = useRef(isDarkMode);
 
   useEffect(() => {
-    if (prevTheme.current === theme) return;
-    prevTheme.current = theme;
+    if (prevIsDarkMode.current === isDarkMode) return;
+    prevIsDarkMode.current = isDarkMode;
 
     Animated.timing(opacity, { toValue: 0, duration: 150, useNativeDriver: true })
       .start(({ finished }) => {
         if (!finished) return;
-        setDisplayedColors(resolveColors(theme));
+        setDisplayedColors(resolveColors(isDarkMode));
         Animated.timing(opacity, { toValue: 1, duration: 250, useNativeDriver: true }).start();
       });
-  }, [theme, opacity, resolveColors]);
+  }, [isDarkMode, opacity, resolveColors]);
 
   return (
     <ThemeDisplayContext.Provider value={displayedColors}>

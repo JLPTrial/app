@@ -1,4 +1,4 @@
-import { useTheme } from '@/hooks/useTheme';
+import { useColors } from '@/hooks/useTheme';
 import { Ionicons } from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
 import { AudioSource, useAudioPlayer, useAudioPlayerStatus } from 'expo-audio';
@@ -14,7 +14,7 @@ function formatTime(seconds: number): string {
 }
 
 export default function AudioPlayer({ source }: { source: AudioSource }) {
-  const { colors } = useTheme();
+  const colors = useColors();
   const player = useAudioPlayer(source);
   const status = useAudioPlayerStatus(player);
 

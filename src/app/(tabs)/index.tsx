@@ -3,7 +3,7 @@ import FloatingButton from '@/components/pressable/FloatingButton';
 import Screen from '@/components/Screen';
 import { AppText } from '@/components/texts/AppText';
 import { useStorage } from '@/hooks/useStorage';
-import { useTheme } from '@/hooks/useTheme';
+import { useColors } from '@/hooks/useTheme';
 import { vh, vw } from '@/styles/globals';
 import { JLPTLevel } from '@/types/types';
 import { Image } from 'expo-image';
@@ -19,7 +19,7 @@ const levels = [
 
 export default function HomeScreen() {
   const { data, setValue } = useStorage();
-  const { colors } = useTheme();
+  const colors = useColors();
 
   return (
     <Screen withBottomTab>

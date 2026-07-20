@@ -1,4 +1,4 @@
-import { useTheme } from '@/hooks/useTheme';
+import { useColors } from '@/hooks/useTheme';
 import { StyleSheet, View } from 'react-native';
 
 export type MarkerType = keyof typeof Marker;
@@ -10,7 +10,7 @@ type DotProps = {
 }
 
 const Dot = ({ index, currentValue, borderColor }: DotProps) => {
-  const { colors } = useTheme();
+  const colors = useColors();
   const resolvedBorderColor = borderColor || colors.background;
 
   return (

@@ -4,7 +4,7 @@ import Screen from '@/components/Screen';
 import { AppText } from '@/components/texts/AppText';
 import { useQuestions } from '@/db/queries';
 import { useStorage } from '@/hooks/useStorage';
-import { useTheme } from '@/hooks/useTheme';
+import { useColors } from '@/hooks/useTheme';
 import { vh } from '@/styles/globals';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
@@ -15,7 +15,7 @@ const QUESTION_COUNTS = [5, 10, 15, 20];
 export default function SessionLobby() {
   const { type, label } = useLocalSearchParams<{ type: string; label: string }>();
   const { data, setValue } = useStorage();
-  const { colors } = useTheme();
+  const colors = useColors();
   const db = useQuestions(data.jlptLevel);
 
   const [searchQuery, setSearchQuery] = useState('');

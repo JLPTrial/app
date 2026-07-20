@@ -2,12 +2,13 @@ import { StyleSheet } from 'react-native';
 import Screen from '@/components/Screen';
 import { SwitchSetting, SliderSetting, ActionSetting, SettingCard } from '../../components/Settings';
 import { useStorage } from '@/hooks/useStorage';
-import { useTheme } from '@/hooks/useTheme';
+import { useColors, useTheme } from '@/hooks/useTheme';
 import Header from '@/components/containers/headers';
 
 export default function SettingsScreen() {
   const { data, setValue } = useStorage();
-  const { colors, isDarkMode, setTheme } = useTheme();
+  const colors = useColors();
+  const { isDarkMode, setIsDarkMode } = useTheme();
 
   return (
     <Screen style={[styles.container, { backgroundColor: colors.backgroundDim }]} withBottomTab>
@@ -16,7 +17,7 @@ export default function SettingsScreen() {
         <SwitchSetting
           icon={isDarkMode ? 'moon' : 'sunny'}
           title='Modo'
-          onChange={(value) => setTheme(value ? 'dark' : 'light')}
+          onChange={setIsDarkMode}
           value={isDarkMode}
         />
 

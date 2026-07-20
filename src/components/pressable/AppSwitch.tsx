@@ -1,4 +1,4 @@
-import { useTheme } from '@/hooks/useTheme';
+import { useColors } from '@/hooks/useTheme';
 import { Switch } from 'react-native-switch';
 
 type SwitchProps = {
@@ -7,7 +7,7 @@ type SwitchProps = {
 }
 
 export function AppSwitch({ value, onChange }: SwitchProps) {
-  const { colors } = useTheme();
+  const colors = useColors();
   return (
     <Switch
       value={value}

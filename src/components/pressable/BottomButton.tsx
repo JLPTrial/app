@@ -1,5 +1,5 @@
 import { AppText } from '@/components/texts/AppText';
-import { useTheme } from '@/hooks/useTheme';
+import { useColors } from '@/hooks/useTheme';
 import React from 'react';
 import { Pressable, StyleProp, StyleSheet, TextStyle, View, ViewStyle } from 'react-native';
 
@@ -13,7 +13,7 @@ interface BottomButtonProps {
 }
 
 const BottomButton = ({ onPress, text, disabled, style, textStyle, toFlex=true }: BottomButtonProps) => {
-  const { colors } = useTheme();
+  const colors = useColors();
 
   return (
     <View style={[styles.footer, !toFlex && { flex: 0 }]}>

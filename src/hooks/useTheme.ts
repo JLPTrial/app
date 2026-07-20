@@ -1,23 +1,18 @@
 import { useDisplayColors } from '@/components/ThemeTransition';
-import { Theme } from '@/contexts/StorageContext';
 import { useStorage } from './useStorage';
 
+export const useColors = () => useDisplayColors();
+
 type UseThemeReturn = {
-  colors: ReturnType<typeof useDisplayColors>;
   isDarkMode: boolean;
-  theme: Theme;
-  setTheme: (theme: Theme) => void;
+  setIsDarkMode: (isDarkMode: boolean) => void;
 };
 
 export const useTheme = (): UseThemeReturn => {
   const { data, setValue } = useStorage();
-  const colors = useDisplayColors();
-  const isDarkMode = data.theme === 'dark';
 
   return {
-    colors,
-    isDarkMode,
-    theme: data.theme,
-    setTheme: (t: Theme) => setValue('theme', t),
+    isDarkMode: data.isDarkMode,
+    setIsDarkMode: (value: boolean) => setValue('isDarkMode', value),
   };
 };

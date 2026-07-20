@@ -1,4 +1,4 @@
-import { useTheme } from '@/hooks/useTheme';
+import { useColors } from '@/hooks/useTheme';
 import React from 'react';
 import { StyleProp, Text, TextProps, TextStyle } from 'react-native';
 import { getVariantColor, textStyles } from '../../styles/texts';
@@ -26,7 +26,7 @@ export const AppText: React.FC<AppTextProps> = ({
   children,
   ...rest
 }) => {
-  const { colors } = useTheme();
+  const colors = useColors();
 
   const variantColor = answer ? colors.primaryLight : getVariantColor(colors, variant);
 

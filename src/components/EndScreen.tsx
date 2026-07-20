@@ -1,7 +1,7 @@
 import PercentageBar from '@/components/PercentageBar';
 import Screen from '@/components/Screen';
 import { AppText } from '@/components/texts/AppText';
-import { useTheme } from '@/hooks/useTheme';
+import { useColors } from '@/hooks/useTheme';
 import { router } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 import BottomButton from './pressable/BottomButton';
@@ -12,7 +12,7 @@ type SessionResult = {
 };
 
 export default function EndScreen({ result }: { result: SessionResult }) {
-  const { colors } = useTheme();
+  const colors = useColors();
   const percentage = result.total > 0 ? Math.round((result.right / result.total) * 100) : 0;
   const scoreColor =
         percentage >= 70 ? colors.success :

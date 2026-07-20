@@ -1,4 +1,4 @@
-import { useTheme } from "@/hooks/useTheme";
+import { useColors } from "@/hooks/useTheme";
 import { Pressable, StyleProp, ViewStyle } from "react-native";
 import { AppText } from "../texts/AppText";
 
@@ -9,7 +9,7 @@ type CardProps = {
 };
 
 export default function Card({ title, onPress, style} : CardProps){
-  const { colors } = useTheme();
+  const colors = useColors();
 
   return (
     <Pressable onPress={onPress}

@@ -1,5 +1,5 @@
 import { assetsMap } from '@/constants/assetsMap';
-import { useTheme } from '@/hooks/useTheme';
+import { useColors } from '@/hooks/useTheme';
 import { ColorScheme, vh, vw } from '@/styles/globals';
 import { Question } from '@/types/types';
 import { Image } from 'expo-image';
@@ -9,7 +9,7 @@ import { AppText } from '../texts/AppText';
 import Statement from '../texts/Statement';
 
 export default function QuestionBody({ question }: { question: Question }) {
-  const { colors } = useTheme();
+  const colors = useColors();
 
   const type: string = question.type;
 

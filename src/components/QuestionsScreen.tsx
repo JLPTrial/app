@@ -1,6 +1,6 @@
 import AlternativeBody from '@/components/question/AlternativeBody';
 import QuestionBody from '@/components/question/QuestionBody';
-import { useTheme } from '@/hooks/useTheme';
+import { useColors } from '@/hooks/useTheme';
 import { Question } from '@/types/types';
 import { useRef, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
@@ -20,7 +20,7 @@ const handleStyle = (choice: number, confirmedAnswer: boolean): buttonState => {
 };
 
 export default function QuestionScreen({ question, onNextQuestion }: { question: Question, onNextQuestion: any }) {
-  const { colors } = useTheme();
+  const colors = useColors();
 
   const [choice, setChoice] = useState<number>(-1);
   const [confirmedAnswer, setConfirmedAnswer] = useState<boolean>(false);

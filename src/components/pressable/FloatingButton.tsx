@@ -1,4 +1,4 @@
-import { useTheme } from '@/hooks/useTheme';
+import { useColors } from '@/hooks/useTheme';
 import { useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { AppText } from '../texts/AppText';
@@ -10,7 +10,7 @@ type FloatingButtonProps = {
 };
 
 export default function FloatingButton({ options, defaultValue, onPress} : FloatingButtonProps){
-  const { colors } = useTheme();
+  const colors = useColors();
   const [open, setOpen] = useState(false);
   const [option, setOption] = useState(defaultValue);
 

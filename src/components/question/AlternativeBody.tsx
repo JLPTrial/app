@@ -1,4 +1,4 @@
-import { useTheme } from '@/hooks/useTheme';
+import { useColors } from '@/hooks/useTheme';
 import { ColorScheme, vh } from '@/styles/globals';
 import { Pressable, StyleSheet, View } from 'react-native';
 import Statement from '../texts/Statement';
@@ -6,7 +6,7 @@ import Statement from '../texts/Statement';
 type buttonState = 'right' | 'wrong' | 'disabled' | 'pressed' | 'chosen' | 'default';
 
 export default function AlternativeBody({ alternatives, answer, onChoice, choice, isConfirmed }: { alternatives: string[], answer: number, onChoice: (choice: number) => void, choice: number, isConfirmed: boolean }) {
-  const { colors } = useTheme();
+  const colors = useColors();
 
   const handleStyle = (alternative: number, pressed: boolean = false): buttonState => {
     if (!isConfirmed) {

@@ -1,4 +1,4 @@
-import { useTheme } from '@/hooks/useTheme';
+import { useColors } from '@/hooks/useTheme';
 import { Icon } from './Icon';
 import Slider from '@react-native-community/slider';
 import { Alert, Linking, Pressable, StyleSheet, View } from 'react-native';
@@ -41,7 +41,7 @@ type CardProps = {
 }
 
 export function SwitchSetting({ icon, furigana, title, color, value, onChange }: SwitchProps) {
-  const { colors } = useTheme();
+  const colors = useColors();
   const iconColor = color || colors.textDark;
 
   return (
@@ -65,7 +65,7 @@ export function SwitchSetting({ icon, furigana, title, color, value, onChange }:
 
 export function SliderSetting({ title, icon, value, onChange, min, max, step = 0,
   left, right, marker = 'None' }: SliderProps) {
-  const { colors } = useTheme();
+  const colors = useColors();
 
   return (
     <View>
@@ -100,7 +100,7 @@ export function SliderSetting({ title, icon, value, onChange, min, max, step = 0
 }
 
 export function ActionSetting({ icon, title, url }: ActionProps) {
-  const { colors } = useTheme();
+  const colors = useColors();
   const handlePress = useCallback(async () => {
     try {
       const isSupported = await Linking.canOpenURL(url);
@@ -132,7 +132,7 @@ export function ActionSetting({ icon, title, url }: ActionProps) {
 }
 
 export function SettingCard({ title, children }: CardProps) {
-  const { colors } = useTheme();
+  const colors = useColors();
   const setting = React.Children.toArray(children);
   return (
     <View style={styles.container}>

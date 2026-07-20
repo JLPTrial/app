@@ -1,4 +1,4 @@
-import { useTheme } from '@/hooks/useTheme';
+import { useColors } from '@/hooks/useTheme';
 import React from 'react';
 import { StyleSheet, View, ViewStyle } from 'react-native';
 
@@ -15,7 +15,7 @@ export default function PercentageBar({
   color,
   style,
 }: PercentageBarProps) {
-  const { colors } = useTheme();
+  const colors = useColors();
   const clampedProgress = Math.max(0, Math.min(100, progress));
 
   return (
