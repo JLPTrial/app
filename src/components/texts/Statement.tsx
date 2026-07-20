@@ -65,8 +65,8 @@ export default function Statement({ statement, ...appTextProps }: StatementProps
   const colors = useColors();
   const tokens = statementParser(statement);
 
-  const { variant = 'base', answer, bold, underlining, center, style: customStyle } = appTextProps;
-  const variantColor = answer ? colors.primaryLight : getVariantColor(colors, variant);
+  const { variant = 'base', bold, underlining, center, style: customStyle } = appTextProps;
+  const variantColor = getVariantColor(colors, variant);
 
   const combinedStyles = [
     textStyles['base'],

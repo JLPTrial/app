@@ -3,12 +3,11 @@ import React from 'react';
 import { StyleProp, Text, TextProps, TextStyle } from 'react-native';
 import { getVariantColor, textStyles } from '../../styles/texts';
 
-export type TextVariant = Exclude<keyof typeof textStyles, 'bold' | 'center' | 'underlining' | 'answer'>;
+export type TextVariant = Exclude<keyof typeof textStyles, 'bold' | 'center' | 'underlining'>;
 
 // Interface estendendo TextProps para aceitar as propriedades padrão do <Text>
 export interface AppTextProps extends TextProps {
   variant?: TextVariant;
-  answer?: boolean;
   bold?: boolean;
   underlining?: boolean;
   center?: boolean;
@@ -18,7 +17,6 @@ export interface AppTextProps extends TextProps {
 
 export const AppText: React.FC<AppTextProps> = ({
   variant = 'base',
-  answer,
   bold,
   underlining,
   center,
@@ -28,7 +26,7 @@ export const AppText: React.FC<AppTextProps> = ({
 }) => {
   const colors = useColors();
 
-  const variantColor = answer ? colors.primaryLight : getVariantColor(colors, variant);
+  const variantColor = getVariantColor(colors, variant);
 
   const combinedStyles = [
     textStyles['base'], // Combinando o estilo base com os subestilos
