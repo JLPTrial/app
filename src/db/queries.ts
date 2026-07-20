@@ -210,6 +210,23 @@ export function useQuestions(level: JLPTLevel) {
     return await selectQuestions(whereClause, Order.DATE, limit);
   };
 
+  const getStats = async () => {
+    const types = ['kanji', 'listening', 'reading', 'vocabulary', 'grammar'];
+    const stats = new Array();
+    for (let type of types) {
+      const typeStats = await searchQuestionsFilters(type, [], 'answered');
+      const total = typeStats.length;
+      if (total === 0) {
+        stats.push(0);
+        continue;
+      }
+      const correct = typeStats.filter((question) => question.isCorrect).length;
+      stats.push(correct / total);
+    }
+
+    return stats;
+  };
+
   const searchQuestionsFilters = async (
     type: string,
     tags: string[] = [],
@@ -304,6 +321,6 @@ export function useQuestions(level: JLPTLevel) {
 
   return {
     selectTagsByType, selectAnsweredByDateMany, selectAnsweredMany,
-    searchQuestionsFilters, searchQuestionsByStatement, selectLastExam
+    searchQuestionsFilters, searchQuestionsByStatement, selectLastExam, getStats
   };
 }
