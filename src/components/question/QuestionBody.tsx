@@ -6,6 +6,7 @@ import AudioPlayer from '../AudioPlayer';
 import { colors, vh, vw } from '@/styles/globals';
 import { AppText } from '../texts/AppText';
 import Statement from '../texts/Statement';
+import capitalizeFirstLetter from '@/utils/capitalize';
 
 export default function QuestionBody({ question }: { question: Question }) {
 
@@ -14,7 +15,7 @@ export default function QuestionBody({ question }: { question: Question }) {
   return (
     <View style={styles.container}>
       <View style={[styles.questionHeader, { backgroundColor: colors[type as keyof typeof colors] }]}>
-        <AppText style={{ color: colors.textLight }} center={true}> {type.charAt(0).toUpperCase() + type.slice(1)}  - Nº  {question.id} </AppText>
+        <AppText style={{ color: colors.textLight }} center={true}> {capitalizeFirstLetter(type)}  - Nº  {question.id} </AppText>
       </View>
       <Statement statement={question.command} style={styles.questionCommand} />
       {(question.image !== null) &&
