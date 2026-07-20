@@ -1,18 +1,22 @@
 import { secondsToTimer } from "@/utils/parsers";
-import { useEffect, useState } from "react";
-import { View } from "react-native";
+import { ReactNode, useEffect, useState } from "react";
+import { StyleProp, TextStyle, View } from "react-native";
 import { AppText } from "./texts/AppText";
 
 type TimerProps = {
     start?: number;
     end?: number;
     onFinishTimer?: () => void;
+    style?: StyleProp<TextStyle>;
+    children?: ReactNode;
 };
 
 export default function Timer({
     start = 0,
     end,
     onFinishTimer,
+    style,
+    children,
 }: TimerProps) {
     const [seconds, setSeconds] = useState(start);
 
@@ -46,10 +50,22 @@ export default function Timer({
     }, [seconds, end, onFinishTimer]);
 
     return (
-        <View>
-            <AppText style={{ fontSize: 20, textAlign: "center" }}>
-                ⏱ {secondsToTimer(seconds)}
+        <View
+            style={{
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 8,
+            }}
+        >
+            <AppText
+                style={[
+                    { fontSize: 20, textAlign: "center" },
+                    style,
+                ]}
+            >
+                ⏱ {children} {secondsToTimer(seconds)}
             </AppText>
+
         </View>
     );
 }
