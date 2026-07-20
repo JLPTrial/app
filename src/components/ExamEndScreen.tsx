@@ -4,6 +4,7 @@ import { useQuestions } from '@/db/queries';
 import { useStorage } from '@/hooks/useStorage';
 import { SessionResult } from '@/types/types';
 import { router } from 'expo-router';
+import { useEffect } from 'react';
 import BottomButton from './pressable/BottomButton';
 import ResultCard from './ResultCard';
 
@@ -35,7 +36,20 @@ export default function ExamEndScreen({ result, startedAt }: { result: SessionRe
 
   const db = useQuestions(level);
 
-  db.insertExam(result.right.total, result.questionCount.total, result.right.total, startedAt, approved, level);
+  
+
+  useEffect(() => {
+    const finishedAt = Date.now();
+    db.insertExam(
+      result.right.total,
+      result.questionCount.total,
+      result.right.total,
+      startedAt,
+      Date.now(),
+      approved,
+      level
+    );
+  }, []);
 
   return (
     <Screen>
