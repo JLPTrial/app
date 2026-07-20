@@ -39,7 +39,6 @@ export default function ExamEndScreen({ result, startedAt }: { result: SessionRe
   
 
   useEffect(() => {
-    const finishedAt = Date.now();
     db.insertExam(
       result.right.total,
       result.questionCount.total,
@@ -49,6 +48,7 @@ export default function ExamEndScreen({ result, startedAt }: { result: SessionRe
       approved,
       level
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

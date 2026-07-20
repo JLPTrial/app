@@ -21,6 +21,7 @@ export default function LastAttemptCard(){
     };
 
     loadLastExam();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!lastExam) return <AppText>Nenhum simulado realizado.</AppText>;

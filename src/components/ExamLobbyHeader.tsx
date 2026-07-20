@@ -5,8 +5,8 @@ import { AppText } from "./texts/AppText";
 
 
 export default function ExamLobbyHeader(){
-  const { type, label } = useLocalSearchParams<{ type: string; label: string }>();
-  const { data, setValue } = useStorage();
+  const { label } = useLocalSearchParams<{ type: string; label: string }>();
+  const { data} = useStorage();
 
   return (
     <View style={styles.header}>
