@@ -23,8 +23,6 @@ export default function StatsScreen() {
 const styles = StyleSheet.create({
   reset: {
     paddingHorizontal: 0,
-    paddingBottom: 0,
-    margin: 0
   },
   tabScreen: {
     alignSelf: 'stretch'
