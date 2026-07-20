@@ -2,6 +2,7 @@ import Loading from '@/app/loading';
 import ExamLobbyHeader from '@/components/ExamLobbyHeader';
 import LastAttemptCard from '@/components/LastAttemptCard';
 import BottomButton from '@/components/pressable/BottomButton';
+import TimerToggle from '@/components/pressable/TimerToggle';
 import Screen from '@/components/Screen';
 import { questionsDistribution } from '@/constants/questionsDistribution';
 import { statements } from '@/constants/statements';
@@ -10,7 +11,7 @@ import { useStorage } from '@/hooks/useStorage';
 import { Question } from '@/types/types';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Alert } from 'react-native';
+import { Alert, View } from 'react-native';
 
 export default function ExamLobby() {
   const { data, setValue } = useStorage();
@@ -22,20 +23,6 @@ export default function ExamLobby() {
 
   useEffect(() => {
     async function load() {
-      setLoading(true);
-
-      // TODO:
-      // Buscar configuração do JLPT atual
-      // {
-      //   timeLimit: number,
-      //   sections: [
-      //   { type: 'grammar', amount: 20 },
-      //   ...
-      //   ]
-      // }
-
-      // TODO:
-      // Buscar último simulado salvo no banco
 
       setLoading(false);
     }
@@ -98,10 +85,14 @@ export default function ExamLobby() {
   }
 
   return (
-    <Screen>
+    <Screen >
       <ExamLobbyHeader/>
 
       <LastAttemptCard/>
+
+      <View style={{alignSelf: 'flex-start'}}>
+        <TimerToggle/>
+      </View>
 
       <BottomButton
         text="Iniciar Simulado"
