@@ -210,21 +210,35 @@ export function useQuestions(level: JLPTLevel) {
     return await selectQuestions(whereClause, Order.DATE, limit);
   };
 
-  const getStats = async () => {
+  const statVal = (questions: Question[]) => {
+    const total = questions.length;
+    if (total === 0) {
+      return 0;
+    }
+    const correct = questions.filter((question) => question.isCorrect).length;
+    return correct / total;
+  };
+
+  const getTypeStats = async () => {
     const types = ['kanji', 'listening', 'reading', 'vocabulary', 'grammar'];
     const stats = new Array();
     for (let type of types) {
       const typeStats = await searchQuestionsFilters(type, [], 'answered');
-      const total = typeStats.length;
-      if (total === 0) {
-        stats.push(0);
-        continue;
-      }
-      const correct = typeStats.filter((question) => question.isCorrect).length;
-      stats.push(correct / total);
+      stats.push(statVal(typeStats));
     }
 
     return stats;
+  };
+
+  const getTagStats = async (type: string) => {
+    const tags = await selectTagsByType(type);
+    const stats = new Array();
+    for (let tag of tags) {
+      const tagStats = await searchQuestionsFilters(type, [tag], 'answered');
+      stats.push(statVal(tagStats));
+    }
+
+    return [tags, stats];
   };
 
   const searchQuestionsFilters = async (
@@ -321,6 +335,7 @@ export function useQuestions(level: JLPTLevel) {
 
   return {
     selectTagsByType, selectAnsweredByDateMany, selectAnsweredMany,
-    searchQuestionsFilters, searchQuestionsByStatement, selectLastExam, getStats
+    searchQuestionsFilters, searchQuestionsByStatement, selectLastExam, 
+    getTypeStats, getTagStats
   };
 }
