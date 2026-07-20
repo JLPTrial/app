@@ -1,21 +1,23 @@
 import Screen from '@/components/Screen';
-import { useQuestions } from '@/db/queries';
 import { useStorage } from '@/hooks/useStorage';
 import { useRef, useState } from 'react';
 import { AppText } from './texts/AppText';
 import QuestionScreen from './QuestionsScreen';
+import { useUserDatabase } from '@/db/insertions';
 
-// sessionType indica na tela se é um simulado ou uma seção de estudo
+// sessionType indica na tela se é um simulado ou uma sessão de estudo
 export default function QuestionSession({ onFinish, sessionType }: { onFinish: any, sessionType: string }) {
   const { data } = useStorage();
 
-  const level = data.jlptLevel;
+
   const questions = data.questionsSession;
-  const db = useQuestions(level);
 
   const [index, setIndex] = useState<number>(data.questionIndexSession);
   let rightAnswers = useRef(0);
   let question = questions[index];
+
+  const db = useUserDatabase();
+  const level = data.jlptLevel;
 
   const handleNextQuestion = (choice: number) => {
     if (choice + 1 === question.correctAlternative) {

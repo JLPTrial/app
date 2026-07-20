@@ -57,13 +57,6 @@ export default function HomeScreen() {
           <Card title='Kanji' style={[{ backgroundColor: colors.kanji }, styles.card]} onPress={() => router.push({pathname: "/session-lobby", params: { type: "kanji", label: "Kanji"}})} />
         </View>
       </View>
-
-      <View style={styles.table}>
-        <AppText variant="title" style={{ marginBottom: 8 }}>Demo</AppText>
-        <View style={styles.row}>
-          <Card title='Demo Questão' style={{ width: '100%' }} onPress={() => router.push("/demo/questions")} />
-        </View>
-      </View>
     </Screen>
 
   );

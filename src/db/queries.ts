@@ -3,9 +3,8 @@ import { useSQLiteContext } from 'expo-sqlite';
 
 export type AnsweredStatus = 'answered' | 'unanswered' | 'all';
 
-// For now, has no utility beside telling the whereClause to
-// not use JLPTLevel database.
-const UserDB = "UserDB";
+// Define prefix to access answers database
+const UserDB = "main";
 
 // Interface to manage question query
 interface QuestionQuery {
@@ -58,22 +57,26 @@ class WhereClause {
     this.level = level;
   }
 
-  addClauseCompare(table: string, column: string, value: string | number | Date, comparison: Compare = Compare.EQUAL, database?: string | undefined): void {
-    const field = ((database === undefined) ? `${this.level}.` : "") + `${table}.${column}`;
+  addClauseCompare(table: string, column: string, value: string | number | Date, comparison: Compare = Compare.EQUAL, database: JLPTLevel | string = this.level): void {
+    const field = `${database}.${table}.${column}`;
     const key = `${field}.${this.numClauses}`.replaceAll(".", "");
     this.clauses.push(`${field} ${comparison} $${key}`);
     this.setValue(key, value);
   }
 
-  addClauseIsNull(table: string, column: string, isNull: boolean = true, database: string | undefined): void {
-    const field = ((database === undefined) ? `${this.level}.` : "") + `${table}.${column}`;
+  addClauseIsNull(table: string, column: string, database: JLPTLevel | string = this.level, isNull = true): void {
+    const field = `${database}.${table}.${column}`;
     this.clauses.push(`${field} is ${(isNull) ? 'NULL' : 'NOT NULL'}`);
   }
 
-  addClauseIn(table: string, column: string, values: (string | number)[], database?: string | undefined): void {
+  addClauseIsNotNull(table: string, column: string, database: JLPTLevel | string = this.level): void {
+    this.addClauseIsNull(table, column, database, false);
+  }
+
+  addClauseIn(table: string, column: string, values: (string | number)[], database = this.level): void {
     if (values.length === 0) return;
 
-    const field = ((database === undefined) ? `${this.level}.` : "") + `${table}.${column}`;
+    const field = `${database}.${table}.${column}`;
 
     const keys = values.map((_, index) => {
       const key = `${field}${this.numClauses}${index}`.replaceAll(".", "");
@@ -130,14 +133,13 @@ const formatQuestion = (result: QuestionQuery, level: JLPTLevel) => {
 export function useQuestions(level: JLPTLevel) {
   const db = useSQLiteContext();
 
-  const queryBase = `
-    SELECT
+  const queryBase = `SELECT
     ${level}.questions.id as id,  
     ${level}.questions.question_text as questionText,
     ${level}.questions.question_type as questionType,
     ${level}.media.image_file_path as imagePath,
     ${level}.media.audio_file_path as audioPath,
-    ${level}.statement.question_command as questionCommand,
+    ${level}.commands.question_command as questionCommand,
     ${level}.contextual_texts.contextual_text as contextualText,
     ${level}.alternatives.id as alternativeId,
     ${level}.alternatives.alternative_1 as alternative1,
@@ -153,8 +155,8 @@ export function useQuestions(level: JLPTLevel) {
         ON ${level}.questions.alternative_id = ${level}.alternatives.id 
       LEFT JOIN ${level}.media
         ON ${level}.questions.media_id = ${level}.media.id
-      INNER JOIN ${level}.statement
-        ON ${level}.questions.statement_id = ${level}.statement.id 
+      INNER JOIN ${level}.commands
+        ON ${level}.questions.command_id = ${level}.commands.id
       LEFT JOIN ${level}.contextual_texts
         ON ${level}.media.contextual_text_id = ${level}.contextual_texts.id
       LEFT JOIN ${level}.question_tags
@@ -165,38 +167,21 @@ export function useQuestions(level: JLPTLevel) {
 		ON ${level}.questions.id = answered_questions.question_id
 		AND answered_questions.jlpt_level = '${level}'`;
 
+  const selectQuestions = async (whereClause?: WhereClause, order: Order = Order.RANDOM, limit: number = -1): Promise<Question[]> => {
 
-  const selectQuestion = async (whereClause?: WhereClause, order: Order = Order.RANDOM): Promise<Question | null> => {
-    const question: Question[] = await selectQuestionMany(whereClause, order, 1);
-    return (question.length > 0) ? question[0] : null;
-  };
+    const hasCondition = (whereClause !== undefined);
 
-  const selectQuestionMany = async (whereClause?: WhereClause, order: Order = Order.RANDOM, limit: number = -1): Promise<Question[]> => {
-    const query = ((whereClause === undefined) ? `${queryBase}` : `${queryBase} WHERE ${whereClause.getClauses()}`)
-      + ` GROUP BY ${level}.questions.id ORDER BY ${order} LIMIT ${limit}`;
+    const where = (hasCondition) ? `WHERE ${whereClause.getClauses()}` : ``;
 
-    const values = ((whereClause === undefined) ? {} : whereClause.getValues());
+    const query = `${queryBase} ${where} GROUP BY ${level}.questions.id ORDER BY ${order} LIMIT ${limit}`;
+
+    const values = (hasCondition) ? whereClause.getValues() : {};
+
     const results: QuestionQuery[] = await db.getAllAsync<QuestionQuery>(query, values);
+
     const questions: Question[] = results.map((result) => formatQuestion(result, level));
+
     return questions;
-  };
-
-  const selectById = async (id: number): Promise<Question | null> => {
-    const whereClause: WhereClause = new WhereClause(level);
-    whereClause.addClauseCompare("questions", "id", id);
-    return await selectQuestion(whereClause);
-  };
-
-  const selectByTagName = async (tagName: string, limit: number = -1): Promise<Question[]> => {
-    const whereClause: WhereClause = new WhereClause(level);
-    whereClause.addClauseCompare("tags", "name", tagName);
-    return await selectQuestionMany(whereClause, Order.RANDOM, limit);
-  };
-
-  const selectByType = async (type: string): Promise<Question | null> => {
-    const whereClause: WhereClause = new WhereClause(level);
-    whereClause.addClauseCompare("questions", "question_type", type);
-    return await selectQuestion(whereClause);
   };
 
   const selectTagsByType = async (type: string): Promise<string[]> => {
@@ -207,46 +192,22 @@ export function useQuestions(level: JLPTLevel) {
       INNER JOIN ${level}.tags ON ${level}.question_tags.tag_id = ${level}.tags.id
       WHERE ${level}.questions.question_type = $type
       ORDER BY ${level}.tags.name ASC
-    `;
+     `;
     const results = await db.getAllAsync<{ name: string }>(query, { $type: type });
     return results.map(r => r.name);
-  };
-
-  const selectByTypeMany = async (type: string, limit: number = -1): Promise<Question[]> => {
-    const whereClause: WhereClause = new WhereClause(level);
-    whereClause.addClauseCompare("questions", "question_type", type);
-    return await selectQuestionMany(whereClause, Order.ASC, limit);
-  };
-
-  const insertAnswer = async (question: Question, level: JLPTLevel, answer: number): Promise<boolean> => {
-    const query = `INSERT INTO answered_questions (jlpt_level, is_correct, question_id) VALUES (?,?,?)`;
-    try {
-      await db.runAsync(query, `${level}`, answer === question.correctAlternative, question.id);
-      return true;
-    } catch {
-      return false;
-    }
   };
 
   const selectAnsweredByDateMany = async (dateStart: Date, dateEnd: Date = new Date(), limit: number = -1): Promise<Question[]> => {
     const whereClause: WhereClause = new WhereClause(level);
     whereClause.addClauseCompare("answered_questions", "answered_date", dateStart, Compare.MORE_EQ, UserDB);
     whereClause.addClauseCompare("answered_questions", "answered_date", dateEnd, Compare.LESS_EQ, UserDB);
-    return await selectQuestionMany(whereClause, Order.DATE, limit);
+    return await selectQuestions(whereClause, Order.DATE, limit);
   };
 
   const selectAnsweredMany = async (limit: number = -1): Promise<Question[]> => {
     const whereClause: WhereClause = new WhereClause(level);
-    whereClause.addClauseIsNull("answered_questions", "answered_date", false, UserDB);
-    return await selectQuestionMany(whereClause, Order.DATE, limit);
-  };
-
-  const filterAnsweredByRight = (questions: Question[]): Question[] => {
-    return questions.filter((question) => question.isCorrect === true);
-  };
-
-  const filterAnsweredByWrong = (questions: Question[]): Question[] => {
-    return questions.filter((question) => question.isCorrect === false);
+    whereClause.addClauseIsNotNull("answered_questions", "answered_date", UserDB);
+    return await selectQuestions(whereClause, Order.DATE, limit);
   };
 
   const searchQuestionsFilters = async (
@@ -263,17 +224,16 @@ export function useQuestions(level: JLPTLevel) {
     if (tags.length > 0) whereClause.addClauseIn("tags", "name", tags);
 
     if (answeredStatus === 'answered') {
-      whereClause.addClauseIsNull("answered_questions", "answered_date", false, UserDB);
+      whereClause.addClauseIsNotNull("answered_questions", "answered_date", UserDB);
     }
     else if (answeredStatus === 'unanswered') {
-      whereClause.addClauseIsNull("answered_questions", "answered_date", true, UserDB);
+      whereClause.addClauseIsNull("answered_questions", "answered_date", UserDB);
     }
 
-    return await selectQuestionMany(whereClause, order, limit);
+    return await selectQuestions(whereClause, order, limit);
   };
 
   return {
-    selectById, selectByTagName, selectByType, selectTagsByType, selectByTypeMany, insertAnswer, selectAnsweredByDateMany,
-    selectAnsweredMany, filterAnsweredByRight, filterAnsweredByWrong, searchQuestionsFilters
+    selectTagsByType, selectAnsweredByDateMany, selectAnsweredMany, searchQuestionsFilters
   };
 }
