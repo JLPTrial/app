@@ -1,19 +1,19 @@
 export default function statementParser(statement: string): string[] {
   const regex = new RegExp(
     [
-      "\\[(?:blank|underline_blank|star_underline_blank)\\]",
+      String.raw`\[(?:blank|underline_blank|star_underline_blank)\]`,
 
-      "\\{[^}]+\\}",
+      String.raw`\{[^}]+\}`,
 
-      "\\p{Script=Han}+\\[[^\\]]+\\]",
+      String.raw`\p{Script=Han}+\[[^\]]+\]`,
 
-      "\\p{Script=Hiragana}+",
+      String.raw`\p{Script=Hiragana}+`,
 
-      "\\p{Script=Katakana}+",
+      String.raw`\p{Script=Katakana}+`,
 
       "[、。「」『』（）！？：；]",
 
-      "\\s+",
+      String.raw`\s+`,
 
       "."
     ].join("|"),
