@@ -11,6 +11,7 @@ export async function moveDatabase() {
 
   const dbs = [
     { name: 'N5.db', asset: require('../../assets/data/N5/N5.db') },
+    { name: 'N4.db', asset: require('../../assets/data/N4/N4.db') },
   ];
 
   for (const { name, asset: assetModule } of dbs) {
