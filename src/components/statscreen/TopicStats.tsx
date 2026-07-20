@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useQuestions } from '@/db/queries';
 import { Dropdown } from 'react-native-element-dropdown';
 import AppRadarGraph from '../graphs/AppRadarGraph';
+import { colors } from '@/styles/globals';
 import { StyleSheet } from 'react-native';
 
 export default function TopicStats() {
@@ -46,20 +47,20 @@ export default function TopicStats() {
       <AppRadarGraph values={statsTypes} labels={labelTypes}/>
 
       <Dropdown
-        style={styles.selector}
+        style={[styles.selector, { backgroundColor: colors[type as keyof typeof colors] }]}
         labelField="label"
         data={selectorData}
         valueField="value"
         value={type}
-        selectedTextStyle={{textAlign:'center'}}
-        itemTextStyle={{textAlign:'center'}}
+        selectedTextStyle={styles.selectorSelected}
+        itemTextStyle={styles.selectorItens}
+        iconColor={colors.textLight}
         onChange={item => {
           setType(item.value);
         }}
       />
 
-
-      <AppRadarGraph values={statsTag} labels={labelTag}/>
+      <AppRadarGraph values={statsTag} labels={labelTag} areaColor={colors[type as keyof typeof colors]}/>
 
     </Screen>
   );
@@ -67,11 +68,22 @@ export default function TopicStats() {
 
 const styles = StyleSheet.create({
   selector: {
-    flex:1, width: '60%',borderWidth: 1, borderColor: 'gray', paddingHorizontal: 8,
+    flex:1,
+    width: '60%',
+    borderWidth: 0,
+    paddingHorizontal: 8,
     borderRadius: 99,
     padding:20,
-    alignItems:'center',
+    color: colors.textLight,
     textAlign:'center',
-    justifyContent:'center'
+    justifyContent:'center',
+  },
+  selectorSelected: {
+    textAlign:'center',
+    color:  colors.textLight,
+    fontWeight: 'bold'
+  },
+  selectorItens: {
+    textAlign:'center'
   }
 });
