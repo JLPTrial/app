@@ -6,16 +6,20 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 type ScreenProps = PropsWithChildren<{
     style?: StyleProp<ViewStyle>;
     withBottomTab?: boolean;
+    internal?: boolean;
 }>;
 
-export default function Screen({ children, style, withBottomTab = false } : ScreenProps){
+export default function Screen({ children, style, withBottomTab = false, internal = false } : ScreenProps){
 
   return (
     <SafeAreaView
       edges={
         withBottomTab
           ? ['left', 'right', 'top']
-          : ['left', 'right', 'top', 'bottom']
+          :
+          internal
+            ? ['left', 'right']
+            : ['left', 'right', 'top', 'bottom']
       }
       style={{flex: 1, backgroundColor: colors.background }}>
       <ScrollView contentContainerStyle={[{
