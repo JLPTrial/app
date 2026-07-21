@@ -18,7 +18,7 @@ const defaultStorage: StorageSchema = {
   questionsSession: [],
   questionIndexSession: 0,
   darkMode: false,
-  furigana: false,
+  furigana: true,
   hapticFeedback: true,
   fontSize: 0,
   volume: 0
