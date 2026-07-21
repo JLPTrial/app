@@ -1,6 +1,6 @@
 import { JLPTLevel, Question } from "@/types/types";
 import { Storage } from "expo-sqlite/kv-store";
-import { createContext, PropsWithChildren, useState } from "react";
+import { createContext, PropsWithChildren, useCallback, useMemo, useState } from "react";
 
 type StorageSchema = {
   jlptLevel: JLPTLevel;
@@ -50,7 +50,7 @@ export function StorageProvider({ children }: PropsWithChildren) {
     return result;
   });
 
-  const setValue = <K extends keyof StorageSchema>(
+  const setValue = useCallback(<K extends keyof StorageSchema>(
     key: K,
     value: StorageSchema[K]
   ) => {
@@ -60,10 +60,12 @@ export function StorageProvider({ children }: PropsWithChildren) {
       ...prev,
       [key]: value,
     }));
-  };
+  }, []);
+
+  const value = useMemo(() => ({ data, setValue }), [data, setValue]);
 
   return (
-    <StorageContext.Provider value={{ data, setValue }}>
+    <StorageContext.Provider value={value}>
       {children}
     </StorageContext.Provider>
   );
