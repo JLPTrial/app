@@ -6,9 +6,9 @@ export default function statementParser(statement: string): string[] {
       String.raw`\p{Script=Han}+\[[^\]]+\]`,
       String.raw`\p{Script=Hiragana}+`,
       String.raw`\p{Script=Katakana}+`,
-      "[、。「」『』（）！？：；]",
+      String.raw`[、。「」『』（）！？：；]`,
       String.raw`\s+`,
-      "."
+      String.raw`.`
     ].join("|"),
     "gu"
   );
