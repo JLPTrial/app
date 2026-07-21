@@ -4,6 +4,7 @@ import { AudioSource, useAudioPlayer, useAudioPlayerStatus } from 'expo-audio';
 import { useFocusEffect } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useStorage } from '../hooks/useStorage';
 import { colors } from '../styles/globals';
 
 function formatTime(seconds: number): string {
@@ -16,6 +17,7 @@ function formatTime(seconds: number): string {
 export default function AudioPlayer({ source }: { source: AudioSource }) {
   const player = useAudioPlayer(source);
   const status = useAudioPlayerStatus(player);
+  const { data } = useStorage();
 
   const [isSliding, setIsSliding] = useState(false);
   const [sliderTime, setSliderTime] = useState(0);
@@ -26,6 +28,10 @@ export default function AudioPlayer({ source }: { source: AudioSource }) {
       player.pause();
     }
   }, [status?.didJustFinish, player]);
+
+  useEffect(() => {
+    player.volume = data.volume / 100;
+  }, [data.volume, player]);
 
   useFocusEffect(
     useCallback(() => {
