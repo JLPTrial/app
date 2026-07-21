@@ -1,6 +1,6 @@
 export const fontSizeScaleMap: Record<number, number> = {
-  0: 1,
-  1: 1.15,
-  2: 1.3,
-  3: 1.45,
+  0: 0.8,
+  1: 1,
+  2: 1.2,
+  3: 1.4,
 };
