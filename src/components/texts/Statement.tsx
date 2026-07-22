@@ -1,3 +1,4 @@
+import { fontSizeScaleMap } from '@/constants/fontSize';
 import { useStorage } from "@/hooks/useStorage";
 import { useColors } from "@/hooks/useTheme";
 import { vh, vw } from "@/styles/globals";
@@ -43,11 +44,12 @@ type FuriganaProps = {
   kanji: string;
   furigana: string;
   fontSize: number;
+  fontScale: number;
   appTextProps: Omit<AppTextProps, 'children'>;
   showFurigana: boolean;
 };
 
-function Furigana({ kanji, furigana, fontSize, appTextProps, showFurigana }: FuriganaProps) {
+function Furigana({ kanji, furigana, fontSize, fontScale, appTextProps, showFurigana }: FuriganaProps) {
   if (!showFurigana) {
     return <AppText {...appTextProps}>{kanji}</AppText>;
   }
@@ -56,11 +58,11 @@ function Furigana({ kanji, furigana, fontSize, appTextProps, showFurigana }: Fur
     <View style={styles.furiganaContainer}>
       <AppText
         {...appTextProps}
-        style={[appTextProps.style, styles.furiganaText, { top: 1, fontSize: fontSize * 0.6, lineHeight: fontSize }]}
+        style={[appTextProps.style, styles.furiganaText, { top: 1, fontSize: fontSize * 0.6, lineHeight: fontSize * fontScale }]}
       >
         {furigana}
       </AppText>
-      <AppText {...appTextProps} style={[appTextProps.style, { top: 1, lineHeight: fontSize }]}>
+      <AppText {...appTextProps} style={[appTextProps.style, { top: 1, lineHeight: fontSize * fontScale }]}>
         {kanji}
       </AppText>
     </View>
@@ -90,7 +92,7 @@ export default function Statement({ statement, ...appTextProps }: StatementProps
   const fontSize = flattenedStyle?.fontSize ?? 16;
   const color = (flattenedStyle?.color as string) ?? '#000';
 
-  const scale = fontSize / textStyles['base'].fontSize;
+  const scale = fontSize / textStyles['base'].fontSize * (fontSizeScaleMap[data.fontSize] ?? 1);
   const blankWidth = scale * (15 * vw);
   const lineThickness = Math.max(0.2 * vh, scale * (0.2 * vh));
 
@@ -98,7 +100,7 @@ export default function Statement({ statement, ...appTextProps }: StatementProps
     <AppText
       {...appTextProps}
       style={[
-        { textAlign: 'justify', lineHeight: 1.8*fontSize },
+        { textAlign: 'justify', lineHeight: 1.8 * fontSize * scale },
         center && { textAlign: 'center' },
         appTextProps.style
       ]}
@@ -139,6 +141,7 @@ export default function Statement({ statement, ...appTextProps }: StatementProps
               kanji={prefix}
               furigana={bracket.slice(1, -1)}
               fontSize={fontSize}
+              fontScale={scale}
               appTextProps={appTextProps}
               showFurigana={data.furigana}
             />
