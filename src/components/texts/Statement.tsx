@@ -1,3 +1,4 @@
+import { useStorage } from "@/hooks/useStorage";
 import { vh, vw } from "@/styles/globals";
 import statementParser from "@/utils/parsers";
 import { Ionicons } from '@expo/vector-icons';
@@ -42,9 +43,14 @@ type FuriganaProps = {
   furigana: string;
   fontSize: number;
   appTextProps: Omit<AppTextProps, 'children'>;
+  showFurigana: boolean;
 };
 
-function Furigana({ kanji, furigana, fontSize, appTextProps }: FuriganaProps) {
+function Furigana({ kanji, furigana, fontSize, appTextProps, showFurigana }: FuriganaProps) {
+  if (!showFurigana) {
+    return <AppText {...appTextProps}>{kanji}</AppText>;
+  }
+
   return (
     <View style={styles.furiganaContainer}>
       <AppText
@@ -61,6 +67,7 @@ function Furigana({ kanji, furigana, fontSize, appTextProps }: FuriganaProps) {
 }
 
 export default function Statement({ statement, ...appTextProps }: StatementProps) {
+  const { data } = useStorage();
   const tokens = statementParser(statement);
 
   const { variant = 'base', answer, bold, underlining, center, style: customStyle } = appTextProps;
@@ -130,6 +137,7 @@ export default function Statement({ statement, ...appTextProps }: StatementProps
               furigana={bracket.slice(1, -1)}
               fontSize={fontSize}
               appTextProps={appTextProps}
+              showFurigana={data.furigana}
             />
           );
         }
