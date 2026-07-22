@@ -1,10 +1,10 @@
 import Screen from '@/components/Screen';
-import { useDisplayColors } from '@/components/ThemeTransition';
+import { useColors } from '@/hooks/useTheme';
 import { Image } from 'expo-image';
 import { ActivityIndicator, StyleSheet } from 'react-native';
 
 export default function Loading() {
-  const colors = useDisplayColors();
+  const colors = useColors();
 
   return (
     <Screen style={styles.container}>
