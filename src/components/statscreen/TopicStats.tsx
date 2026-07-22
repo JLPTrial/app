@@ -6,8 +6,12 @@ import { Dropdown } from 'react-native-element-dropdown';
 import AppRadarGraph from '../graphs/AppRadarGraph';
 import { colors } from '@/styles/globals';
 import { StyleSheet } from 'react-native';
+import { useStorage } from '@/hooks/useStorage';
 
 export default function TopicStats() {
+  const { data } = useStorage();
+  const level = data.jlptLevel;
+
   const [statsTypes, setStatsTypes] = useState<number[] | null>(null);
   const [type, setType] = useState<string>('kanji');
   const [statsTag, setStatsTag] = useState<number[] | null>(null);
@@ -15,13 +19,13 @@ export default function TopicStats() {
   const selectorData = [
     {label: 'Kanji', value: 'kanji'},
     {label: 'Audição',value: 'listening'},
-    {label:  'Leitura',value: 'reading'},
+    {label: 'Leitura',value: 'reading'},
     {label: 'Vocabulário',value: 'vocabulary'},
     {label: 'Gramática', value :'grammar'}
   ];
   const labelTypes = selectorData.map(type => type.label);
 
-  const db = useQuestions('N5');
+  const db = useQuestions(level);
 
   useEffect(() => {
     (async () => {
@@ -29,7 +33,7 @@ export default function TopicStats() {
       setStatsTypes(data);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [level]);
 
   useEffect(() => {
     (async () => {
@@ -38,14 +42,15 @@ export default function TopicStats() {
       setLabelTag(tags);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [type]);
+  }, [type, level]);
 
   if (!statsTypes || statsTypes.length === 0) return null;
   return (
     <Screen internal>
-      <AppText>Tópicos</AppText>
+      <AppText variant='title'>Tópicos do {level}</AppText>
       <AppRadarGraph values={statsTypes} labels={labelTypes}/>
 
+      <AppText>Veja as questões resolvidas por tipo</AppText>
       <Dropdown
         style={[styles.selector, { backgroundColor: colors[type as keyof typeof colors] }]}
         labelField="label"
@@ -60,7 +65,7 @@ export default function TopicStats() {
         }}
       />
 
-      <AppRadarGraph values={statsTag} labels={labelTag} areaColor={colors[type as keyof typeof colors]}/>
+      { (statsTag && labelTag) && <AppRadarGraph values={statsTag} labels={labelTag} areaColor={colors[type as keyof typeof colors]}/>}
 
     </Screen>
   );
