@@ -1,7 +1,7 @@
 import { assetsMap } from '@/constants/assetsMap';
 import { Question } from '@/types/types';
+import { Image as RNImage , StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';
-import { StyleSheet, View } from 'react-native';
 import AudioPlayer from '../AudioPlayer';
 import { colors, vh, vw } from '@/styles/globals';
 import { AppText } from '../texts/AppText';
@@ -10,6 +10,13 @@ import Statement from '../texts/Statement';
 export default function QuestionBody({ question }: { question: Question }) {
 
   const type: string = question.type;
+
+  const imageSource = question.image ? assetsMap[`${question.image}`] : null;
+  const assetSource = imageSource ? RNImage.resolveAssetSource(imageSource) : null;
+
+  const imgAspectRatio = assetSource?.width && assetSource?.height
+    ? assetSource.width / assetSource.height
+    : 1;
 
   return (
     <View style={styles.container}>
@@ -20,7 +27,7 @@ export default function QuestionBody({ question }: { question: Question }) {
       {(question.image !== null) &&
         (<Image
           source={assetsMap[`${question.image}`]}
-          style={styles.questionImage}
+          style={[styles.questionImage, { aspectRatio: imgAspectRatio }]}
           contentFit="contain"
         />)}
       {(question.contextualText !== null) && (question.audio === null) && (<Statement statement={question.contextualText} />)}
@@ -56,7 +63,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   questionImage: {
-    height: 25 * vh,
-    aspectRatio: 16 / 9,
+    width: '100%',
   },
 });
