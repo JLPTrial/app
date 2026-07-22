@@ -21,7 +21,7 @@ const defaultStorage: StorageSchema = {
   furigana: false,
   hapticFeedback: true,
   fontSize: 0,
-  volume: 0
+  volume: 100,
 };
 
 type StorageContextType = {
