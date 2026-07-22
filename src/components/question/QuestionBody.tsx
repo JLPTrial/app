@@ -56,7 +56,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   questionImage: {
-    height: 25 * vh,
-    aspectRatio: 16 / 9,
+    width: '100%',
   },
 });
