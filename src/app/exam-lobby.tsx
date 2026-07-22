@@ -56,11 +56,7 @@ export default function ExamLobby() {
       questions.push(...currentQuestions);
     }
 
-    questions.sort((a, b) => {
-      if (a.type < b.type) return -1;
-      if (a.type > b.type) return 1;
-      return 0;
-    });
+    questions.sort((a, b) => a.type.localeCompare(b.type));
 
     if (questions.length === 0) {
       let feedback = "Você já respondeu todas as questões desse tipo!";
