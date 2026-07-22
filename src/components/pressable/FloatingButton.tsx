@@ -1,6 +1,7 @@
-import { textStyles } from '@/styles/texts';
+import { useColors } from '@/hooks/useTheme';
 import { useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
+import { AppText } from '../texts/AppText';
 
 type FloatingButtonProps = {
   options: any[];
@@ -9,27 +10,28 @@ type FloatingButtonProps = {
 };
 
 export default function FloatingButton({ options, defaultValue, onPress} : FloatingButtonProps){
+  const colors = useColors();
   const [open, setOpen] = useState(false);
   const [option, setOption] = useState(defaultValue);
 
   return (
     <View style={styles.overlay}>
-      <Pressable style={styles.button} onPress={() => setOpen(!open)}>
-        <Text style={textStyles.subtitle}>{ option }</Text>
+      <Pressable style={[styles.button, { backgroundColor: colors.primary }]} onPress={() => setOpen(!open)}>
+        <AppText variant="subtitle">{ option }</AppText>
       </Pressable>
 
       {open && (
-        <View style={styles.menu}>
+        <View style={[styles.menu, { backgroundColor: colors.floatingMenu, borderColor: colors.border }]}>
           {options.map((item) => (
             <Pressable
               key={item}
-              style={styles.option}
+              style={[styles.option, { backgroundColor: colors.floatingOption }]}
               onPress={() => {
                 setOpen(false);
                 setOption(item);
                 onPress(item);
               }}>
-              <Text style={textStyles.subtitle}>{item}</Text>
+              <AppText variant="subtitle">{item}</AppText>
             </Pressable>
           ))}
         </View>
@@ -51,13 +53,11 @@ const styles = StyleSheet.create({
     height: 50,
     width: 50,
     borderRadius: 30,
-    backgroundColor: 'rgba(238, 36, 36, 1)',
     justifyContent: 'center',
     alignItems: 'center'
   },
   menu: {
     borderRadius: 30,
-    backgroundColor: '#fff',
     borderWidth: 1,
     elevation: 4,
   },
@@ -65,7 +65,6 @@ const styles = StyleSheet.create({
     height: 50,
     width: 50,
     borderRadius: 30,
-    backgroundColor: '#eee',
     justifyContent: 'center',
     alignItems: 'center'
   }

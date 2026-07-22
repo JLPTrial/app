@@ -1,18 +1,20 @@
+import Screen from '@/components/Screen';
+import { useColors } from '@/hooks/useTheme';
 import { Image } from 'expo-image';
-import { StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, StyleSheet } from 'react-native';
 
 export default function Loading() {
+  const colors = useColors();
+
   return (
-    <View style={styles.container}>
-	  <Image
+    <Screen style={styles.container}>
+      <Image
         source={require('@/assets/images/logo.jpg')}
         style={styles.logo}
         contentFit="contain"
-	  />
-	  <Text style={styles.message}>
-        {'Carregando...'}
-	  </Text>
-    </View>
+      />
+      <ActivityIndicator size="large" color={colors.primary} />
+    </Screen>
   );
 }
 
@@ -27,8 +29,5 @@ const styles = StyleSheet.create({
   logo: {
     width: 180,
     height: 180,
-  },
-  message: {
-    textAlign: 'center',
   },
 });

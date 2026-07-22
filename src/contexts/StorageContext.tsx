@@ -1,27 +1,28 @@
 import { JLPTLevel, Question } from "@/types/types";
 import { Storage } from "expo-sqlite/kv-store";
 import { createContext, PropsWithChildren, useCallback, useMemo, useState } from "react";
+import { Appearance } from "react-native";
 
 type StorageSchema = {
   jlptLevel: JLPTLevel;
   questionsSession: Question[];
   questionIndexSession: number;
-  darkMode: boolean;
   furigana: boolean;
   hapticFeedback: boolean;
   fontSize: number;
   volume: number;
+  isDarkMode: boolean;
 };
 
 const defaultStorage: StorageSchema = {
   jlptLevel: 'N5',
   questionsSession: [],
   questionIndexSession: 0,
-  darkMode: false,
   furigana: true,
   hapticFeedback: true,
   fontSize: 0,
   volume: 100,
+  isDarkMode: Appearance.getColorScheme() === 'dark',
 };
 
 type StorageContextType = {

@@ -1,5 +1,5 @@
 import { AppText } from '@/components/texts/AppText';
-import { colors } from '@/styles/globals';
+import { useColors } from '@/hooks/useTheme';
 import React from 'react';
 import { Pressable, StyleProp, StyleSheet, TextStyle, View, ViewStyle } from 'react-native';
 
@@ -13,14 +13,16 @@ interface BottomButtonProps {
 }
 
 const BottomButton = ({ onPress, text, disabled, style, textStyle, toFlex=true }: BottomButtonProps) => {
+  const colors = useColors();
+
   return (
     <View style={[styles.footer, !toFlex && { flex: 0 }]}>
       <Pressable
-        style={[styles.startButton, style]}
+        style={[styles.startButton, { backgroundColor: colors.primary }, style]}
         onPress={onPress}
         disabled={disabled}
       >
-        <AppText variant="title" style={[styles.buttonText, textStyle]} center={true}>
+        <AppText variant="title" style={[{ color: colors.textLight }, textStyle]} center={true}>
           {text}
         </AppText>
       </Pressable>
@@ -36,13 +38,9 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   startButton: {
-    backgroundColor: colors.primary,
     borderRadius: 16,
     paddingVertical: 16,
     alignItems: 'center',
-  },
-  buttonText: {
-    color: colors.textLight,
   },
 });
 
