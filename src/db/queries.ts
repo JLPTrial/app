@@ -321,21 +321,26 @@ export function useQuestions(level: JLPTLevel) {
     return await selectQuestions(whereClause, order, limit);
   };
 
-  const selectLastExam = async () : Promise<ExamAttempt | null> => {
-    const query = `SELECT * FROM exam_attempts ORDER BY started_at DESC LIMIT 1`;
+  const selectExamsAttempts = async (limit : number = 1) : Promise<ExamAttempt[] | null> => {
+    const query = `SELECT * FROM exam_attempts ORDER BY started_at DESC LIMIT ${limit}`;
 
     try {
-      const exam_attempt : ExamAttempt | null = await db.getFirstAsync(query);
-      return exam_attempt;
+      const examAttempts : ExamAttempt[] | null = await db.getAllAsync(query);
+      return examAttempts;
     } catch {
       return null;
     }
 
   };
 
+  const selectLastExam = async () : Promise<ExamAttempt | null> => {
+    const exam : ExamAttempt[] | null = await selectExamsAttempts();
+    return (exam === null) ? null : exam[0];
+  };
+
   return {
     selectTagsByType, selectAnsweredByDateMany, selectAnsweredMany,
-    searchQuestionsFilters, searchQuestionsByStatement, selectLastExam, 
+    searchQuestionsFilters, searchQuestionsByStatement, selectLastExam,
     getTypeStats, getTagStats
   };
 }
