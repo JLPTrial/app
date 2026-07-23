@@ -1,70 +1,66 @@
+import { useColors } from "@/hooks/useTheme";
 import { secondsToTimer } from "@/utils/parsers";
-import { ReactNode, useEffect, useState } from "react";
-import { StyleProp, TextStyle, View } from "react-native";
+import { ReactNode, useEffect, useRef, useState } from "react";
+import { StyleProp, TextStyle } from "react-native";
 import { AppText } from "./texts/AppText";
 
 type TimerProps = {
-  start?: number;
+  start: number;
   end?: number;
   onFinishTimer?: () => void;
   style?: StyleProp<TextStyle>;
-  children?: ReactNode;
+  expiredStyle?: StyleProp<TextStyle>;
+  expiredPrefix?: ReactNode;
 };
 
 export default function Timer({
-  start = 0,
-  end,
+  start,
+  end = 0,
   onFinishTimer,
   style,
-  children,
+  expiredStyle,
+  expiredPrefix = "Tempo Excedido: +",
 }: TimerProps) {
+  const colors = useColors();
   const [seconds, setSeconds] = useState(start);
+  const [isExpired, setIsExpired] = useState(false);
+  const hasFinishedRef = useRef(false);
+
+  const finalExpiredStyle = expiredStyle ?? { color: colors.error };
 
   useEffect(() => {
     setSeconds(start);
-
-    const increment =
-      end === undefined ? 1 : end < start ? -1 : 1;
+    setIsExpired(false);
+    hasFinishedRef.current = false;
 
     const interval = setInterval(() => {
-      setSeconds((current) => {
-        if (end === undefined) {
-          return current + increment;
-        }
-
-        if (current === end) {
-          return current;
-        }
-
-        return current + increment;
-      });
+      setSeconds((current) => current - 1);
     }, 1000);
 
     return () => clearInterval(interval);
   }, [start, end]);
 
   useEffect(() => {
-    if (end !== undefined && seconds === end) {
+    if (end !== undefined && seconds === end && !hasFinishedRef.current) {
+      hasFinishedRef.current = true;
+      setIsExpired(true);
       onFinishTimer?.();
     }
   }, [seconds, end, onFinishTimer]);
 
+  const displayText = isExpired
+    ? expiredPrefix + secondsToTimer(seconds)
+    : secondsToTimer(seconds);
+
   return (
-    <View
-      style={{
-        flexDirection: "row",
-        alignItems: "center",
-        gap: 8,
-      }}
+    <AppText
+      style={[
+        { color: colors.textMuted },
+        style,
+        isExpired && finalExpiredStyle,
+      ]}
     >
-      <AppText
-        style={[
-          { fontSize: 20, textAlign: "center" },
-          style,
-        ]}
-      >
-        ⏱ {children} {secondsToTimer(seconds)}
-      </AppText>
-    </View>
+      ⏱ {displayText}
+    </AppText>
   );
 }

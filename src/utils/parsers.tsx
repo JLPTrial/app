@@ -17,6 +17,8 @@ export default function statementParser(statement: string): string[] {
 }
 
 export const secondsToTimer = (totalSeconds: number) : string => {
+  if (totalSeconds < 0) totalSeconds = -totalSeconds;
+
   const hours = Math.floor(totalSeconds / 3600);
   const minutes = Math.floor(totalSeconds%3600 / 60);
   const secs = totalSeconds%3600 % 60;

@@ -1,8 +1,6 @@
 import Screen from '@/components/Screen';
 import { useStorage } from '@/hooks/useStorage';
-import { useColors } from '@/hooks/useTheme';
 import { useRef, useState } from 'react';
-import { Alert } from 'react-native';
 import QuestionScreen from './QuestionsScreen';
 import { useUserDatabase } from '@/db/insertions';
 import { AppText } from './texts/AppText';
@@ -11,18 +9,11 @@ import Timer from './Timer';
 // sessionType indica na tela se é um simulado ou uma seção de estudo
 export default function QuestionSession({ onFinish, sessionType, timer }: { onFinish: any, sessionType: string, timer : boolean}) {
   const { data } = useStorage();
-  const colors = useColors();
 
   const questions = data.questionsSession;
 
   const [index, setIndex] = useState<number>(data.questionIndexSession);
 
-  const onFinishTimer = () => {
-    Alert.alert("O tempo acabou!");
-    setTimerComponent(<Timer style={{color: colors.error}}>Tempo Excedido:</Timer>);
-  };
-
-  const [timerComponent, setTimerComponent] = useState(<Timer start={3600} end={0} onFinishTimer={onFinishTimer} />);
   let rightAnswers = useRef(0);
   let question = questions[index];
 
@@ -69,9 +60,12 @@ export default function QuestionSession({ onFinish, sessionType, timer }: { onFi
 
   return (
     <Screen>
-      {
-        timer && timerComponent
-      }
+      {timer && (
+        <Timer
+          start={3600}
+          end={0}
+        />
+      )}
       <AppText>{sessionType} - Questão {index + 1}/{questions.length}</AppText>
       <QuestionScreen question={question} onNextQuestion={handleNextQuestion}></QuestionScreen>
     </Screen>
