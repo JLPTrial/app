@@ -238,7 +238,7 @@ export function useQuestions(level: JLPTLevel) {
   ): Promise<number | null> => {
     const query = `
       SELECT id
-      FROM ${level}.statement
+      FROM ${level}.commands
       WHERE question_command = $statementText
     `;
 
@@ -267,7 +267,7 @@ export function useQuestions(level: JLPTLevel) {
 
     whereClause.addClauseCompare(
       "questions",
-      "statement_id",
+      "command_id",
       statementId
     );
 
