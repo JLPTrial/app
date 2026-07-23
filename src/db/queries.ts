@@ -311,9 +311,8 @@ export function useQuestions(level: JLPTLevel) {
 
   const selectLastExam = async () : Promise<ExamAttempt | null> => {
     const query = `SELECT * FROM exam_attempts ORDER BY started_at DESC LIMIT 1`;
-    
+
     try {
-      
       const exam_attempt : ExamAttempt | null = await db.getFirstAsync(query);
       if (! exam_attempt) console.log("Aqui");
       return exam_attempt;

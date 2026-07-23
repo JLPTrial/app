@@ -16,8 +16,6 @@ export default function SessionHandler() {
 
   if (result) {
     if (label === 'Simulado') return (<ExamEndScreen result={result} startedAt={startedAt.current}/>);
-
-
     return (<EndScreen result={result} />);
   }
 

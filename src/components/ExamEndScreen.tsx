@@ -36,8 +36,6 @@ export default function ExamEndScreen({ result, startedAt }: { result: SessionRe
 
   const db = useQuestions(level);
 
-  
-
   useEffect(() => {
     db.insertExam(
       result.right.total,
