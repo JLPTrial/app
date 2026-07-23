@@ -10,7 +10,7 @@ import { useQuestions } from '@/db/queries';
 import { useStorage } from '@/hooks/useStorage';
 import { Question } from '@/types/types';
 import { router, useLocalSearchParams } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Alert, View } from 'react-native';
 
 export default function ExamLobby() {
@@ -18,17 +18,7 @@ export default function ExamLobby() {
   const db = useQuestions(data.jlptLevel);
   const { label } = useLocalSearchParams<{ label: string }>();
 
-  const [loading, setLoading] = useState(true);
   const [starting, setStarting] = useState(false);
-
-  useEffect(() => {
-    async function load() {
-
-      setLoading(false);
-    }
-
-    load();
-  }, [data.jlptLevel]);
 
   const startSession = async () => {
     setStarting(true);
@@ -76,7 +66,7 @@ export default function ExamLobby() {
     router.replace({ pathname: '/session-handler', params: { label } });
   };
 
-  if (loading || starting) {
+  if (starting) {
     return <Loading />;
   }
 
