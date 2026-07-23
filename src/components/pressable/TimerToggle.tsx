@@ -16,7 +16,7 @@ export default function TimerToggle() {
         padding: 16,
         borderRadius: 12,
       }}
-      >
+    >
 
       <AppText bold>Temporizador</AppText>
 

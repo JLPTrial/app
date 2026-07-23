@@ -22,7 +22,7 @@ export default function ExamEndScreen({ result, startedAt }: { result: SessionRe
   const approved = (result.right.total > 35 && result.right.listening > 4 && result.right.total - result.right.listening > 20);
 
   const resultText = approved ?
-    "Aprovado!" : 
+    "Aprovado!" :
     "Reprovado...";
 
   const sections = [
@@ -57,10 +57,10 @@ export default function ExamEndScreen({ result, startedAt }: { result: SessionRe
 
       {
         sections.map(({key, label}) =>
-          <ResultCard 
+          <ResultCard
             key={key}
-            label={label} 
-            right={result.right[key]} 
+            label={label}
+            right={result.right[key]}
             total={result.questionCount[key]}/>
         )
       }

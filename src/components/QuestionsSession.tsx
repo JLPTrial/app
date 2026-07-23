@@ -21,7 +21,7 @@ export default function QuestionSession({ onFinish, sessionType, timer }: { onFi
     Alert.alert("O tempo acabou!");
     setTimerComponent(<Timer style={{color: colors.error}}>Tempo Excedido:</Timer>);
   };
-  
+
   const [timerComponent, setTimerComponent] = useState(<Timer start={3600} end={0} onFinishTimer={onFinishTimer} />);
   let rightAnswers = useRef(0);
   let question = questions[index];
@@ -54,7 +54,7 @@ export default function QuestionSession({ onFinish, sessionType, timer }: { onFi
       rightAnswers.current++;
       res.right.total++;
       res.right[question.type]++;
-      
+
     }
     res.questionCount.total++;
     res.questionCount[question.type]++;

@@ -26,7 +26,7 @@ export default function ExamLobby() {
     const distribution = questionsDistribution.find(
       d => d.level === data.jlptLevel
     );
-    
+
     if (!distribution) return;
 
     const questions: Question[] = [];
