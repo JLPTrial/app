@@ -1,4 +1,4 @@
-import { JLPTLevel, Question } from '@/types/types';
+import { ExamAttempt, JLPTLevel, Question } from '@/types/types';
 import { useSQLiteContext } from 'expo-sqlite';
 
 export type AnsweredStatus = 'answered' | 'unanswered' | 'all';
@@ -11,7 +11,7 @@ interface QuestionQuery {
   id: number;
   questionText: string;
   questionCommand: string;
-  questionType: string;
+  questionType: 'kanji' | 'vocabulary' | 'reading' | 'grammar' | 'listening';
   imagePath: string | null;
   audioPath: string | null;
   contextualText: string | null;
@@ -233,7 +233,77 @@ export function useQuestions(level: JLPTLevel) {
     return await selectQuestions(whereClause, order, limit);
   };
 
+  const selectStatementId = async (
+    statementText: string
+  ): Promise<number | null> => {
+    const query = `
+      SELECT id
+      FROM ${level}.commands
+      WHERE question_command = $statementText
+    `;
+
+    const result = await db.getFirstAsync<{ id: number }>(
+      query,
+      { $statementText: statementText }
+    );
+
+    return result?.id ?? null;
+  };
+
+  const searchQuestionsByStatement = async (
+    statementText: string,
+    answeredStatus: AnsweredStatus = 'unanswered',
+    limit: number = -1,
+    order: Order = Order.RANDOM,
+  ): Promise<Question[]> => {
+
+    const statementId = await selectStatementId(statementText);
+
+    if (statementId === null) {
+      return [];
+    }
+
+    const whereClause = new WhereClause(level);
+
+    whereClause.addClauseCompare(
+      "questions",
+      "command_id",
+      statementId
+    );
+
+    if (answeredStatus === 'answered') {
+      whereClause.addClauseIsNull(
+        "answered_questions",
+        "answered_date",
+        UserDB,
+        false
+      );
+    } else if (answeredStatus === 'unanswered') {
+      whereClause.addClauseIsNull(
+        "answered_questions",
+        "answered_date",
+        UserDB,
+        true
+      );
+    }
+
+    return await selectQuestions(whereClause, order, limit);
+  };
+
+  const selectLastExam = async () : Promise<ExamAttempt | null> => {
+    const query = `SELECT * FROM exam_attempts ORDER BY started_at DESC LIMIT 1`;
+
+    try {
+      const exam_attempt : ExamAttempt | null = await db.getFirstAsync(query);
+      return exam_attempt;
+    } catch {
+      return null;
+    }
+
+  };
+
   return {
-    selectTagsByType, selectAnsweredByDateMany, selectAnsweredMany, searchQuestionsFilters
+    selectTagsByType, selectAnsweredByDateMany, selectAnsweredMany,
+    searchQuestionsFilters, searchQuestionsByStatement, selectLastExam
   };
 }

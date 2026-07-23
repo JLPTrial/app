@@ -12,6 +12,7 @@ type StorageSchema = {
   fontSize: number;
   volume: number;
   isDarkMode: boolean;
+  timer: boolean;
 };
 
 const defaultStorage: StorageSchema = {
@@ -23,6 +24,7 @@ const defaultStorage: StorageSchema = {
   fontSize: 0,
   volume: 100,
   isDarkMode: Appearance.getColorScheme() === 'dark',
+  timer: false,
 };
 
 type StorageContextType = {

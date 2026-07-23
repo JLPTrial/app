@@ -15,3 +15,15 @@ export default function statementParser(statement: string): string[] {
 
   return statement?.match(regex)?.filter(Boolean) ?? [];
 }
+
+export const secondsToTimer = (totalSeconds: number) : string => {
+  if (totalSeconds < 0) totalSeconds = -totalSeconds;
+
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor(totalSeconds%3600 / 60);
+  const secs = totalSeconds%3600 % 60;
+
+  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs
+    .toString()
+    .padStart(2, '0')}`;
+};

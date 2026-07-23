@@ -16,5 +16,24 @@ export function useUserDatabase() {
     }
   };
 
-  return { insertAnswer };
+  const insertExam = async (
+    score : number,
+    totalQuestions : number,
+    correctAnswers : number,
+    startedAt : number,
+    finishedAt : number,
+    approved : boolean,
+    jlptLevel : string,
+  ): Promise<boolean> => {
+    const query = `INSERT INTO exam_attempts (score, total_questions, correct_answers, started_at, finished_at, approved, jlpt_level) VALUES (?,?,?,?,?,?,?)`;
+    try {
+      await db.runAsync(query, `${score}`, `${totalQuestions}`, `${correctAnswers}`, `${startedAt}`, `${finishedAt}`, approved ? '1' : '0', `${jlptLevel}`);
+
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  return { insertAnswer, insertExam };
 }

@@ -5,7 +5,7 @@ import { Stack } from "expo-router";
 import { SQLiteDatabase, SQLiteProvider } from "expo-sqlite";
 import { Suspense, useEffect, useState } from "react";
 import Loading from "./loading";
-import { attachQuestionsDatabase, createAnswerTable } from "@/db/initDatabaseUtils";
+import { attachQuestionsDatabase, createAnswerTable, createExamTables } from "@/db/initDatabaseUtils";
 
 export default function RootLayout() {
   const [isReady, setIsReady] = useState(false);
@@ -22,8 +22,9 @@ export default function RootLayout() {
         databaseName="main.db"
         onInit={async (db: SQLiteDatabase) => {
           await db.execAsync("PRAGMA foreign_keys = ON;");
-          attachQuestionsDatabase(db);
-          createAnswerTable(db);
+          await attachQuestionsDatabase(db);
+          await createAnswerTable(db);
+          await createExamTables(db);
         }}
       >
         <StorageProvider>

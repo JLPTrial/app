@@ -36,7 +36,7 @@ export default function HomeScreen() {
       <View style={styles.table}>
         <AppText variant="title" style={{ marginBottom: 8 }}>Teste Seus Conhecimentos</AppText>
         <View style={styles.row}>
-          <Card title='Simulado' style={{ width: '100%' }} onPress={() => router.push("/practice-test")} />
+          <Card title='Simulado' style={{ width: '100%' }} onPress={() => router.push({pathname: "/exam-lobby", params: { label: "Simulado"}})} />
         </View>
       </View>
 

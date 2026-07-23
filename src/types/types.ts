@@ -4,7 +4,7 @@ export interface Question {
 	id: number;
 	text: string;
 	command: string;
-	type: string;
+	type: 'kanji' | 'vocabulary' | 'reading' | 'grammar' | 'listening';
 	image: string | null;
 	audio: string | null;
 	contextualText: string | null;
@@ -14,3 +14,33 @@ export interface Question {
 	date: Date | null;
 	isCorrect: boolean | null,
 }
+
+export interface ExamAttempt {
+	id: number;
+	score: number;
+	correct_answers: number;
+	total_questions: number;
+	started_at: number;
+	finished_at: number | null;
+	approved: boolean;
+	jlpt_level: JLPTLevel;
+}
+
+export interface SessionResult {
+  right: {
+    total: number,
+    kanji: number,
+    vocabulary: number,
+    grammar: number,
+    reading: number,
+	listening: number
+  };
+  questionCount: {
+    total: number,
+    kanji: number,
+    vocabulary: number,
+    grammar: number,
+    reading: number,
+	listening: number
+  };
+};
