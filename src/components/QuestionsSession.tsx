@@ -7,7 +7,7 @@ import { AppText } from './texts/AppText';
 import Timer from './Timer';
 
 // sessionType indica na tela se é um simulado ou uma seção de estudo
-export default function QuestionSession({ onFinish, sessionType, timer }: { onFinish: any, sessionType: string, timer : boolean}) {
+export default function QuestionSession({ onFinish, sessionType, wantTimer }: { onFinish: any, sessionType: string, wantTimer : boolean}) {
   const { data } = useStorage();
 
   const questions = data.questionsSession;
@@ -60,7 +60,7 @@ export default function QuestionSession({ onFinish, sessionType, timer }: { onFi
 
   return (
     <Screen>
-      {timer && (
+      {wantTimer && (
         <Timer
           start={3600}
           end={0}
