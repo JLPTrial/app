@@ -4,13 +4,14 @@ import { useEffect, useState } from 'react';
 import { useQuestions } from '@/db/queries';
 import { Dropdown } from 'react-native-element-dropdown';
 import AppRadarGraph from '../graphs/AppRadarGraph';
-import { colors } from '@/styles/globals';
+import { useColors } from '@/hooks/useTheme';
 import { StyleSheet } from 'react-native';
 import { useStorage } from '@/hooks/useStorage';
 
 export default function TopicStats() {
   const { data } = useStorage();
   const level = data.jlptLevel;
+  const colors = useColors();
 
   const [statsTypes, setStatsTypes] = useState<number[] | null>(null);
   const [type, setType] = useState<string>('kanji');
@@ -48,16 +49,16 @@ export default function TopicStats() {
   return (
     <Screen internal>
       <AppText variant='title'>Tópicos do {level}</AppText>
-      <AppRadarGraph values={statsTypes} labels={labelTypes}/>
+      <AppRadarGraph values={statsTypes} labels={labelTypes} areaColor={colors.primaryLight}/>
 
       <AppText>Veja as questões resolvidas por tipo</AppText>
       <Dropdown
-        style={[styles.selector, { backgroundColor: colors[type as keyof typeof colors] }]}
+        style={[styles.selector, {backgroundColor: colors[type as keyof typeof colors], color: colors.textLight }]}
         labelField="label"
         data={selectorData}
         valueField="value"
         value={type}
-        selectedTextStyle={styles.selectorSelected}
+        selectedTextStyle={[styles.selectorSelected, { color: colors.textLight }]}
         itemTextStyle={styles.selectorItens}
         iconColor={colors.textLight}
         onChange={item => {
@@ -79,13 +80,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     borderRadius: 99,
     padding:20,
-    color: colors.textLight,
     textAlign:'center',
     justifyContent:'center',
   },
   selectorSelected: {
     textAlign:'center',
-    color:  colors.textLight,
     fontWeight: 'bold'
   },
   selectorItens: {

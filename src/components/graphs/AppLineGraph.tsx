@@ -1,5 +1,6 @@
 import { LineChart } from "react-native-gifted-charts";
-import { colors, vw } from '@/styles/globals';
+import { vw } from '@/styles/globals';
+import { useColors } from '@/hooks/useTheme';
 
 type AppLineGraphProps = {
   values: number[],
@@ -11,6 +12,7 @@ type AppLineGraphProps = {
 }
 
 export default function AppLineGraph({ values, xLabels, maxValue = 100, yLabels, yLabelsSulfix = "%", onBackgroundPress}: AppLineGraphProps) {
+  const colors = useColors();
   const data = values.map((value) => { return { value: value }; });
 
   return <LineChart

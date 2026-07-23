@@ -1,14 +1,16 @@
 import { RadarChart } from "react-native-gifted-charts";
-import { colors, vw } from '@/styles/globals';
+import { vw } from '@/styles/globals';
+import { useColors } from '@/hooks/useTheme';
 
 type AppRadarGraphProps = {
   values: number[],
   labels: string[],
+  areaColor: string,
   maxValue?: number,
-  areaColor?: string,
 }
 
-export default function AppRadarGraph({ values, labels, areaColor = colors.primary, maxValue = 1 }: AppRadarGraphProps) {
+export default function AppRadarGraph({ values, labels, areaColor, maxValue = 1 }: AppRadarGraphProps) {
+  const colors = useColors();
   return <RadarChart
     data={values}
     maxValue={maxValue}
@@ -28,6 +30,7 @@ export default function AppRadarGraph({ values, labels, areaColor = colors.prima
         { fill: colors.backgroundDim, gradientColor: colors.backgroundDim },
       ],
     }}
+    labelConfig={{stroke: colors.textDark, fontWeight: 'bold'}}
     polygonConfig={{
       fill:areaColor,
       strokeWidth: 0,
