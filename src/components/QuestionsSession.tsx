@@ -62,7 +62,7 @@ export default function QuestionSession({ onFinish, sessionType, wantTimer }: { 
     <Screen>
       {wantTimer && (
         <Timer
-          start={3600}
+          start={5400}
           end={0}
         />
       )}
