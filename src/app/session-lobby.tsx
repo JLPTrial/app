@@ -1,4 +1,5 @@
 import Loading from '@/app/loading';
+import LevelBadge from '@/components/containers/LevelBadge';
 import BottomButton from '@/components/pressable/BottomButton';
 import TimerToggle from '@/components/pressable/TimerToggle';
 import Screen from '@/components/Screen';
@@ -85,9 +86,7 @@ export default function SessionLobby() {
     <Screen>
       <View style={styles.header}>
         <AppText variant='title'>{label}</AppText>
-        <View style={[styles.levelBadge, { backgroundColor: colors.primary }]}>
-          <AppText variant='tag'>{data.jlptLevel}</AppText>
-        </View>
+        <LevelBadge level={data.jlptLevel} />
       </View>
 
       <View style={styles.section}>
@@ -171,12 +170,6 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 12,
     maxHeight: 55 * vh,
-  },
-
-  levelBadge: {
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
   },
 
   section: {

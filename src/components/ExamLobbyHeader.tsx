@@ -2,18 +2,16 @@ import { useStorage } from "@/hooks/useStorage";
 import { useLocalSearchParams } from "expo-router";
 import { StyleSheet, View } from "react-native";
 import { AppText } from "./texts/AppText";
-
+import LevelBadge from "./containers/LevelBadge";
 
 export default function ExamLobbyHeader(){
   const { label } = useLocalSearchParams<{ type: string; label: string }>();
-  const { data} = useStorage();
+  const { data } = useStorage();
 
   return (
     <View style={styles.header}>
       <AppText variant='title'>{label}</AppText>
-      <View >
-        <AppText variant='tag'>{data.jlptLevel}</AppText>
-      </View>
+      <LevelBadge level={data.jlptLevel} />
     </View>
   );
 }
