@@ -290,25 +290,6 @@ export function useQuestions(level: JLPTLevel) {
     return await selectQuestions(whereClause, order, limit);
   };
 
-  const insertExam = async (
-    score : number,
-    totalQuestions : number,
-    correctAnswers : number,
-    startedAt : number,
-    finishedAt : number,
-    approved : boolean,
-    jlptLevel : string,
-  ): Promise<boolean> => {
-    const query = `INSERT INTO exam_attempts (score, total_questions, correct_answers, started_at, finished_at, approved, jlpt_level) VALUES (?,?,?,?,?,?,?)`;
-    try {
-      await db.runAsync(query, `${score}`, `${totalQuestions}`, `${correctAnswers}`, `${startedAt}`, `${finishedAt}`, approved ? '1' : '0', `${jlptLevel}`);
-
-      return true;
-    } catch {
-      return false;
-    }
-  };
-
   const selectLastExam = async () : Promise<ExamAttempt | null> => {
     const query = `SELECT * FROM exam_attempts ORDER BY started_at DESC LIMIT 1`;
 
@@ -323,7 +304,7 @@ export function useQuestions(level: JLPTLevel) {
   };
 
   return {
-    selectTagsByType, selectAnsweredByDateMany, selectAnsweredMany, searchQuestionsFilters,
-    searchQuestionsByStatement, insertExam, selectLastExam
+    selectTagsByType, selectAnsweredByDateMany, selectAnsweredMany,
+    searchQuestionsFilters, searchQuestionsByStatement, selectLastExam
   };
 }

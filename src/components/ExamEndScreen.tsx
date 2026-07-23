@@ -1,6 +1,6 @@
 import Screen from '@/components/Screen';
 import { AppText } from '@/components/texts/AppText';
-import { useQuestions } from '@/db/queries';
+import { useUserDatabase } from '@/db/insertions';
 import { useStorage } from '@/hooks/useStorage';
 import { SessionResult } from '@/types/types';
 import { router } from 'expo-router';
@@ -34,7 +34,7 @@ export default function ExamEndScreen({ result, startedAt }: { result: SessionRe
     { key: 'listening', label: 'Listening'}
   ] as const;
 
-  const db = useQuestions(level);
+  const db = useUserDatabase();
 
   useEffect(() => {
     db.insertExam(
