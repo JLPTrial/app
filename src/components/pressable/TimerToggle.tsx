@@ -9,24 +9,22 @@ export default function TimerToggle() {
   return (
     <View
       style={{
+        width: '100%',
         flexDirection: "row",
         alignItems: 'center',
-        alignSelf: 'flex-start',
         justifyContent: "space-between",
         padding: 16,
         borderRadius: 12,
-        backgroundColor: "#fff",
       }}
-    >
+      >
+
+      <AppText bold>Temporizador</AppText>
 
       <AppSwitch
         value={!!data.timer}
         onChange={(value) => setValue("timer", value)}
       />
 
-      <AppText style={{ fontSize: 16 }}>
-        Temporizador
-      </AppText>
     </View>
   );
 }
