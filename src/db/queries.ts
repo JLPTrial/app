@@ -210,7 +210,7 @@ export function useQuestions(level: JLPTLevel) {
     return await selectQuestions(whereClause, Order.DATE, limit);
   };
 
-  const statVal = (questions: Question[]) => {
+  const calculateRightRatio = (questions: Question[]) => {
     const total = questions.length;
     if (total === 0) {
       return 0;
@@ -224,7 +224,7 @@ export function useQuestions(level: JLPTLevel) {
     const stats = new Array();
     for (let type of types) {
       const typeStats = await searchQuestionsFilters(type, [], 'answered');
-      stats.push(statVal(typeStats));
+      stats.push(calculateRightRatio(typeStats));
     }
 
     return stats;
@@ -235,7 +235,7 @@ export function useQuestions(level: JLPTLevel) {
     const stats = new Array();
     for (let tag of tags) {
       const tagStats = await searchQuestionsFilters(type, [tag], 'answered');
-      stats.push(statVal(tagStats));
+      stats.push(calculateRightRatio(tagStats));
     }
 
     return [tags, stats];
