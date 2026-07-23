@@ -295,7 +295,6 @@ export function useQuestions(level: JLPTLevel) {
 
     try {
       const exam_attempt : ExamAttempt | null = await db.getFirstAsync(query);
-      if (! exam_attempt) console.log("Aqui");
       return exam_attempt;
     } catch {
       return null;

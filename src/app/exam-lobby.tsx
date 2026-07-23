@@ -41,8 +41,6 @@ export default function ExamLobby() {
         amount,
       );
 
-      if (currentQuestions.length !== amount) console.log(i + "(" + currentQuestions.length + "/" + amount + ")");
-
       questions.push(...currentQuestions);
     }
 
