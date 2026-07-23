@@ -1,6 +1,6 @@
 import Screen from '@/components/Screen';
 import { useStorage } from '@/hooks/useStorage';
-import { colors } from '@/styles/globals';
+import { useColors } from '@/hooks/useTheme';
 import { useRef, useState } from 'react';
 import { Alert } from 'react-native';
 import QuestionScreen from './QuestionsScreen';
@@ -11,7 +11,7 @@ import Timer from './Timer';
 // sessionType indica na tela se é um simulado ou uma seção de estudo
 export default function QuestionSession({ onFinish, sessionType, timer }: { onFinish: any, sessionType: string, timer : boolean}) {
   const { data } = useStorage();
-
+  const colors = useColors();
 
   const questions = data.questionsSession;
 

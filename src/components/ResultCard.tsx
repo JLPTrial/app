@@ -1,10 +1,11 @@
-import { colors } from "@/styles/globals";
 import { StyleSheet, View } from "react-native";
 import PercentageBar from "./PercentageBar";
 import { AppText } from "./texts/AppText";
+import { useColors } from "@/hooks/useTheme";
 
 
 export default function ResultCard({ label, right, total} : { label : string, right : number, total : number}){
+  const colors = useColors();
   const percentage = total > 0 ? Math.round((right / total) * 100) : 0;
   const scoreColor =
         percentage >= 70 ? colors.success :
@@ -12,7 +13,7 @@ export default function ResultCard({ label, right, total} : { label : string, ri
             colors.failure;
 
   return (
-    <View style={styles.resultCard}>
+    <View style={[styles.resultCard, { backgroundColor: colors.successBlock }]}>
       <AppText style={{ color: colors.textMuted }}>Questões corretas - {label}</AppText>
       <AppText bold={true} style={[styles.scoreText, { color: scoreColor }]}>
         {right}/{total}
@@ -31,7 +32,6 @@ export default function ResultCard({ label, right, total} : { label : string, ri
 
 const styles = StyleSheet.create({
   resultCard: {
-    backgroundColor: colors.successBlock,
     borderRadius: 16,
     padding: 24,
     alignItems: 'center',
