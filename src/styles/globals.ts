@@ -29,7 +29,7 @@ export const lightColors = {
   grammar: '#AA22AA',             // Cor de destaque das questões de gramática
   vocabulary: '#DD2222',          // Cor de destaque das questões de vocabulário
   reading: '#22BB77',             // Cor de destaque das questões de leitura
-  kanji: '#CCCC33',               // Cor de destaque das questões de kanji
+  kanji: '#F39C12',               // Cor de destaque das questões de kanji
   listening: '#33AACC',           // Cor de destaque das questões de audição
   card: '#33AAFF',                // Cor de fundo dos cards
   alternativePressed: '#9DD6D6',  // Alternativa pressionada na tela de questões
@@ -63,7 +63,7 @@ export const darkColors = {
   grammar: '#BB44BB',             // Cor de destaque das questões de gramática
   vocabulary: '#EE4444',          // Cor de destaque das questões de vocabulário
   reading: '#44CC88',             // Cor de destaque das questões de leitura
-  kanji: '#CCCC44',               // Cor de destaque das questões de kanji
+  kanji: '#F39C12',               // Cor de destaque das questões de kanji
   listening: '#44AACC',           // Cor de destaque das questões de audição
   card: '#2288DD',                // Cor de fundo dos cards
   alternativePressed: '#1A3030',  // Alternativa pressionada na tela de questões
