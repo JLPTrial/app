@@ -1,4 +1,4 @@
-export default function statementParser(statement: string): string[] {
+export function statementParser(statement: string): string[] {
   const regex = new RegExp(
     [
       String.raw`\[(?:blank|underline_blank|star_underline_blank)\]`,

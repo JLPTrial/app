@@ -1,7 +1,7 @@
 import { useStorage } from "@/hooks/useStorage";
 import { useColors } from "@/hooks/useTheme";
 import { vh, vw } from "@/styles/globals";
-import statementParser from "@/utils/parsers";
+import { statementParser } from "@/utils/parsers";
 import { Ionicons } from '@expo/vector-icons';
 import { PropsWithChildren } from "react";
 import { StyleSheet, TextStyle, View } from "react-native";
