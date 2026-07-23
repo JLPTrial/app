@@ -1,6 +1,7 @@
 import { useStorage } from "@/hooks/useStorage";
-import { Switch, View } from "react-native";
+import { View } from "react-native";
 import { AppText } from "../texts/AppText";
+import { AppSwitch } from "./AppSwitch";
 
 export default function TimerToggle() {
   const { data, setValue } = useStorage();
@@ -18,11 +19,9 @@ export default function TimerToggle() {
       }}
     >
 
-      <Switch
+      <AppSwitch
         value={!!data.timer}
-        onValueChange={(value) => setValue("timer", value)}
-        trackColor={{ false: "#cfcfcf", true: "#4CAF50" }}
-        thumbColor="#fff"
+        onChange={(value) => setValue("timer", value)}
       />
 
       <AppText style={{ fontSize: 16 }}>
