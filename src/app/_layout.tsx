@@ -22,9 +22,9 @@ export default function RootLayout() {
         databaseName="main.db"
         onInit={async (db: SQLiteDatabase) => {
           await db.execAsync("PRAGMA foreign_keys = ON;");
-          attachQuestionsDatabase(db);
-          createAnswerTable(db);
-          createExamTables(db);
+          await attachQuestionsDatabase(db);
+          await createAnswerTable(db);
+          await createExamTables(db);
         }}
       >
         <StorageProvider>
