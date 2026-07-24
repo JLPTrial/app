@@ -46,6 +46,7 @@ export interface SessionResult {
 };
 
 export interface ExamStats {
-	answers: number[];
-	duration: number[];
+	approved: boolean,
+	score: number,
+	duration: number,
 }

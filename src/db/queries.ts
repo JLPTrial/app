@@ -241,27 +241,25 @@ export function useQuestions(level: JLPTLevel) {
     return [tags, stats];
   };
 
-  const getAttemptStats = async (limit : number = 5) : Promise<ExamStats | null> => {
+  const getAttemptStats = async (limit : number = 5) : Promise<ExamStats[] | null> => {
     const examAttempts : ExamAttempt[] | null = await selectExamsAttempts(limit, 'ASC');
     if(examAttempts === null){
       return null;
     }
-    const statsAnswer = new Array();
-    const statsDuration = new Array();
+    const stats: ExamStats[] = new Array();
     for (let attempt of examAttempts) {
       const answerRatio = 100 * (attempt.correct_answers / attempt.total_questions);
-      statsAnswer.push(answerRatio);
+     
       if(attempt.finished_at === null){
-        statsDuration.push(0);
+        stats.push({approved: attempt.approved, score: answerRatio, duration : 0 });
         continue;
       }
       const durationMs = Number(attempt.finished_at) - Number(attempt.started_at);
       const durationMinutes = ((durationMs / 1000) / 60);
 
-      statsDuration.push(durationMinutes);
+      stats.push({approved: attempt.approved, score: answerRatio, duration : durationMinutes });
     }
 
-    const stats : ExamStats = {answers: statsAnswer, duration: statsDuration};
     return stats;
   };
 
