@@ -344,7 +344,7 @@ export function useQuestions(level: JLPTLevel) {
   };
 
   const selectExamsAttempts = async (limit : number = 1, order : string = 'DESC') : Promise<ExamAttempt[] | null> => {
-    const query = `SELECT * FROM exam_attempts ORDER BY started_at ${order} LIMIT ${limit}`;
+    const query = `SELECT * FROM exam_attempts WHERE jlpt_level = '${level}' ORDER BY started_at ${order} LIMIT ${limit}`;
 
     try {
       const examAttempts : ExamAttempt[] | null = await db.getAllAsync(query);
