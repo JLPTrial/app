@@ -8,6 +8,13 @@ import { useColors } from '@/hooks/useTheme';
 import { StyleSheet } from 'react-native';
 import { useStorage } from '@/hooks/useStorage';
 
+const formatLabel = (labels : string[]) =>{
+  labels.forEach((label, index, labels) => {
+    labels[index] = label.replace("(","\n(");
+  });
+  return labels;
+};
+
 export default function TopicStats() {
   const { data } = useStorage();
   const level = data.jlptLevel;
@@ -53,7 +60,7 @@ export default function TopicStats() {
 
       <AppText>Veja as questões resolvidas por tipo</AppText>
       <Dropdown
-        style={[styles.selector, {backgroundColor: colors[type as keyof typeof colors], color: colors.textLight }]}
+        style={[styles.selector, {backgroundColor: colors[type as keyof typeof colors]}]}
         labelField="label"
         data={selectorData}
         valueField="value"
@@ -66,7 +73,7 @@ export default function TopicStats() {
         }}
       />
 
-      { (statsTag && labelTag) && <AppRadarGraph values={statsTag} labels={labelTag} areaColor={colors[type as keyof typeof colors]}/>}
+      { (statsTag && labelTag) && <AppRadarGraph values={statsTag} labels={formatLabel(labelTag)} areaColor={colors[type as keyof typeof colors]}/>}
 
     </Screen>
   );
