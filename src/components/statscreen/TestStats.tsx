@@ -6,6 +6,22 @@ import { useQuestions } from '@/db/queries';
 import { useEffect, useState } from 'react';
 import { ExamStats } from '@/types/types';
 import AppTable from '../graphs/AppTable';
+import { secondsToTimer } from '@/utils/parsers';
+
+const formatToTable = (stats : ExamStats[]) =>{
+  const formattedStats = new Array();
+  for (const stat of stats) {
+    const formattedApproved = (stat.approved) ? 'Sim' : 'Não';
+    const formattedScore = `${stat.score.toFixed(1)}%`;
+    const formattedDuration = (stat.duration === 0) ? '-' : secondsToTimer(Math.floor(stat.duration*60)) ;
+    formattedStats.push({
+      approved : formattedApproved,
+      score: formattedScore,
+      duration: formattedDuration
+  })
+  }
+  return formattedStats;
+}
 
 export default function TestStats(){
   const { data } = useStorage();
@@ -27,10 +43,13 @@ export default function TestStats(){
 
   return (
     <Screen internal>
-      <AppText>Simulados de nível {level}</AppText>
+      <AppText center variant='title'>Taxa de Acertos dos últimos simulados {level}</AppText>
       <AppLineGraph
         values={stats.map(exam => exam.score)}
         maxValue={100}/>
+
+       <AppText center>Tabela dos últimos simulados {level}</AppText>
+        <AppTable header={['Aprovado','Acertos','Tempo (min)']} data={formatToTable(stats)}/>
     </Screen>
   );
 }
