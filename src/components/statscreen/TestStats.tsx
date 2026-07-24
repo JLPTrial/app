@@ -8,6 +8,7 @@ import { ExamStats } from '@/types/types';
 import AppTable from '../graphs/AppTable';
 import { secondsToTimer } from '@/utils/parsers';
 import { useFocusEffect } from 'expo-router';
+import { useColors } from '@/hooks/useTheme';
 
 const formatToTable = (stats : ExamStats[]) =>{
   const formattedStats = new Array();
@@ -27,6 +28,7 @@ const formatToTable = (stats : ExamStats[]) =>{
 export default function TestStats(){
   const { data } = useStorage();
   const level = data.jlptLevel;
+  const colors = useColors();
 
   const [stats, setStats] = useState<ExamStats[] | null>(null);
 
@@ -44,10 +46,15 @@ export default function TestStats(){
     }, [level])
   );
 
-  if (!stats || stats.length === 0) return <AppText center>Faça um simulado no nível {level} para ver suas estatísticas</AppText>;
+  if (!stats || stats.length === 0){
+    return (
+      <Screen internal style={{backgroundColor: colors.background}}>
+        <AppText center>Faça um simulado do nível {level} para ver suas estatísticas</AppText>
+      </Screen>);
+  }
 
   return (
-    <Screen internal>
+    <Screen internal style={{backgroundColor: colors.background}}>
       <AppText center variant='title'>Taxa de Acertos dos últimos simulados {level}</AppText>
       <AppLineGraph
         values={stats.map(exam => exam.score)}
