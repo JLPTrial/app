@@ -25,6 +25,7 @@ export default function AppLineGraph({ values, xLabels = [], maxValue = 100, yLa
     color={colors.primaryLight}
     dataPointsColor={colors.primary}
     sectionColors={Array(6).fill([colors.backgroundDim,colors.background]).flat()}
+    yAxisTextStyle={{ color: colors.textLight }}
     dataPointsWidth={10}
     thickness={3}
     dataPointsRadius={5}
