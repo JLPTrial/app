@@ -1,4 +1,5 @@
 import { ExamAttempt, ExamStats, JLPTLevel, Question } from '@/types/types';
+import { calculateRightRatio } from '@/utils/formatStats';
 import { useSQLiteContext } from 'expo-sqlite';
 
 export type AnsweredStatus = 'answered' | 'unanswered' | 'all';
@@ -208,15 +209,6 @@ export function useQuestions(level: JLPTLevel) {
     const whereClause: WhereClause = new WhereClause(level);
     whereClause.addClauseIsNotNull("answered_questions", "answered_date", UserDB);
     return await selectQuestions(whereClause, Order.DATE, limit);
-  };
-
-  const calculateRightRatio = (questions: Question[]) => {
-    const total = questions.length;
-    if (total === 0) {
-      return 0;
-    }
-    const correct = questions.filter((question) => question.isCorrect).length;
-    return correct / total;
   };
 
   const getTypeStats = async () => {
