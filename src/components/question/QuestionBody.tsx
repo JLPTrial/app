@@ -1,6 +1,6 @@
 import { assetsMap } from '@/constants/assetsMap';
 import { useColors } from '@/hooks/useTheme';
-import { ColorScheme, vh, vw } from '@/styles/globals';
+import { vh, vw } from '@/styles/globals';
 import { Question } from '@/types/types';
 import { Image as RNImage , StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';

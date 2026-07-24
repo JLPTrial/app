@@ -249,7 +249,7 @@ export function useQuestions(level: JLPTLevel) {
     const stats: ExamStats[] = new Array();
     for (let attempt of examAttempts) {
       const answerRatio = 100 * (attempt.correct_answers / attempt.total_questions);
-     
+
       if(attempt.finished_at === null){
         stats.push({approved: attempt.approved, score: answerRatio, duration : 0 });
         continue;

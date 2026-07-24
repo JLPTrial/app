@@ -18,10 +18,10 @@ const formatToTable = (stats : ExamStats[]) =>{
       approved : formattedApproved,
       score: formattedScore,
       duration: formattedDuration
-  })
+    });
   }
   return formattedStats;
-}
+};
 
 export default function TestStats(){
   const { data } = useStorage();
@@ -48,8 +48,8 @@ export default function TestStats(){
         values={stats.map(exam => exam.score)}
         maxValue={100}/>
 
-       <AppText center>Tabela dos últimos simulados {level}</AppText>
-        <AppTable header={['Aprovado','Acertos','Tempo (min)']} data={formatToTable(stats)}/>
+      <AppText center>Tabela dos últimos simulados {level}</AppText>
+      <AppTable header={['Aprovado','Acertos','Tempo (min)']} data={formatToTable(stats)}/>
     </Screen>
   );
 }
