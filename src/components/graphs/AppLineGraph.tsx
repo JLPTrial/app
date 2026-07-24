@@ -4,14 +4,14 @@ import { useColors } from '@/hooks/useTheme';
 
 type AppLineGraphProps = {
   values: number[],
-  xLabels: string[],
+  xLabels?: string[],
   maxValue: number,
   yLabels?: string[],
-  yLabelsSulfix?: string,
+  yLabelsSuffix?: string,
   onBackgroundPress?: () => void,
 }
 
-export default function AppLineGraph({ values, xLabels, maxValue = 100, yLabels, yLabelsSulfix = "%", onBackgroundPress}: AppLineGraphProps) {
+export default function AppLineGraph({ values, xLabels = [], maxValue = 100, yLabels, yLabelsSuffix = "%", onBackgroundPress}: AppLineGraphProps) {
   const colors = useColors();
   const data = values.map((value) => { return { value: value }; });
 
@@ -19,7 +19,7 @@ export default function AppLineGraph({ values, xLabels, maxValue = 100, yLabels,
     data={data}
     xAxisLabelTexts={xLabels}
     yAxisLabelTexts={yLabels}
-    yAxisLabelSuffix={yLabelsSulfix}
+    yAxisLabelSuffix={yLabelsSuffix}
     maxValue={maxValue}
     onBackgroundPress={onBackgroundPress}
     color={colors.primaryLight}
@@ -29,6 +29,8 @@ export default function AppLineGraph({ values, xLabels, maxValue = 100, yLabels,
     thickness={3}
     dataPointsRadius={5}
     width={80 * vw}
+    roundToDigits={0}
+    stepValue={10}
     animateOnDataChange
     isAnimated
     adjustToWidth

@@ -1,4 +1,4 @@
-import { ExamAttempt, JLPTLevel, Question } from '@/types/types';
+import { ExamAttempt, ExamStats, JLPTLevel, Question } from '@/types/types';
 import { useSQLiteContext } from 'expo-sqlite';
 
 export type AnsweredStatus = 'answered' | 'unanswered' | 'all';
@@ -241,6 +241,30 @@ export function useQuestions(level: JLPTLevel) {
     return [tags, stats];
   };
 
+  const getAttemptStats = async (limit : number = 5) : Promise<ExamStats | null> => {
+    const examAttempts : ExamAttempt[] | null = await selectExamsAttempts(limit, 'ASC');
+    if(examAttempts === null){
+      return null;
+    }
+    const statsAnswer = new Array();
+    const statsDuration = new Array();
+    for (let attempt of examAttempts) {
+      const answerRatio = 100 * (attempt.correct_answers / attempt.total_questions);
+      statsAnswer.push(answerRatio);
+      if(attempt.finished_at === null){
+        statsDuration.push(0);
+        continue;
+      }
+      const durationMs = Number(attempt.finished_at) - Number(attempt.started_at);
+      const durationMinutes = ((durationMs / 1000) / 60);
+
+      statsDuration.push(durationMinutes);
+    }
+
+    const stats : ExamStats = {answers: statsAnswer, duration: statsDuration};
+    return stats;
+  };
+
   const searchQuestionsFilters = async (
     type: string,
     tags: string[] = [],
@@ -321,8 +345,8 @@ export function useQuestions(level: JLPTLevel) {
     return await selectQuestions(whereClause, order, limit);
   };
 
-  const selectExamsAttempts = async (limit : number = 1) : Promise<ExamAttempt[] | null> => {
-    const query = `SELECT * FROM exam_attempts ORDER BY started_at DESC LIMIT ${limit}`;
+  const selectExamsAttempts = async (limit : number = 1, order : string = 'DESC') : Promise<ExamAttempt[] | null> => {
+    const query = `SELECT * FROM exam_attempts ORDER BY started_at ${order} LIMIT ${limit}`;
 
     try {
       const examAttempts : ExamAttempt[] | null = await db.getAllAsync(query);
@@ -341,6 +365,6 @@ export function useQuestions(level: JLPTLevel) {
   return {
     selectTagsByType, selectAnsweredByDateMany, selectAnsweredMany,
     searchQuestionsFilters, searchQuestionsByStatement, selectLastExam,
-    getTypeStats, getTagStats
+    getTypeStats, getTagStats, getAttemptStats
   };
 }

@@ -44,3 +44,8 @@ export interface SessionResult {
 	listening: number
   };
 };
+
+export interface ExamStats {
+	answers: number[];
+	duration: number[];
+}
