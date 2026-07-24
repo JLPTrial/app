@@ -9,11 +9,8 @@ import { StyleSheet } from 'react-native';
 import { useStorage } from '@/hooks/useStorage';
 import { useFocusEffect } from 'expo-router';
 
-const formatLabel = (labels: string[]) => {
-  labels.forEach((label, index, labels) => {
-    labels[index] = label.replace("(", "\n(");
-  });
-  return labels;
+const formatLabel = (labels: string[]): string[] => {
+  return labels.map(label => label.replace("(", "\n("));
 };
 
 export default function TopicStats() {
