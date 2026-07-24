@@ -47,3 +47,6 @@ example
 
 # generated db folder
 /assets/data
+
+# generated tests folder
+coverage/
