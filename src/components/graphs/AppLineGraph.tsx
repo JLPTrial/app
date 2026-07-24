@@ -13,7 +13,7 @@ type AppLineGraphProps = {
 
 export default function AppLineGraph({ values, xLabels = [], maxValue = 100, yLabels, yLabelsSuffix = "%", onBackgroundPress}: AppLineGraphProps) {
   const colors = useColors();
-  const data = values.map((value) => { return { value: value }; });
+  const data = values.map((value) => { return { value: value, dataPointText: value.toFixed(1) }; });
 
   return <LineChart
     data={data}
@@ -22,16 +22,22 @@ export default function AppLineGraph({ values, xLabels = [], maxValue = 100, yLa
     yAxisLabelSuffix={yLabelsSuffix}
     maxValue={maxValue}
     onBackgroundPress={onBackgroundPress}
+
     color={colors.primaryLight}
     dataPointsColor={colors.primary}
     sectionColors={Array(6).fill([colors.backgroundDim,colors.background]).flat()}
     yAxisTextStyle={{ color: colors.textLight }}
-    dataPointsWidth={10}
+    textColor={colors.textLight}
+
     thickness={3}
-    dataPointsRadius={5}
     width={80 * vw}
+    dataPointsWidth={10}
+    dataPointsRadius={5}
     roundToDigits={0}
     stepValue={10}
+    textFontSize={14}
+    textShiftY={-10}
+
     animateOnDataChange
     isAnimated
     adjustToWidth
