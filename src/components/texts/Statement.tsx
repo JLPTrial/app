@@ -74,7 +74,7 @@ export default function Statement({ statement, ...appTextProps }: StatementProps
   const colors = useColors();
   const tokens = statementParser(statement);
 
-  const { variant = 'base', bold, underlining, center, style: customStyle } = appTextProps;
+  const { variant = 'base', bold, underlining, center, style: customStyle, scaleWithFontSize = true } = appTextProps;
   const variantColor = getVariantColor(colors, variant);
 
   const combinedStyles = [
@@ -92,7 +92,7 @@ export default function Statement({ statement, ...appTextProps }: StatementProps
   const fontSize = flattenedStyle?.fontSize ?? 16;
   const color = (flattenedStyle?.color as string) ?? '#000';
 
-  const scale = fontSize / textStyles['base'].fontSize * (fontSizeScaleMap[data.fontSize] ?? 1);
+  const scale = fontSize / textStyles['base'].fontSize * (scaleWithFontSize ? (fontSizeScaleMap[data.fontSize] ?? 1) : 1);
   const blankWidth = scale * (15 * vw);
   const lineThickness = Math.max(0.2 * vh, scale * (0.2 * vh));
 
