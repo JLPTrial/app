@@ -15,6 +15,7 @@ export interface AppTextProps extends TextProps {
   center?: boolean;
   style?: StyleProp<TextStyle>;
   children: React.ReactNode;
+  scaleWithFontSize?: boolean;
 }
 
 export const AppText: React.FC<AppTextProps> = ({
@@ -24,6 +25,7 @@ export const AppText: React.FC<AppTextProps> = ({
   center,
   style,
   children,
+  scaleWithFontSize = true,
   ...rest
 }) => {
   const colors = useColors();
@@ -43,7 +45,7 @@ export const AppText: React.FC<AppTextProps> = ({
 
   const flattenedStyle = StyleSheet.flatten(combinedStyles) as TextStyle;
   const baseFontSize = flattenedStyle?.fontSize ?? textStyles['base'].fontSize;
-  const scale = fontSizeScaleMap[data.fontSize] ?? 1;
+  const scale = scaleWithFontSize ? (fontSizeScaleMap[data.fontSize] ?? 1) : 1;
 
   return (
     <Text style={[combinedStyles, { fontSize: baseFontSize * scale }]} {...rest}>
