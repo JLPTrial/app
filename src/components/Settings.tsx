@@ -1,11 +1,12 @@
+import { useHaptics } from '@/hooks/useHaptics';
 import { useColors } from '@/hooks/useTheme';
-import { Icon } from './Icon';
 import Slider from '@react-native-community/slider';
+import React, { useCallback, useRef } from 'react';
 import { Alert, Linking, Pressable, StyleSheet, View } from 'react-native';
-import { AppText } from './texts/AppText';
-import { Marker, MarkerType } from './slider/Marker';
-import React, { useCallback } from 'react';
+import { Icon } from './Icon';
 import { AppSwitch } from './pressable/AppSwitch';
+import { Marker, MarkerType } from './slider/Marker';
+import { AppText } from './texts/AppText';
 
 type SliderProps = {
   title: string,
@@ -42,7 +43,13 @@ type CardProps = {
 
 export function SwitchSetting({ icon, furigana, title, color, value, onChange }: SwitchProps) {
   const colors = useColors();
+  const haptics = useHaptics();
   const iconColor = color || colors.textDark;
+
+  const handleChange = (value: boolean) => {
+    haptics.selection();
+    onChange(value);
+  };
 
   return (
     <View style={styles.horizontal}>
@@ -57,7 +64,7 @@ export function SwitchSetting({ icon, furigana, title, color, value, onChange }:
 
       <AppSwitch
         value={value}
-        onChange={(value : boolean) => onChange(value)}
+        onChange={handleChange}
       />
     </View>
   );
@@ -66,6 +73,22 @@ export function SwitchSetting({ icon, furigana, title, color, value, onChange }:
 export function SliderSetting({ title, icon, value, onChange, min, max, step = 0,
   left, right, marker = 'None' }: SliderProps) {
   const colors = useColors();
+  const haptics = useHaptics();
+  const lastValue = useRef(value);
+
+  const handleValueChange = useCallback((newValue: number) => {
+    if (step > 0 && newValue !== lastValue.current) {
+      lastValue.current = newValue;
+      haptics.selection();
+    }
+  }, [step, haptics]);
+
+  const handleSlidingComplete = useCallback((newValue: number) => {
+    if (step === 0) {
+      haptics.selection();
+    }
+    onChange(newValue);
+  }, [step, onChange, haptics]);
 
   return (
     <View>
@@ -86,7 +109,8 @@ export function SliderSetting({ title, icon, value, onChange, min, max, step = 0
           maximumValue={max}
           step={step}
           value={value}
-          onSlidingComplete={onChange}
+          onValueChange={handleValueChange}
+          onSlidingComplete={handleSlidingComplete}
           minimumTrackTintColor={colors.primaryLight}
           maximumTrackTintColor={colors.textMuted}
           StepMarker={Marker[marker]}
