@@ -65,6 +65,7 @@ export default function QuestionScreen({ question, onNextQuestion }: { question:
           style={buttonStyle[handleStyle(choice, confirmedAnswer)]}
           textStyle={textStyle[handleStyle(choice, confirmedAnswer)]}
           text="Confirmar"
+          haptic={(choice === question.correctAlternative - 1) ? 'success' : 'error'}
           toFlex={false}/>
         : <BottomButton onPress={() => handleNextQuestion()}
           style={buttonStyle[handleStyle(choice, confirmedAnswer)]}
