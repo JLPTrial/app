@@ -1,3 +1,4 @@
+import { useHaptics } from "@/hooks/useHaptics";
 import { useStorage } from "@/hooks/useStorage";
 import { View } from "react-native";
 import { AppText } from "../texts/AppText";
@@ -5,6 +6,7 @@ import { AppSwitch } from "./AppSwitch";
 
 export default function TimerToggle() {
   const { data, setValue } = useStorage();
+  const haptics = useHaptics();
 
   return (
     <View
@@ -22,7 +24,10 @@ export default function TimerToggle() {
 
       <AppSwitch
         value={!!data.timer}
-        onChange={(value) => setValue("timer", value)}
+        onChange={(value) => {
+          haptics.selection();
+          setValue("timer", value);
+        }}
       />
 
     </View>
