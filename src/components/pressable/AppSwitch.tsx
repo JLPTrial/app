@@ -1,17 +1,26 @@
+import { HapticFeedback, useHaptics } from '@/hooks/useHaptics';
 import { useColors } from '@/hooks/useTheme';
 import { Switch } from 'react-native-switch';
 
 type SwitchProps = {
   value: boolean,
   onChange: (value: boolean) => void,
+  haptics?: HapticFeedback,
 }
 
-export function AppSwitch({ value, onChange }: SwitchProps) {
+export function AppSwitch({ value, onChange, haptics = 'selection' }: SwitchProps) {
   const colors = useColors();
+  const hapticFeedback = useHaptics();
+
+  const handleValueChange = (value: boolean) => {
+    if (haptics !== 'none') hapticFeedback[haptics]();
+    onChange(value);
+  };
+
   return (
     <Switch
       value={value}
-      onValueChange={(value) => onChange(value)}
+      onValueChange={handleValueChange}
       circleSize={32}
       barHeight={40}
       circleBorderWidth={0}
