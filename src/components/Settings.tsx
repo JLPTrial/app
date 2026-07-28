@@ -43,13 +43,7 @@ type CardProps = {
 
 export function SwitchSetting({ icon, furigana, title, color, value, onChange }: SwitchProps) {
   const colors = useColors();
-  const haptics = useHaptics();
   const iconColor = color || colors.textDark;
-
-  const handleChange = (value: boolean) => {
-    haptics.selection();
-    onChange(value);
-  };
 
   return (
     <View style={styles.horizontal}>
@@ -64,7 +58,7 @@ export function SwitchSetting({ icon, furigana, title, color, value, onChange }:
 
       <AppSwitch
         value={value}
-        onChange={handleChange}
+        onChange={onChange}
       />
     </View>
   );
