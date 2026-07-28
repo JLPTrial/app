@@ -1,9 +1,9 @@
-import { StyleSheet } from 'react-native';
+import Header from '@/components/containers/headers';
 import Screen from '@/components/Screen';
-import { SwitchSetting, SliderSetting, ActionSetting, SettingCard } from '../../components/Settings';
 import { useStorage } from '@/hooks/useStorage';
 import { useColors, useTheme } from '@/hooks/useTheme';
-import Header from '@/components/containers/headers';
+import { StyleSheet } from 'react-native';
+import { ActionSetting, SettingCard, SliderSetting, SwitchSetting } from '../../components/Settings';
 
 export default function SettingsScreen() {
   const { data, setValue } = useStorage();
@@ -64,7 +64,7 @@ export default function SettingsScreen() {
       <SettingCard title='Suporte'>
         <ActionSetting icon='star' title='Avalie o app' url='https://play.google.com' />
         <ActionSetting icon='mail' title='Fale conosco' url='mailto:suporte@exemplo.com' />
-        <ActionSetting icon='open' title='Termos de uso' url='https://exemplo.com/termos' />
+        {/* <ActionSetting icon='open' title='Termos de uso' url='https://exemplo.com/termos' /> */}
         <ActionSetting icon='bug' title='Relatar bugs' url='https://github.com/JLPTrial/JLPTrial/blob/main/docs/ISSUES.MD' />
       </SettingCard>
     </Screen>
