@@ -63,7 +63,7 @@ export default function SettingsScreen() {
 
       <SettingCard title='Suporte'>
         {/* <ActionSetting icon='star' title='Avalie o app' url='https://play.google.com' /> */}
-        <ActionSetting icon='mail' title='Fale conosco' url='mailto:suporte@exemplo.com' />
+        {/* <ActionSetting icon='mail' title='Fale conosco' url='mailto:suporte@exemplo.com' /> */}
         {/* <ActionSetting icon='open' title='Termos de uso' url='https://exemplo.com/termos' /> */}
         <ActionSetting icon='bug' title='Relatar bugs' url='https://github.com/JLPTrial/JLPTrial/blob/main/docs/ISSUES.MD' />
       </SettingCard>
