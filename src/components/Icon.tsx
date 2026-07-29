@@ -1,9 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
-import { AppText } from "./texts/AppText";
-import { WithLocalSvg } from 'react-native-svg/css';
-import Statement from './texts/Statement';
+import { IconProps, TextAaIcon, VibrateIcon } from 'phosphor-react-native';
 import { View } from 'react-native';
-import { VibrateIcon, TextAaIcon, IconProps } from 'phosphor-react-native';
+import { WithLocalSvg } from 'react-native-svg/css';
+import { AppText } from "./texts/AppText";
+import Statement from './texts/Statement';
 
 type ionicon = keyof typeof Ionicons.glyphMap;
 
@@ -44,9 +44,14 @@ export const Icon = ({ name, size, color, furigana = '' }: iconProps) => {
     const Icon = phosphorIcons[name];
     return <Icon size={size} color={color} />;
   }
+
   if (name === 'furigana') {
-    return <View style={{ width: size, height: size }}>
-      <Statement statement={furigana} style={{ fontSize: size * 0.9, color: color }} />
+    return <View style={{ width: size, alignItems: 'center' }}>
+      <Statement
+        statement={furigana}
+        scaleWithFontSize={false}
+        style={{ fontSize: size, color: color , marginBottom: 15}}
+      />
     </View>;
   }
   return <AppText style={{ fontSize: size, color: color }}>{name}</AppText>;

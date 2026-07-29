@@ -1,6 +1,8 @@
 import { useColors } from '@/hooks/useTheme';
+import { fontSizeScaleMap } from '@/constants/fontSize';
+import { useStorage } from '@/hooks/useStorage';
 import React from 'react';
-import { StyleProp, Text, TextProps, TextStyle } from 'react-native';
+import { StyleProp, StyleSheet, Text, TextProps, TextStyle } from 'react-native';
 import { getVariantColor, textStyles } from '../../styles/texts';
 
 export type TextVariant = Exclude<keyof typeof textStyles, 'bold' | 'center' | 'underlining'>;
@@ -13,6 +15,7 @@ export interface AppTextProps extends TextProps {
   center?: boolean;
   style?: StyleProp<TextStyle>;
   children: React.ReactNode;
+  scaleWithFontSize?: boolean;
 }
 
 export const AppText: React.FC<AppTextProps> = ({
@@ -22,11 +25,13 @@ export const AppText: React.FC<AppTextProps> = ({
   center,
   style,
   children,
+  scaleWithFontSize = true,
   ...rest
 }) => {
   const colors = useColors();
 
   const variantColor = getVariantColor(colors, variant);
+  const { data } = useStorage();
 
   const combinedStyles = [
     textStyles['base'], // Combinando o estilo base com os subestilos
@@ -38,8 +43,12 @@ export const AppText: React.FC<AppTextProps> = ({
     style,
   ];
 
+  const flattenedStyle = StyleSheet.flatten(combinedStyles) as TextStyle;
+  const baseFontSize = flattenedStyle?.fontSize ?? textStyles['base'].fontSize;
+  const scale = scaleWithFontSize ? (fontSizeScaleMap[data.fontSize] ?? 1) : 1;
+
   return (
-    <Text style={combinedStyles} {...rest}>
+    <Text style={[combinedStyles, { fontSize: baseFontSize * scale }]} {...rest}>
       {children}
     </Text>
   );

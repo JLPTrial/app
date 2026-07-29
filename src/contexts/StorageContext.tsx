@@ -21,7 +21,7 @@ const defaultStorage: StorageSchema = {
   questionIndexSession: 0,
   furigana: true,
   hapticFeedback: true,
-  fontSize: 0,
+  fontSize: 1,
   volume: 100,
   isDarkMode: Appearance.getColorScheme() === 'dark',
   timer: false,
