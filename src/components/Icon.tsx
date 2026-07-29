@@ -45,13 +45,12 @@ export const Icon = ({ name, size, color, furigana = '' }: iconProps) => {
     return <Icon size={size} color={color} />;
   }
 
-  const furiganaDefaultSize = 0.7;
   if (name === 'furigana') {
-    return <View style={{ width: size, alignItems: 'center', justifyContent: 'center' }}>
+    return <View style={{ width: size, alignItems: 'center' }}>
       <Statement
         statement={furigana}
         scaleWithFontSize={false}
-        style={{ fontSize: size * furiganaDefaultSize, color: color }}
+        style={{ fontSize: size, color: color , marginBottom: 15}}
       />
     </View>;
   }
