@@ -349,7 +349,8 @@ export function useQuestions(level: JLPTLevel) {
 
   const selectLastExam = async () : Promise<ExamAttempt | null> => {
     const exam : ExamAttempt[] | null = await selectExamsAttempts();
-    return (exam === null) ? null : exam[0];
+    if (!exam || exam.length === 0) return null;
+    return exam[0];
   };
 
   return {
