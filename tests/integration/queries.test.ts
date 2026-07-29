@@ -73,13 +73,13 @@ describe('useQuestions', () => {
     const { result } = renderHook(() => useQuestions('N5'));
     const mockExam = { id: 1, score: 100, jlpt_level: 'N5' };
     
-    mockGetFirstAsync.mockResolvedValueOnce(mockExam);
+    mockGetAllAsync.mockResolvedValueOnce([mockExam]);
 
     const exam = await result.current.selectLastExam();
 
     expect(exam).toEqual(mockExam);
-    expect(mockGetFirstAsync).toHaveBeenCalledWith(
-      expect.stringContaining('SELECT * FROM exam_attempts ORDER BY started_at DESC LIMIT 1')
+    expect(mockGetAllAsync).toHaveBeenCalledWith(
+      expect.stringContaining("SELECT * FROM exam_attempts WHERE jlpt_level = 'N5' ORDER BY started_at DESC LIMIT 1")
     );
   });
 });
