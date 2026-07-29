@@ -23,7 +23,7 @@ export default function SessionHandler() {
     <QuestionsSession
       sessionType={label}
       onFinish={(res : SessionResult) => setResult(res)}
-      wantTimer={data.timer}
+      wantTimer={data.timer && label === 'Simulado'}
     />
   );
 }
