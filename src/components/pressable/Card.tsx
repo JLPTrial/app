@@ -1,5 +1,6 @@
-import { Pressable, StyleProp, Text, ViewStyle } from "react-native";
-import { textStyles } from "../../styles/texts";
+import { useColors } from "@/hooks/useTheme";
+import { Pressable, StyleProp, ViewStyle } from "react-native";
+import { AppText } from "../texts/AppText";
 
 type CardProps = {
   title?: string;
@@ -8,18 +9,19 @@ type CardProps = {
 };
 
 export default function Card({ title, onPress, style} : CardProps){
-     
+  const colors = useColors();
+
   return (
-    <Pressable  onPress={onPress}
+    <Pressable onPress={onPress}
       style={[{
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#3af',
+        backgroundColor: colors.card,
         borderRadius: 20,
       }, style]}>
 
-      {title && <Text style={[{color: 'white'}, textStyles.title]}>{ title }</Text>}
-            
+      {title && <AppText variant="title" style={{ color: colors.textLight }}>{ title }</AppText>}
+
     </Pressable>
   );
 }

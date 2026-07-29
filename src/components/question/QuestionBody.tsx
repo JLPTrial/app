@@ -1,32 +1,42 @@
 import { assetsMap } from '@/constants/assetsMap';
+import { useColors } from '@/hooks/useTheme';
+import { vh, vw } from '@/styles/globals';
 import { Question } from '@/types/types';
+import { Image as RNImage , StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';
-import { StyleSheet, View } from 'react-native';
 import AudioPlayer from '../AudioPlayer';
-import { colors, vh, vw } from '@/styles/globals';
 import { AppText } from '../texts/AppText';
 import Statement from '../texts/Statement';
+import capitalizeFirstLetter from '@/utils/capitalize';
 
 export default function QuestionBody({ question }: { question: Question }) {
+  const colors = useColors();
 
   const type: string = question.type;
+
+  const imageSource = question.image ? assetsMap[`${question.image}`] : null;
+  const assetSource = imageSource ? RNImage.resolveAssetSource(imageSource) : null;
+
+  const imgAspectRatio = assetSource?.width && assetSource?.height
+    ? assetSource.width / assetSource.height
+    : 1;
 
   return (
     <View style={styles.container}>
       <View style={[styles.questionHeader, { backgroundColor: colors[type as keyof typeof colors] }]}>
-        <AppText style={{ color: colors.textLight }} center={true}> {type.charAt(0).toUpperCase() + type.slice(1)}  - Nº  {question.id} </AppText>
+        <AppText style={{ color: colors.textLight }} center={true}> {capitalizeFirstLetter(type)}  - Nº  {question.id} </AppText>
       </View>
-      <Statement statement={question.command} style={styles.questionCommand} />
+      <Statement statement={question.command} style={[styles.questionCommand, { color: colors.textMuted }]} />
       {(question.image !== null) &&
         (<Image
           source={assetsMap[`${question.image}`]}
-          style={styles.questionImage}
+          style={[styles.questionImage, { aspectRatio: imgAspectRatio }]}
           contentFit="contain"
         />)}
       {(question.contextualText !== null) && (question.audio === null) && (<Statement statement={question.contextualText} />)}
       {(question.audio !== null) && (<AudioPlayer source={assetsMap[`${question.audio}`]} />)}
       {question.type !== 'listening' && (
-        <View style={styles.questionTextContainer}>
+        <View style={[styles.questionTextContainer, { borderColor: colors.primaryLight }]}>
           <Statement statement={question.text} />
         </View>
       )}
@@ -46,17 +56,14 @@ const styles = StyleSheet.create({
   },
   questionCommand: {
     fontSize: 15,
-    color: colors.textMuted,
   },
   questionTextContainer: {
-    borderColor: colors.primaryLight,
     borderStyle: 'dotted',
     borderWidth: 1 * vw,
     padding: 2 * vw,
     borderRadius: 10,
   },
   questionImage: {
-    height: 25 * vh,
-    aspectRatio: 16 / 9,
+    width: '100%',
   },
 });

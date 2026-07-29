@@ -1,4 +1,4 @@
-import { colors } from '@/styles/globals';
+import { useColors } from '@/hooks/useTheme';
 import React from 'react';
 import { StyleSheet, View, ViewStyle } from 'react-native';
 
@@ -15,10 +15,11 @@ export default function PercentageBar({
   color,
   style,
 }: PercentageBarProps) {
+  const colors = useColors();
   const clampedProgress = Math.max(0, Math.min(100, progress));
 
   return (
-    <View style={[styles.container, { height }, style]}>
+    <View style={[styles.container, { height, backgroundColor: colors.border }, style]}>
       <View
         style={[
           styles.fill,
@@ -35,7 +36,6 @@ export default function PercentageBar({
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    backgroundColor: colors.border,
     borderRadius: 99,
     overflow: 'hidden',
   },

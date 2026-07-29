@@ -1,9 +1,12 @@
+import { fontSizeScaleMap } from '@/constants/fontSize';
+import { useStorage } from "@/hooks/useStorage";
+import { useColors } from "@/hooks/useTheme";
 import { vh, vw } from "@/styles/globals";
-import statementParser from "@/utils/parsers";
+import { statementParser } from "@/utils/parsers";
 import { Ionicons } from '@expo/vector-icons';
 import { PropsWithChildren } from "react";
 import { StyleSheet, TextStyle, View } from "react-native";
-import { textStyles } from '../../styles/texts';
+import { getVariantColor, textStyles } from '../../styles/texts';
 import { AppText, AppTextProps } from "./AppText";
 
 interface StatementProps extends Omit<AppTextProps, 'children'> {
@@ -29,12 +32,11 @@ function StarUnderlineBlank({ color, width, fontSize, thickness }: { color: stri
   );
 }
 
-function Underlined({ children, color, lineThickness, appTextProps }: PropsWithChildren<{ color: string, lineThickness: number, appTextProps: Omit<AppTextProps, 'children'> }>) {
+function Underlined({ children, appTextProps }: PropsWithChildren<{appTextProps: Omit<AppTextProps, 'children'> }>) {
   return (
-    <View style={styles.underlined}>
-      <AppText style={{ top: 4.5 * lineThickness }} {...appTextProps}>{children}</AppText>
-      <View style={{ top: 4.5 * lineThickness, width: '100%', borderBottomWidth: lineThickness, borderBottomColor: color }} />
-    </View>
+    <AppText underlining {...appTextProps}>
+      {children}
+    </AppText>
   );
 }
 
@@ -42,19 +44,25 @@ type FuriganaProps = {
   kanji: string;
   furigana: string;
   fontSize: number;
+  fontScale: number;
   appTextProps: Omit<AppTextProps, 'children'>;
+  showFurigana: boolean;
 };
 
-function Furigana({ kanji, furigana, fontSize, appTextProps }: FuriganaProps) {
+function Furigana({ kanji, furigana, fontSize, fontScale, appTextProps, showFurigana }: FuriganaProps) {
+  if (!showFurigana) {
+    return <AppText {...appTextProps}>{kanji}</AppText>;
+  }
+
   return (
     <View style={styles.furiganaContainer}>
-      <AppText 
-        {...appTextProps} 
-        style={[appTextProps.style, styles.furiganaText, { top: 1, fontSize: fontSize * 0.6, lineHeight: fontSize }]}
+      <AppText
+        {...appTextProps}
+        style={[appTextProps.style, styles.furiganaText, { top: 1, fontSize: fontSize * 0.6, lineHeight: fontSize * fontScale }]}
       >
         {furigana}
       </AppText>
-      <AppText {...appTextProps} style={[appTextProps.style, { top: 1, lineHeight: fontSize }]}>
+      <AppText {...appTextProps} style={[appTextProps.style, { top: 1, lineHeight: fontSize * fontScale }]}>
         {kanji}
       </AppText>
     </View>
@@ -62,14 +70,16 @@ function Furigana({ kanji, furigana, fontSize, appTextProps }: FuriganaProps) {
 }
 
 export default function Statement({ statement, ...appTextProps }: StatementProps) {
+  const { data } = useStorage();
+  const colors = useColors();
   const tokens = statementParser(statement);
 
-  const { variant = 'base', answer, bold, underlining, center, style: customStyle } = appTextProps;
-
+  const { variant = 'base', bold, underlining, center, style: customStyle, scaleWithFontSize = true } = appTextProps;
+  const variantColor = getVariantColor(colors, variant);
   const combinedStyles = [
     textStyles['base'],
     textStyles[variant],
-    answer && textStyles.answer,
+    { color: variantColor },
     bold && textStyles.bold,
     underlining && textStyles.underlining,
     center && textStyles.center,
@@ -81,15 +91,15 @@ export default function Statement({ statement, ...appTextProps }: StatementProps
   const fontSize = flattenedStyle?.fontSize ?? 16;
   const color = (flattenedStyle?.color as string) ?? '#000';
 
-  const scale = fontSize / textStyles['base'].fontSize;
+  const scale = scaleWithFontSize ? fontSize / textStyles['base'].fontSize * (fontSizeScaleMap[data.fontSize] ?? 1) : 1;
   const blankWidth = scale * (15 * vw);
   const lineThickness = Math.max(0.2 * vh, scale * (0.2 * vh));
 
   return (
-    <AppText 
+    <AppText
       {...appTextProps}
       style={[
-        { textAlign: 'justify', lineHeight: 1.8*fontSize }, 
+        { textAlign: 'justify', lineHeight: 1.8 * fontSize * scale },
         center && { textAlign: 'center' },
         appTextProps.style
       ]}
@@ -105,7 +115,7 @@ export default function Statement({ statement, ...appTextProps }: StatementProps
               {" "}
             </AppText>
           );
-        
+
         if (token === "[star_underline_blank]")
           return (
             <AppText key={index}>
@@ -116,7 +126,7 @@ export default function Statement({ statement, ...appTextProps }: StatementProps
           );
         if (token.startsWith("{"))
           return (
-            <Underlined key={index} color={color} lineThickness={lineThickness} appTextProps={appTextProps}>
+            <Underlined key={index} appTextProps={appTextProps}>
               {token.slice(1, -1)}
             </Underlined>
           );
@@ -125,12 +135,14 @@ export default function Statement({ statement, ...appTextProps }: StatementProps
           const prefix = token.slice(0, bracketIndex);
           const bracket = token.slice(bracketIndex);
           return (
-            <Furigana 
-              key={index} 
-              kanji={prefix} 
-              furigana={bracket.slice(1, -1)} 
+            <Furigana
+              key={index}
+              kanji={prefix}
+              furigana={bracket.slice(1, -1)}
               fontSize={fontSize}
-              appTextProps={appTextProps} 
+              fontScale={scale}
+              appTextProps={appTextProps}
+              showFurigana={data.furigana}
             />
           );
         }
@@ -146,15 +158,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
   },
   star_underline_blank: {
-    alignItems: 'center', 
-    justifyContent: 'flex-end'
-  },
-  underlined: {
-    alignItems: 'center', 
+    alignItems: 'center',
     justifyContent: 'flex-end'
   },
   furiganaContainer: {
-    justifyContent: 'flex-end', 
+    justifyContent: 'flex-end',
     alignItems: 'center',
   },
   furiganaText: {

@@ -1,42 +1,54 @@
+import { useColors } from '@/hooks/useTheme';
+import { fontSizeScaleMap } from '@/constants/fontSize';
+import { useStorage } from '@/hooks/useStorage';
 import React from 'react';
-import { StyleProp, Text, TextProps, TextStyle } from 'react-native';
-import { textStyles } from '../../styles/texts';
+import { StyleProp, StyleSheet, Text, TextProps, TextStyle } from 'react-native';
+import { getVariantColor, textStyles } from '../../styles/texts';
 
-export type TextVariant = Exclude<keyof typeof textStyles, 'bold' | 'center' | 'underlining' | 'answer'>;
+export type TextVariant = Exclude<keyof typeof textStyles, 'bold' | 'center' | 'underlining'>;
 
 // Interface estendendo TextProps para aceitar as propriedades padrão do <Text>
 export interface AppTextProps extends TextProps {
   variant?: TextVariant;
-  answer?: boolean;
   bold?: boolean;
   underlining?: boolean;
   center?: boolean;
   style?: StyleProp<TextStyle>;
   children: React.ReactNode;
+  scaleWithFontSize?: boolean;
 }
 
 export const AppText: React.FC<AppTextProps> = ({
   variant = 'base',
-  answer,
   bold,
   underlining,
   center,
   style,
   children,
+  scaleWithFontSize = true,
   ...rest
 }) => {
+  const colors = useColors();
+
+  const variantColor = getVariantColor(colors, variant);
+  const { data } = useStorage();
+
   const combinedStyles = [
     textStyles['base'], // Combinando o estilo base com os subestilos
     textStyles[variant],
-    answer && textStyles.answer,
+    { color: variantColor },
     bold && textStyles.bold,
     underlining && textStyles.underlining,
     center && textStyles.center,
     style,
   ];
 
+  const flattenedStyle = StyleSheet.flatten(combinedStyles) as TextStyle;
+  const baseFontSize = flattenedStyle?.fontSize ?? textStyles['base'].fontSize;
+  const scale = scaleWithFontSize ? (fontSizeScaleMap[data.fontSize] ?? 1) : 1;
+
   return (
-    <Text style={combinedStyles} {...rest}>
+    <Text style={[combinedStyles, { fontSize: baseFontSize * scale }]} {...rest}>
       {children}
     </Text>
   );

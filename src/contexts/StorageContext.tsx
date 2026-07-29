@@ -1,17 +1,30 @@
 import { JLPTLevel, Question } from "@/types/types";
 import { Storage } from "expo-sqlite/kv-store";
-import { createContext, PropsWithChildren, useState } from "react";
+import { createContext, PropsWithChildren, useCallback, useMemo, useState } from "react";
+import { Appearance } from "react-native";
 
 type StorageSchema = {
   jlptLevel: JLPTLevel;
   questionsSession: Question[];
   questionIndexSession: number;
+  furigana: boolean;
+  hapticFeedback: boolean;
+  fontSize: number;
+  volume: number;
+  isDarkMode: boolean;
+  timer: boolean;
 };
 
 const defaultStorage: StorageSchema = {
   jlptLevel: 'N5',
   questionsSession: [],
   questionIndexSession: 0,
+  furigana: true,
+  hapticFeedback: true,
+  fontSize: 1,
+  volume: 100,
+  isDarkMode: Appearance.getColorScheme() === 'dark',
+  timer: false,
 };
 
 type StorageContextType = {
@@ -40,7 +53,7 @@ export function StorageProvider({ children }: PropsWithChildren) {
     return result;
   });
 
-  const setValue = <K extends keyof StorageSchema>(
+  const setValue = useCallback(<K extends keyof StorageSchema>(
     key: K,
     value: StorageSchema[K]
   ) => {
@@ -50,10 +63,12 @@ export function StorageProvider({ children }: PropsWithChildren) {
       ...prev,
       [key]: value,
     }));
-  };
+  }, []);
+
+  const value = useMemo(() => ({ data, setValue }), [data, setValue]);
 
   return (
-    <StorageContext.Provider value={{ data, setValue }}>
+    <StorageContext.Provider value={value}>
       {children}
     </StorageContext.Provider>
   );

@@ -1,15 +1,18 @@
+import { useColors } from '@/hooks/useTheme';
 import { Ionicons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
-import { StyleSheet } from 'react-native';
-import { colors } from '../../styles/globals';
 
 export default function TabLayout() {
+  const colors = useColors();
+
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarStyle: styles.tab,
-
+        tabBarStyle: {
+          paddingTop: 5,
+          backgroundColor: colors.surface,
+        },
         tabBarActiveTintColor: colors.primaryLight,
         tabBarInactiveTintColor: colors.textMuted,
       }}
@@ -46,9 +49,3 @@ export default function TabLayout() {
     </Tabs>
   );
 }
-
-const styles = StyleSheet.create({
-  tab: {
-    paddingTop: 5,
-  }
-});
