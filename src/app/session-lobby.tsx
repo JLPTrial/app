@@ -1,7 +1,6 @@
 import Loading from '@/app/loading';
 import LevelBadge from '@/components/containers/LevelBadge';
 import BottomButton from '@/components/pressable/BottomButton';
-import TimerToggle from '@/components/pressable/TimerToggle';
 import Screen from '@/components/Screen';
 import { AppText } from '@/components/texts/AppText';
 import { useQuestions } from '@/db/queries';
@@ -148,10 +147,6 @@ export default function SessionLobby() {
           </View>
         )
       }
-
-      <View style={{alignSelf: 'flex-start'}}>
-        <TimerToggle/>
-      </View>
 
       <BottomButton onPress={startSession} text="Iniciar" />
     </Screen >
