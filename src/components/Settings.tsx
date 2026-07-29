@@ -51,6 +51,7 @@ export function SwitchSetting({ icon, furigana, title, color, value, onChange }:
         furigana={furigana}
         size={32}
         color={iconColor}
+        active={value}
       />
 
       <AppText style={styles.switchTitle}>{title}</AppText>

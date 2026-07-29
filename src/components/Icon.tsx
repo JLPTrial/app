@@ -21,9 +21,10 @@ type iconProps = {
   size: number,
   color: string,
   furigana?: string,
+  active?: boolean,
 };
 
-export const Icon = ({ name, size, color, furigana = '' }: iconProps) => {
+export const Icon = ({ name, size, color, furigana = '', active = true }: iconProps) => {
   if (name in Ionicons.glyphMap) {
     return <Ionicons
       name={name as ionicon}
@@ -50,7 +51,7 @@ export const Icon = ({ name, size, color, furigana = '' }: iconProps) => {
       <Statement
         statement={furigana}
         scaleWithFontSize={false}
-        style={{ fontSize: size, color: color , marginBottom: 15}}
+        style={{ fontSize: size, color: color , marginBottom: active ? 15 : 4 }}
       />
     </View>;
   }
