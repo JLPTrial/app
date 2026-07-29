@@ -44,3 +44,9 @@ export interface SessionResult {
 	listening: number
   };
 };
+
+export interface ExamStats {
+	approved: boolean,
+	score: number,
+	duration: number,
+}

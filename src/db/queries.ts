@@ -1,4 +1,5 @@
-import { ExamAttempt, JLPTLevel, Question } from '@/types/types';
+import { ExamAttempt, ExamStats, JLPTLevel, Question } from '@/types/types';
+import { calculateRightRatio } from '@/utils/formatStats';
 import { useSQLiteContext } from 'expo-sqlite';
 
 export type AnsweredStatus = 'answered' | 'unanswered' | 'all';
@@ -210,6 +211,50 @@ export function useQuestions(level: JLPTLevel) {
     return await selectQuestions(whereClause, Order.DATE, limit);
   };
 
+  const getTypeStats = async () => {
+    const types = ['kanji', 'listening', 'reading', 'vocabulary', 'grammar'];
+    const stats = new Array();
+    for (let type of types) {
+      const typeStats = await searchQuestionsFilters(type, [], 'answered');
+      stats.push(calculateRightRatio(typeStats));
+    }
+
+    return stats;
+  };
+
+  const getTagStats = async (type: string) => {
+    const tags = await selectTagsByType(type);
+    const stats = new Array();
+    for (let tag of tags) {
+      const tagStats = await searchQuestionsFilters(type, [tag], 'answered');
+      stats.push(calculateRightRatio(tagStats));
+    }
+
+    return [tags, stats];
+  };
+
+  const getAttemptStats = async (limit : number = 5) : Promise<ExamStats[] | null> => {
+    const examAttempts : ExamAttempt[] | null = await selectExamsAttempts(limit, 'ASC');
+    if(examAttempts === null){
+      return null;
+    }
+    const stats: ExamStats[] = new Array();
+    for (let attempt of examAttempts) {
+      const answerRatio = 100 * (attempt.correct_answers / attempt.total_questions);
+
+      if(attempt.finished_at === null){
+        stats.push({approved: attempt.approved, score: answerRatio, duration : 0 });
+        continue;
+      }
+      const durationMs = Number(attempt.finished_at) - Number(attempt.started_at);
+      const durationMinutes = ((durationMs / 1000) / 60);
+
+      stats.push({approved: attempt.approved, score: answerRatio, duration : durationMinutes });
+    }
+
+    return stats;
+  };
+
   const searchQuestionsFilters = async (
     type: string,
     tags: string[] = [],
@@ -290,20 +335,26 @@ export function useQuestions(level: JLPTLevel) {
     return await selectQuestions(whereClause, order, limit);
   };
 
-  const selectLastExam = async () : Promise<ExamAttempt | null> => {
-    const query = `SELECT * FROM exam_attempts ORDER BY started_at DESC LIMIT 1`;
+  const selectExamsAttempts = async (limit : number = 1, order : string = 'DESC') : Promise<ExamAttempt[] | null> => {
+    const query = `SELECT * FROM exam_attempts WHERE jlpt_level = '${level}' ORDER BY started_at ${order} LIMIT ${limit}`;
 
     try {
-      const exam_attempt : ExamAttempt | null = await db.getFirstAsync(query);
-      return exam_attempt;
+      const examAttempts : ExamAttempt[] | null = await db.getAllAsync(query);
+      return examAttempts;
     } catch {
       return null;
     }
 
   };
 
+  const selectLastExam = async () : Promise<ExamAttempt | null> => {
+    const exam : ExamAttempt[] | null = await selectExamsAttempts();
+    return (exam === null) ? null : exam[0];
+  };
+
   return {
     selectTagsByType, selectAnsweredByDateMany, selectAnsweredMany,
-    searchQuestionsFilters, searchQuestionsByStatement, selectLastExam
+    searchQuestionsFilters, searchQuestionsByStatement, selectLastExam,
+    getTypeStats, getTagStats, getAttemptStats
   };
 }
