@@ -9,7 +9,7 @@ export default function Loading() {
   return (
     <Screen style={styles.container}>
       <Image
-        source={require('@/assets/images/logo.jpg')}
+        source={require('@/assets/images/logo.png')}
         style={styles.logo}
         contentFit="contain"
       />
